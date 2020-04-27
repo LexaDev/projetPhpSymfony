@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -67,20 +66,16 @@ class Participant implements UserInterface
     private $site;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Outing")
-     */
-    private $outings;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Outing", mappedBy="organisateur")
+     * @ORM\OneToMany(targetEntity="App\Entity\Outing", mappedBy="$organisateur")
      */
     private $outingsCreated;
 
+
     public function __construct()
     {
-        $this->outings = new ArrayCollection();
         $this->outingsCreated = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -206,7 +201,7 @@ class Participant implements UserInterface
     /**
      * @return mixed
      */
-    public function isActif()
+    public function getActif()
     {
         return $this->actif;
     }
@@ -236,25 +231,9 @@ class Participant implements UserInterface
     }
 
     /**
-     * @return Collection
+     * @return ArrayCollection
      */
-    public function getOutings(): Collection
-    {
-        return $this->outings;
-    }
-
-    /**
-     * @param ArrayCollection $outings
-     */
-    public function setOutings(ArrayCollection $outings): void
-    {
-        $this->outings = $outings;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getOutingsCreated(): Collection
+    public function getOutingsCreated(): ArrayCollection
     {
         return $this->outingsCreated;
     }
@@ -266,5 +245,6 @@ class Participant implements UserInterface
     {
         $this->outingsCreated = $outingsCreated;
     }
+
 
 }
