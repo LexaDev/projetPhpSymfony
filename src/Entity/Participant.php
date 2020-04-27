@@ -66,13 +66,20 @@ class Participant implements UserInterface
     private $site;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Outing", mappedBy="$organisateur")
+     * @ORM\OneToMany(targetEntity="App\Entity\Outing", mappedBy="organizer")
      */
     private $outingsCreated;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Outing",mappedBy="participants")
+     */
+    private $outingsParticipate;
 
 
     public function __construct()
     {
+        $this->outingsParticipate = new ArrayCollection();
+
         $this->outingsCreated = new ArrayCollection();
     }
 
@@ -244,6 +251,22 @@ class Participant implements UserInterface
     public function setOutingsCreated(ArrayCollection $outingsCreated): void
     {
         $this->outingsCreated = $outingsCreated;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOutingsParticipate(): ArrayCollection
+    {
+        return $this->outingsParticipate;
+    }
+
+    /**
+     * @param ArrayCollection $outingsParticipate
+     */
+    public function setOutingsParticipate(ArrayCollection $outingsParticipate): void
+    {
+        $this->outingsParticipate = $outingsParticipate;
     }
 
 

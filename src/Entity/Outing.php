@@ -64,14 +64,14 @@ class Outing
     private $site;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant",inversedBy="outingsParticipate")
      */
     private $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="outingsCreated")
      */
-    private $organisateur;
+    private $organizer;
 
     public function __construct()
     {
@@ -225,18 +225,19 @@ class Outing
     /**
      * @return mixed
      */
-    public function getOrganisateur()
+    public function getOrganizer()
     {
-        return $this->organisateur;
+        return $this->organizer;
     }
 
     /**
-     * @param mixed $organisateur
+     * @param mixed $organizer
      */
-    public function setOrganisateur($organisateur): void
+    public function setOrganizer($organizer): void
     {
-        $this->organisateur = $organisateur;
+        $this->organizer = $organizer;
     }
+
 
 
 }
