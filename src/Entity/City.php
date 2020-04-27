@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +27,16 @@ class City
      * @ORM\Column(type="string", length=5)
      */
     private $zip;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Location", mappedBy="city")
+     */
+    private $locations;
+
+    public function __construct()
+    {
+        $this->locations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -54,4 +66,21 @@ class City
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getLocations(): Collection
+    {
+        return $this->locations;
+    }
+
+    /**
+     * @param ArrayCollection $locations
+     */
+    public function setLocations(ArrayCollection $locations): void
+    {
+        $this->locations = $locations;
+    }
+
 }

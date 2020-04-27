@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,36 @@ class Outing
      * @ORM\Column(type="text")
      */
     private $infosOuting;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="outings")
+     */
+    private $state;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="outings")
+     */
+    private $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="outings")
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant")
+     */
+    private $participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="outingsCreated")
+     */
+    private $organisateur;
+
+    public function __construct()
+    {
+        $this->participants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,4 +154,89 @@ class Outing
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state): void
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param mixed $location
+     */
+    public function setLocation($location): void
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * @param mixed $site
+     */
+    public function setSite($site): void
+    {
+        $this->site = $site;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    //Methode remplaçant setParticipants qui permet d'ajouter un participant sans écraser le reste de la collection
+    public function addParticipant($participant)
+    {
+        $this->participants->add($participant);
+    }
+    //Methode remplaçant setParticipants qui permet de supprimer un seul participant sans écraser le reste de la collection
+    public function removeParticipant($participant)
+    {
+        $this->participants->removeElement($participant);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrganisateur()
+    {
+        return $this->organisateur;
+    }
+
+    /**
+     * @param mixed $organisateur
+     */
+    public function setOrganisateur($organisateur): void
+    {
+        $this->organisateur = $organisateur;
+    }
+
+
 }

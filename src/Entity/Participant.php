@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -58,6 +60,27 @@ class Participant implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $actif;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Outing")
+     */
+    private $outings;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Outing", mappedBy="organisateur")
+     */
+    private $outingsCreated;
+
+    public function __construct()
+    {
+        $this->outings = new ArrayCollection();
+        $this->outingsCreated = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -179,4 +202,69 @@ class Participant implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function isActif()
+    {
+        return $this->actif;
+    }
+
+    /**
+     * @param mixed $actif
+     */
+    public function setActif($actif): void
+    {
+        $this->actif = $actif;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * @param mixed $site
+     */
+    public function setSite($site): void
+    {
+        $this->site = $site;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOutings(): Collection
+    {
+        return $this->outings;
+    }
+
+    /**
+     * @param ArrayCollection $outings
+     */
+    public function setOutings(ArrayCollection $outings): void
+    {
+        $this->outings = $outings;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOutingsCreated(): Collection
+    {
+        return $this->outingsCreated;
+    }
+
+    /**
+     * @param ArrayCollection $outingsCreated
+     */
+    public function setOutingsCreated(ArrayCollection $outingsCreated): void
+    {
+        $this->outingsCreated = $outingsCreated;
+    }
+
 }
