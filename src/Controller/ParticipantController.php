@@ -12,38 +12,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ParticipantController extends AbstractController
 {
-    /**
-     * @Route("/register", name="participant_register")
-     * @param EntityManagerInterface $em
-     * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function register(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $participant = new Participant();
-        $participantForm = $this->createForm(ParticipantType::class,$participant);
-
-        $participantForm->handleRequest($request);
-        if ($participantForm->isSubmitted() && $participantForm->isValid())
-        {
-            $participant->setActif(true);
-            $participant->setRoles(['ROLE_USER']);
-            $password = $passwordEncoder->encodePassword($participant,$participant->getPassword());
-            $participant->setPassword($password);
-
-            $em->persist($participant);
-            $em->flush();
-
-            $this->addFlash('success','Inscription réussie');
-            return  $this->redirectToRoute('home');
-
-        }
-
-
-        return $this->render('participant/register.html.twig',[
-            'partiForm'=>$participantForm->createView()
-        ]);
-    }
 
     /**
      * @Route("/updateProfile",name="participant_update")
@@ -53,27 +21,26 @@ class ParticipantController extends AbstractController
      */
     public function update(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $participant = $this->getDoctrine()->getRepository(Participant::class)->find(1);
-        $encodePassword = $this->getUser()->getPassword();
+
+        $participant = new Participant();
         $participantForm = $this->createForm(ParticipantType::class, $participant);
 
-        $participantForm->handleRequest($request);
-        if ($participantForm->isSubmitted() && $participantForm->isValid()) {
+        if ($request->get('participant[password][second]'))
 
-            $password = $request->get('password');
-             if($passwordEncoder->isPasswordValid($encodePassword,$password))
-
-                 $participant->setPassword($encodePassword);
-                 $em->persist($participant);
-                 $em->flush();
-
-                 $this->addFlash('success', 'Inscription réussie');
-                 return $this->redirectToRoute('home');
-        }
 
         return  $this->render('participant/updateProfil.html.twig',[
             'partiForm'=> $participantForm->createView()
         ]);
     }
 
+    /**
+     * @Route("/profile",name="participant_profile")
+     */
+    public function profile()
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            return $this->render('participant/profile.html.twig');
+        }
+    }
 }
