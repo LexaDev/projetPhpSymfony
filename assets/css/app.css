@@ -1,3 +1,35 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
 body {
     background-color: lightgray;
 }
+
+.form-control
+{
+    margin-left: 25px;
+}
+
+#createOuting{
+    margin-top: 30px;
+}
+.img-responsive
+{
+    width: 50%;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: #e33d77;
+    color: #000000;
+    text-align: center;
+}
+.copyright
+{
+    margin: auto;
+}
+
+

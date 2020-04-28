@@ -54,8 +54,7 @@ class Participant implements UserInterface
     private $lastName;
 
     /**
-     * @Assert\NotBlank(message="Le champs 'Téléphone' est obligatoire.")
-     * @Assert\Regex(pattern="#^(\d{2}\s*){5}$#", message="Veuillez saisir un numéro au format 02 55 23 23 23.")
+     * @Assert\Regex(pattern="#^(\d{2}\s*){5}$#", message="Veuillez saisir un numéro au format 02 23 23 23 23.")
      * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $phoneNumber;
