@@ -38,10 +38,22 @@
     {{ form_errors(partiForm.site) }}
     </div>
     <div>
-        <label for="password" class="required">Mot de Passe</label>
-        <input type="password" id="password" name="password" required="required" class="password-field">
+        {{ form_label(partiForm.password) }}
+        {{ form_widget(partiForm.password) }}
+        {{ form_errors(partiForm.password) }}
     </div>
     <div>
         <button type="submit">Modifier</button>
     </div>
 {%  endblock %}
+
+{%  block javaScript %}
+    <script>
+
+
+
+    </script>
+{%  endblock %}
+
+
+
