@@ -33,9 +33,7 @@ class ParticipantType extends AbstractType
             ])
             ->add('phoneNumber', TelType::class,[
                 'label'=>'Téléphone',
-                'attr'=>[
-                    'pattern'=>'#^(\d{2}\s*){5}$#'
-                        ]
+
             ])
             ->add('email',EmailType::class,[
                 'label'=>'E-mail',
@@ -46,8 +44,9 @@ class ParticipantType extends AbstractType
              ])
             ->add('site',EntityType::class,[
                 'class'=>Site::class,
-                'choice_label'=>'Site',
-                'expanded'=>true
+                'label'=>'Site',
+                'choice_label'=>'name'
+
             ])
             ->add('password',RepeatedType::class,[
                 'type' => PasswordType::class,
