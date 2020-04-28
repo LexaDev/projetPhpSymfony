@@ -40,7 +40,7 @@ class Outing
     private $dateTimeStart;
 
     /**
-     * @Assert\Positive(message=""La durée ne peut pas être nul ou négative")
+     * @Assert\Positive(message="La durée ne peut pas être nul ou négative")
      * @Assert\Type(type="integer",message="La durée doit être exprimé par un nombre entier")
      * @ORM\Column(type="integer")
      */
@@ -49,7 +49,7 @@ class Outing
     /**
      * @Assert\NotBlank(message="La date limite d'inscription doit être rensignée")
      * @Assert\Date()
-     * @Assert\LessThan("$dateTimeStart", message="La dete limite d'inscription doit être avant le début de la sortie")
+     * @Assert\LessThan("$dateTimeStart", message="La date limite d'inscription doit être avant le début de la sortie")
      * @Assert\GreaterThanOrEqual("today UTC", message="La date limite d'inscription doit être supérieure à aujourd'hui")
      * @ORM\Column(type="date")
      */
