@@ -40,7 +40,7 @@ class Outing
     private $dateTimeStart;
 
     /**
-     * @Assert\Positive(message=""La durée ne peut pas être nul ou négative")
+     * @Assert\Positive(message="La durée ne peut pas être nul ou négative")
      * @Assert\Type(type="integer",message="La durée doit être exprimé par un nombre entier")
      * @ORM\Column(type="integer")
      */
