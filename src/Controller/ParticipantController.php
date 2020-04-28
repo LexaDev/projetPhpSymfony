@@ -17,7 +17,7 @@ class ParticipantController extends AbstractController
      * @param EntityManagerInterface $em
      * @param Request $request
      * @param PasswordEncoderInterface $passwordEncoder
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
      */
     public function register(EntityManagerInterface $em, Request $request, PasswordEncoderInterface $passwordEncoder)
     {
@@ -45,4 +45,36 @@ class ParticipantController extends AbstractController
             'partiForm'=>$participantForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/updateProfile",name="participant_update")
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     *
+     */
+    public function update(EntityManagerInterface $em, Request $request, PasswordEncoderInterface $passwordEncoder)
+    {
+        $participant = $this->getDoctrine()->getRepository(Participant::class)->find(1);
+        $encodePassword = $this->getUser()->getPassword();
+        $participantForm = $this->createForm(ParticipantType::class, $participant);
+
+        $participantForm->handleRequest($request);
+        if ($participantForm->isSubmitted() && $participantForm->isValid()) {
+
+            $password = $request->get('password');
+             if($passwordEncoder->isPasswordValid($encodePassword,$password))
+
+                 $participant->setPassword($encodePassword);
+                 $em->persist($participant);
+                 $em->flush();
+
+                 $this->addFlash('success', 'Inscription réussie');
+                 return $this->redirectToRoute('home');
+        }
+
+        return  $this->render('participant/updateProfil.html.twig',[
+            'partiForm'=> $participantForm->createView()
+        ]);
+    }
+
 }
