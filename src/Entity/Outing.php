@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OutingRepository")
@@ -19,31 +20,54 @@ class Outing
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Le nom est obligatoire")
+     * @Assert\Length(
+     *     min="3",
+     *     minMessage="Le nom doit faire au moins 3 caractères",
+     *     max="255",
+     *     maxMessage="Le nom ne doit pas dépasser 255 caractères"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message="La date de début de la sortie doit être rensignée")
+     * @Assert\DateTime()
+     * @Assert\GreaterThan("today UTC", message="La date et l'heure de début de la sortie doit être après aujourd'hui")
      * @ORM\Column(type="datetime")
      */
     private $dateTimeStart;
 
     /**
+     * @Assert\Positive(message=""La durée ne peut pas être nul ou négative")
+     * @Assert\Type(type="integer",message="La durée doit être exprimé par un nombre entier")
      * @ORM\Column(type="integer")
      */
     private $duration;
 
     /**
+     * @Assert\NotBlank(message="La date limite d'inscription doit être rensignée")
+     * @Assert\Date()
+     * @Assert\LessThan("$dateTimeStart", message="La dete limite d'inscription doit être avant le début de la sortie")
+     * @Assert\GreaterThanOrEqual("today UTC", message="La date limite d'inscription doit être supérieure à aujourd'hui")
      * @ORM\Column(type="date")
      */
     private $dateLimitSigningUp;
 
     /**
+     *
+     * @Assert\Positive(message="Le nombre de participants ne peut pas être nul ou négatif")
      * @ORM\Column(type="integer")
      */
     private $nbSigningUpMax;
 
     /**
+     * @Assert\NotBlank(message="Le champ ne peut pas être vide")
+     * @Assert\Length(
+     *     min="3",
+     *      minMessage="Les informations sur la sorties doivent faire au minimum 3 caractères"
+     * )
      * @ORM\Column(type="text")
      */
     private $infosOuting;
