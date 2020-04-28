@@ -20,6 +20,11 @@ class Participant implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Le champs 'Pseudo' est obligatoire.")
+     * @Assert\Length(  min="5",
+     *                  minMessage="Le champs 'Pseudo' doit contenir au minimum 5 caractères.",
+     *                  max="30",
+     *                  maxMessage="Le champs 'Pseudo' doit contenir au maximum 30 caractères.")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
@@ -31,26 +36,33 @@ class Participant implements UserInterface
 
     /**
      * @var string The hashed password
+     * @Assert\Regex(pattern="#^[\w-?!]{8,}$#", message="Le champs 'Mot de passe' doit contenir au moins 8 caractères comprenant: chiffre, lettre, _, ?, -, !.")
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
+     * @Assert\NotBlank(message="Le champs 'Prénom' est obligatoire.")
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank(message="Le champs 'Nom' est obligatoire.")
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Assert\NotBlank(message="Le champs 'Téléphone' est obligatoire.")
+     * @Assert\Regex(pattern="#^(\d{2}\s*){5}$#", message="Veuillez saisir un numéro au format 02 55 23 23 23.")
      * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $phoneNumber;
 
     /**
+     * @Assert\NotBlank(message="Le champs 'Email' est obligatoire.")
+     * @Assert\Regex(pattern="#^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$#", message="Veuillez saisir une adresse email valide.")
      * @ORM\Column(type="string", length=255)
      */
     private $email;
