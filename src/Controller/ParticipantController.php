@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ParticipantController extends AbstractController
 {
@@ -16,10 +16,9 @@ class ParticipantController extends AbstractController
      * @Route("/register", name="participant_register")
      * @param EntityManagerInterface $em
      * @param Request $request
-     * @param PasswordEncoderInterface $passwordEncoder
-     *
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
-    public function register(EntityManagerInterface $em, Request $request, PasswordEncoderInterface $passwordEncoder)
+    public function register(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $participant = new Participant();
         $participantForm = $this->createForm(ParticipantType::class,$participant);
@@ -52,7 +51,7 @@ class ParticipantController extends AbstractController
      * @param Request $request
      *
      */
-    public function update(EntityManagerInterface $em, Request $request, PasswordEncoderInterface $passwordEncoder)
+    public function update(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $participant = $this->getDoctrine()->getRepository(Participant::class)->find(1);
         $encodePassword = $this->getUser()->getPassword();
