@@ -3,8 +3,11 @@
         <span style="text-decoration: underline;"><a href="#">Villes</a></span>
         <span style="text-decoration: underline;"><a href="#">Sites</a></span>
         <span style="text-decoration: underline;"><a href="{{ path('home')   }}">Accueil</a></span>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <span style="text-decoration: underline;"><a href="{{ path('participant_profile') }}">Mon profil</a></span>
-        <span style="text-decoration: underline;"><a href="{{ path('app_login') }}">Se connecter</a></span>
         <span style="text-decoration: underline;"><a href="{{ path('app_logout') }}">Se déconnecter</a></span>
+        {% else %}
+        <span style="text-decoration: underline;"><a href="{{ path('app_login') }}">Se connecter</a></span>
+        {% endif %}
     </ul>
 </nav>

@@ -181,7 +181,13 @@
         </table>
 
         <div>
-            <button id="createOuting" type="submit" class="btn btn-primary btn-lg">Créer une sortie</button>
+            <div class="form-group">
+                <a href="{{ path('create_outing') }}">
+                    <button class="btn btn-lg btn-primary m-2" type="submit">
+                        Créer une sortie
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 {% endblock %}

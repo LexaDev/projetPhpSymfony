@@ -1,0 +1,89 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Créer une sortie
+{% endblock %}
+
+{% block main %}
+    <div class="container mt-4 mb-3">
+            {{ form_start(outingForm) }}
+        <div class="d-flex justify-content-center h-100">
+            <div class="card w-75">
+                <div class="card-header">
+                    <h3 style="text-align: center;">Créer une sortie</h3>
+
+                    <div class="card-body">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                 <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.name) }}
+                                 </span>
+                            </div>
+                                    {{ form_widget(outingForm.name) }}
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.dateTimeStart) }}
+                                </span>
+                            </div>
+                                    {{ form_widget(outingForm.dateTimeStart) }}
+                        </div>
+
+                        <div class="input-group form-group">
+                           <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.dateLimitSigningUp) }}
+                                </span>
+                           </div>
+                                    {{ form_widget(outingForm.dateLimitSigningUp) }}
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.nbSigningUpMax) }}
+                                </span>
+                             </div>
+                                    {{ form_widget(outingForm.nbSigningUpMax) }}
+                         </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.duration) }}
+                                </span>
+                            </div>
+                                    {{ form_widget(outingForm.duration) }}
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    {{ form_label(outingForm.infosOuting) }}
+                                </span>
+                            </div>
+                                    {{ form_widget(outingForm.infosOuting) }}
+                        </div>
+                    </div>
+                        <div class="row justify-content-center">
+                             <button type="submit" class="btn btn-primary">Enregistrer</button>
+                             <button type="submit" class="btn btn-primary">Publier la sortie</button>
+                             <button type="submit" class="btn btn-primary">Annuler</button>
+                        </div>
+
+
+                    <div class="card w-75">
+                         <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                 <span class="input-group-text mb-3">
+                                      {{ form_label(outingForm.location) }}
+                                </span>
+                             </div>
+                             {{ form_widget(outingForm.location) }}
+                        </div>
+                    </div>
+                </div>
+        </div>
+{% endblock %}
