@@ -21,45 +21,69 @@ class ParticipantType extends AbstractType
         $builder
             ->add('username',TextType::class,[
             'label'=>'Pseudo',
-            'required'=>true
+            'required'=>true,
+                'attr'=>[
+                    'class'=>'ml-0 form-control'
+                ]
             ])
             ->add('firstName',TextType::class,[
                 'label'=>'Prénom',
-                'required'=>true
+                'required'=>true,
+                'attr'=>[
+                    'class'=>'ml-0 form-control'
+                ]
              ])
             ->add('lastName',TextType::class,[
                 'label'=>'Nom',
-                'required'=>true
+                'required'=>true,
+                'attr'=>[
+                    'class'=>'ml-0 form-control'
+                ]
             ])
             ->add('phoneNumber', TelType::class,[
                 'label'=>'Téléphone',
+                'attr'=>[
+                    'class'=>'ml-0 form-control'
+                ]
 
             ])
             ->add('email',EmailType::class,[
                 'label'=>'E-mail',
                 'required'=>true,
                  'attr'=>[
-                     'pattern'=>'#^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$#'
+                     'class'=>'ml-0 form-control'
                         ]
              ])
             ->add('site',EntityType::class,[
                 'class'=>Site::class,
                 'label'=>'Site',
-                'choice_label'=>'name'
+                'choice_label'=>'name',
+                'attr'=>[
+                    'class'=>'ml-0 form-control'
+                ]
 
             ])
-            ->add('password',RepeatedType::class,[
-                'type' => PasswordType::class,
+            ->add('newPassword',RepeatedType::class,[
+                'type' =>PasswordType::class,
+                'required'=>false,
+                'mapped'=>false,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'first_options'  => [
                     'label' => 'Mot de Passe',
+                    'mapped'=>false,
                     'attr'=>[
-                        'required'=>true
+                        'class'=>'ml-0 form-control',
+                        'pattern'=>'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
                                             ]
                     ],
                 'second_options' => [
-                    'label' => 'Saisir à nouveau'
+                    'label' => 'Saisir à  nouveau',
+                    'mapped'=>false,
+                    'attr'=>[
+                        'class'=>'ml-0 form-control',
+                        'pattern'=>'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+                    ]
                     ],
             ])
         ;
