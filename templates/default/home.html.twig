@@ -6,37 +6,95 @@
 
     <div class="container align-items-center">
         <form class="searching" method="get" action="">
-        <div class="row">
+            <div class="row">
 
                 <div class="col-4" style="margin:auto;">
 
-                            <p style=><strong>Filtrer les sorties</strong></p>
+                    <p style=><strong>Filtrer les sorties</strong></p>
 
-                                    <label for="site">Site :</label>
+                        <div class="btn-group">
+                            <label for="search-site" class="col-6">Site :</label>
+                            <button id="search-site" type="button" class="btn btn-default col-4">Rechercher</button>
+                            <button id="search-site" type="button" class="btn btn-default dropdown-toggle col-2" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" title="SAINT HERBLAIN">SAINT HERBLAIN</a></li>
+                                <li><a href="#" title="LA ROCHE SUR YON">LA ROCHE SUR YON</a></li>
+                                <li><a href="#" title="QUIMPER">QUIMPER</a></li>
+                            </ul>
+                        </div>
 
-                                    <SELECT name="site" size="1" id="site">
-                                        <option>SAINT-HERBLAIN</option>
-                                        <option>LA ROCHE-SUR-YON</option>
-                                        <option>RENNES</option>
-                                        <option>NIORT</option>
-                                    </SELECT>
+                    <div class="d-flex">
+                        <label class="rechercher-sortie" for="sortie-search">Le nom de la<br> sortie contient
+                            :</label>
 
 
-                                    <label class="rechercher-sortie" for="sortie-search">Le nom de la sortie contient
-                                        :</label>
+                        <input class="form-control"
+                               type="text"
+                               id="sortie-search"
+                               placeholder="search"
+                               name="sortieSearch"
+                               aria-label="Search"
+                                style="display: inline-block;">
+
+                    </div>
+                    <div class="container">
+
+                        <div class="form-group">
+                            <div class='input-group date col' id='datetimepicker8'>
+                                <label for="beforeDate">Entre : </label>
+                                <input type='text' class="form-control"/>
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar">
+                                    </span>
+                                </span>
+                            </div>
 
 
-                                    <input class="form-control" type="search" id="sortie-search"
-                                           placeholder="Q Rechercher"
-                                           name="sortieSearch"
-                                           aria-label="Search">
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker8').datetimepicker({
+                                        icons: {
+                                            time: "fa fa-clock-o",
+                                            date: "fa fa-calendar",
+                                            up: "fa fa-arrow-up",
+                                            down: "fa fa-arrow-down"
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            <div class='input-group date col' id='datetimepicker8'>
+                                <label for="afterDate">et</label>
+                                <input type='text' id="afterDate" class="form-control"/>
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar">
+                                    </span>
+                                </span>
+                            </div>
 
 
-                                    Entre : <input type="date" name="beforeDate"> et <input type="date" name="laterDate">
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker8').datetimepicker({
+                                        icons: {
+                                            time: "fa fa-clock-o",
+                                            date: "fa fa-calendar",
+                                            up: "fa fa-arrow-up",
+                                            down: "fa fa-arrow-down"
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
 
                 </div>
 
-            <div class="col-4" style="margin: auto;">
+                <div class="col-4" style="margin: auto;">
 
                     <input type="checkbox" id="outing-organizer" name="organizer">
                     <label for="outing-organizer">Sorties dont je suis l'organisateur/trice</label>
@@ -56,13 +114,13 @@
                     <input type="checkbox" id="past-outings" name="finish">
                     <label for="past-outings">Sorties passées</label>
 
-            </div>
+                </div>
 
-            <div class="col-4 d-flex align-items-center">
-                <button type="button" class="btn btn-primary btn-lg " style="margin: auto">Rechercher</button>
-            </div>
+                <div class="col-4 d-flex align-items-center">
+                    <button type="button" class="btn btn-primary btn-lg " style="margin: auto">Rechercher</button>
+                </div>
 
-        </div>
+            </div>
         </form>
 
         <table class="table table-bordered">
@@ -97,7 +155,7 @@
                 <td>Fermé</td>
                 <td></td>
                 <td>Rémi.S</td>
-                <td><a href="#">Afficher</a> </td>
+                <td><a href="#">Afficher</a></td>
             </tr>
             <tr>
                 <th scope="row">Perles</th>
@@ -106,8 +164,8 @@
                 <td>2/12</td>
                 <td>Fermé</td>
                 <td>X</td>
-                <td><a href="#">Jojo56</a> </td>
-                <td><a href="#">Afficher</a> - <a href="#">Se désister</a> </td>
+                <td><a href="#">Jojo56</a></td>
+                <td><a href="#">Afficher</a> - <a href="#">Se désister</a></td>
             </tr>
             <tr>
                 <th scope="row">Concert metal</th>
@@ -117,7 +175,7 @@
                 <td>Ouvert</td>
                 <td>X</td>
                 <td>Raymond D.</td>
-                <td><a href="#">Afficher</a> - <a href="#">Se désister</a> </td>
+                <td><a href="#">Afficher</a> - <a href="#">Se désister</a></td>
             </tr>
             </tbody>
         </table>

@@ -9,6 +9,7 @@ body {
 .form-control
 {
     margin-left: 25px;
+    display: inline-block;
 }
 
 #createOuting{
@@ -30,6 +31,21 @@ body {
 .copyright
 {
     margin: auto;
+}
+.btn-default{
+    float: right;
+}
+#sortie-search{
+    width: 60%;
+}
+.table-bordered{
+    margin-top: 35px;
+}
+.menu{
+    margin: auto;
+}
+ul span{
+    margin-left: 10px;
 }
 
 
