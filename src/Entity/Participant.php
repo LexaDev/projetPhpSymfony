@@ -61,7 +61,7 @@ class Participant implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Le champs 'Email' est obligatoire.")
-     * @Assert\Regex(pattern="#^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$#", message="Veuillez saisir une adresse email valide.")
+     * @Assert\Regex(pattern="#^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$#", message="Veuillez saisir une adresse email valide.")
      * @ORM\Column(type="string", length=255)
      */
     private $email;
