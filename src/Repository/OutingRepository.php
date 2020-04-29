@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Outing;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Outing|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +20,60 @@ class OutingRepository extends ServiceEntityRepository
         parent::__construct($registry, Outing::class);
     }
 
-    // /**
-    //  * @return Outing[] Returns an array of Outing objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOutingsByCriterias($nameModele = null,
+                                           $site = null,
+                                           $dateStart = null,
+                                           $dateEnd = null,
+                                           $organizer = null,
+                                           $registered = null,
+                                           $unregistered = null,
+                                           $finish = null)
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $query = $this->createQueryBuilder('o')
+            ->leftJoin('o.participants', 'p')
+            ->innerJoin('o.state', 's')
+            ->innerJoin('o.organizer', 'organizer')
+            ->select('o', 'p', 's', 'organizer')
         ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Outing
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($nameModele){
+            $query->where('o.name LIKE :nameModele');
+            $query->setParameter('nameModele', '%'.$nameModele.'%');
+        }
+
+        if ($site){
+            $query->andWhere('o.site = :site');
+            $query->setParameter('site', $site);
+        }
+
+        if ($dateStart AND $dateEnd){
+            $query->andWhere($query->expr()->between('o.dateTimeStart', ':dateStart', ':dateEnd'));
+            $query->setParameter('dateStart', $dateStart);
+            $query->setParameter('dateEnd', $dateEnd);
+        }
+
+        if ($organizer){
+            $query->andWhere('organizer = :organizer');
+            $query->setParameter('organizer', $organizer);
+        }
+
+        if ($registered){
+            $query->andWhere('p = :participant');
+            $query->setParameter('participant', $registered);
+        }
+
+        if ($unregistered){
+            $query->andWhere('p != :participant');
+            $query->setParameter('participant', $unregistered);
+        }
+
+        if ($finish){
+            $query->andWhere('o.state = :etat');
+            $query->setParameter('etat', $finish);
+        }
+
+        $query->orderBy('o.dateTimeStart');
+
+        return $query->getQuery()->getResult();
     }
-    */
 }
