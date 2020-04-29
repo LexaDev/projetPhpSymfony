@@ -20,13 +20,14 @@
                 <img src="{{ asset('build/img/logo.png') }}"  class="img-responsive"alt="Sortir.com"/>
             </div>
 
-
             <div class="col" style="text-align: right;padding-right: 10px; padding-top: 10px;">
-                {% include ('inc/nav.html.twig') %}
-                <div style="text-align: right;padding-right: 10px;">
-                    <strong>Date du jour : {{ "now"|date ("D/M/Y") }} <br>
-                        Participant : </strong>
-                </div>
+                {% if app.user %}
+                    {% include ('inc/nav.html.twig') %}
+                    <div style="text-align: right;padding-right: 10px;">
+                        <strong>Date du jour : {{ "now"|date ("d/m/Y") }} <br>
+                            Participant : {{ app.user.username }}</strong>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </header>
@@ -44,6 +45,8 @@
         </div>
     </div>
 </footer>
+{% block javaScript %}
+{%  endblock %}
 </body>
 </html>
 

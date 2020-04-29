@@ -1,0 +1,59 @@
+{%  extends 'layout.html.twig' %}
+
+{%  block title %}
+    Modifier son profil
+{%  endblock %}
+
+
+{%  block main %}
+{{ form_start(partiForm) }}
+    <div>
+    {{ form_label(partiForm.username) }}
+    {{ form_widget(partiForm.username) }}
+    {{ form_errors(partiForm.username) }}
+    </div>
+    <div>
+    {{ form_label(partiForm.firstName) }}
+    {{ form_widget(partiForm.firstName) }}
+    {{ form_errors(partiForm.firstName) }}
+    </div>
+    <div>
+    {{ form_label(partiForm.lastName) }}
+    {{ form_widget(partiForm.lastName) }}
+    {{ form_errors(partiForm.lastName) }}
+    </div>
+    <div>
+    {{ form_label(partiForm.phoneNumber) }}
+    {{ form_widget(partiForm.phoneNumber) }}
+    {{ form_errors(partiForm.phoneNumber) }}
+    </div>
+    <div>
+    {{ form_label(partiForm.email) }}
+    {{ form_widget(partiForm.email) }}
+    {{ form_errors(partiForm.email) }}
+    </div>
+    <div>
+    {{ form_label(partiForm.site) }}
+    {{ form_widget(partiForm.site) }}
+    {{ form_errors(partiForm.site) }}
+    </div>
+    <div>
+        {{ form_label(partiForm.password) }}
+        {{ form_widget(partiForm.password) }}
+        {{ form_errors(partiForm.password) }}
+    </div>
+    <div>
+        <button type="submit">Modifier</button>
+    </div>
+{%  endblock %}
+
+{%  block javaScript %}
+    <script>
+
+
+
+    </script>
+{%  endblock %}
+
+
+

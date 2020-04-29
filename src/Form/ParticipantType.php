@@ -33,9 +33,7 @@ class ParticipantType extends AbstractType
             ])
             ->add('phoneNumber', TelType::class,[
                 'label'=>'Téléphone',
-                'attr'=>[
-                    'pattern'=>'#^(\d{2}\s*){5}$#'
-                        ]
+
             ])
             ->add('email',EmailType::class,[
                 'label'=>'E-mail',
@@ -46,16 +44,23 @@ class ParticipantType extends AbstractType
              ])
             ->add('site',EntityType::class,[
                 'class'=>Site::class,
-                'choice_label'=>'Site',
-                'expanded'=>true
+                'label'=>'Site',
+                'choice_label'=>'name'
+
             ])
             ->add('password',RepeatedType::class,[
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => ['label' => 'Mot de Passe'],
-                'second_options' => ['label' => 'Saisir à nouveau'],
+                'first_options'  => [
+                    'label' => 'Mot de Passe',
+                    'attr'=>[
+                        'required'=>true
+                                            ]
+                    ],
+                'second_options' => [
+                    'label' => 'Saisir à nouveau'
+                    ],
             ])
         ;
     }
