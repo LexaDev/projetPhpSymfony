@@ -36,8 +36,7 @@ class Participant implements UserInterface
 
     /**
      * @var string The hashed password
-     * @Assert\Regex(pattern="#^[\w-?!]{8,}$#", message="Le champs 'Mot de passe' doit contenir au moins 8 caractères comprenant: chiffre, lettre, _, ?, -, !.")
-     * @ORM\Column(type="string")
+      * @ORM\Column(type="string")
      */
     private $password;
 
