@@ -18,7 +18,7 @@
                                     Pseudo
                                 </span>
                             </div >
-                                <div class="ml-0 form-control">
+                                <div class="ml-0 form-control" id="userName">
                                     {{ app.user.username }}
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
                                     Prénom
                                 </span>
                         </div >
-                        <div class="ml-0 form-control">
+                        <div class="ml-0 form-control" id="firstname">
                             {{ app.user.firstName }}
                         </div>
                     </div>
@@ -63,10 +63,20 @@
                             {{ app.user.phoneNumber }}
                         </div>
                     </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    Site de rattachement
+                                </span>
+                        </div >
+                        <div class="ml-0 form-control">
+                            {{ app.user.site.name }}
+                        </div>
+                    </div>
                         <div class="row justify-content-center">
                             <div class="form-group">
                                 <a href="{{ path('participant_update') }}">
-                                <button class="btn btn-lg btn-primary m-2" type="submit">
+                                <button class="btn btn-lg btn-primary m-2" id="modifier">
                                     Modifier
                                 </button>
                                 </a>
@@ -76,4 +86,8 @@
             </div>
         </div>
     </div>
+{%  endblock %}
+
+{%  block javaScript %}
+
 {%  endblock %}
