@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -260,6 +261,19 @@ class Outing
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * Teste si on inscription possible sur la sortie return true si ok
+     * @return bool
+     */
+    public function canSubscribe()
+    {
+        if ($this->getDateLimitSigningUp()>new DateTime('now') && count($this->getParticipants())<$this->getNbSigningUpMax() && $this->getState()->getId() == 2)
+        {
+            return true;
         }
         return false;
     }
