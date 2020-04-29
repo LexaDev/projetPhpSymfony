@@ -12,20 +12,31 @@
 
                     <p style=><strong>Filtrer les sorties</strong></p>
 
-                        <div class="btn-group">
-                            <label for="search-site" class="col-6">Site :</label>
-                            <button id="search-site" type="button" class="btn btn-default col-4">Rechercher</button>
-                            <button id="search-site" type="button" class="btn btn-default dropdown-toggle col-2" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" title="SAINT HERBLAIN">SAINT HERBLAIN</a></li>
-                                <li><a href="#" title="LA ROCHE SUR YON">LA ROCHE SUR YON</a></li>
-                                <li><a href="#" title="QUIMPER">QUIMPER</a></li>
-                            </ul>
-                        </div>
+                    <div class="btn-group">
+                        <label for="search-site" class="col-6">Site :</label>
+                        <!--<button id="search-site" type="button" class="btn btn-default col-4">Rechercher</button>
+                        <button id="search-site" type="button" class="btn btn-default dropdown-toggle col-2" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" title="SAINT HERBLAIN">SAINT HERBLAIN</a></li>
+                            <li><a href="#" title="LA ROCHE SUR YON">LA ROCHE SUR YON</a></li>
+                            <li><a href="#" title="QUIMPER">QUIMPER</a></li>
+                        </ul>-->
+
+                        <select name="site">
+                            {% for site in sites|sort((a, b) => a.name <=> b.name) %}
+                                <option value="{{ site.id }}"
+                                        {% if filters['site'] %}
+                                            {% if filters['site'] == site.id %}selected{% endif %}
+                                        {% endif %}
+                                >{{ site.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
 
                     <div class="d-flex">
                         <label class="rechercher-sortie" for="sortie-search">Le nom de la<br> sortie contient
@@ -37,6 +48,9 @@
                                id="sortie-search"
                                placeholder="search"
                                name="sortieSearch"
+                               {% if filters['sortieSearch'] %}
+                                    value="{{ filters['sortieSearch'] }}"
+                               {% endif %}
                                aria-label="Search"
                                 style="display: inline-block;">
 
@@ -46,7 +60,11 @@
                         <div class="form-group">
                             <div class='input-group date col' id='datetimepicker8'>
                                 <label for="beforeDate">Entre : </label>
-                                <input type='text' class="form-control"/>
+                                <input type='date' name="dateStart"
+                                        {% if filters['dateStart'] %}
+                                            value="{{ filters['dateStart'] }}"
+                                        {% endif %}
+                                       id="beforeDate" class="form-control"/>
                                 <span class="input-group-addon">
                                     <span class="fa fa-calendar">
                                     </span>
@@ -69,7 +87,11 @@
 
                             <div class='input-group date col' id='datetimepicker8'>
                                 <label for="afterDate">et</label>
-                                <input type='text' id="afterDate" class="form-control"/>
+                                <input type='date' name="dateEnd"
+                                        {% if filters['dateEnd'] %}
+                                            value="{{ filters['dateEnd'] }}"
+                                        {% endif %}
+                                       id="afterDate" class="form-control"/>
                                 <span class="input-group-addon">
                                     <span class="fa fa-calendar">
                                     </span>
@@ -96,33 +118,50 @@
 
                 <div class="col-4" style="margin: auto;">
 
-                    <input type="checkbox" id="outing-organizer" name="organizer">
+                    <input type="checkbox" id="outing-organizer" name="organizer"
+                        {% if filters['organizer'] %}
+                            checked
+                        {% endif %}
+                    >
                     <label for="outing-organizer">Sorties dont je suis l'organisateur/trice</label>
 
                     <br>
 
-                    <input type="checkbox" id="registered-outings" name="register">
+                    <input type="checkbox" id="registered-outings" name="registered"
+                        {% if filters['registered'] %}
+                            checked
+                        {% endif %}
+                    >
                     <label for="registered-outings">Sorties auxquelles je suis inscrit/e</label>
 
                     <br>
 
-                    <input type="checkbox" id="unregistered-outings" name="unregistered">
+                    <input type="checkbox" id="unregistered-outings" name="unregistered"
+                        {% if filters['unregistered'] %}
+                            checked
+                        {% endif %}
+                    >
                     <label for="unregistered-outings">Sorties auxquelles je ne suis pas inscrit/e</label>
 
                     <br>
 
-                    <input type="checkbox" id="past-outings" name="finish">
+                    <input type="checkbox" id="past-outings" name="finish"
+                        {% if filters['finish'] %}
+                            checked
+                        {% endif %}
+                    >
                     <label for="past-outings">Sorties passées</label>
 
                 </div>
 
                 <div class="col-4 d-flex align-items-center">
-                    <button type="button" class="btn btn-primary btn-lg " style="margin: auto">Rechercher</button>
+                    <button type="submit" class="btn btn-primary btn-lg " style="margin: auto">Rechercher</button>
                 </div>
 
             </div>
         </form>
 
+        <p>{{ outings|length }} sorties trouvées !</p>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -137,49 +176,27 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">Philo</th>
-                <td>19/07/2018 23:45</td>
-                <td>19/07/2018</td>
-                <td>8/8</td>
-                <td>En cours</td>
-                <td>X</td>
-                <td>Spinoz.A</td>
-                <td><a href="#">Afficher</a></td>
-            </tr>
-            <tr>
-                <th scope="row">Origamie</th>
-                <td>21/07/2018 20:00</td>
-                <td>18/07/2018</td>
-                <td>3/5</td>
-                <td>Fermé</td>
-                <td></td>
-                <td>Rémi.S</td>
-                <td><a href="#">Afficher</a></td>
-            </tr>
-            <tr>
-                <th scope="row">Perles</th>
-                <td>21/07/2018 20:00</td>
-                <td>18/07/2018</td>
-                <td>2/12</td>
-                <td>Fermé</td>
-                <td>X</td>
-                <td><a href="#">Jojo56</a></td>
-                <td><a href="#">Afficher</a> - <a href="#">Se désister</a></td>
-            </tr>
-            <tr>
-                <th scope="row">Concert metal</th>
-                <td>27/07/2018 20:30</td>
-                <td>20/07/2018</td>
-                <td>8/10</td>
-                <td>Ouvert</td>
-                <td>X</td>
-                <td>Raymond D.</td>
-                <td><a href="#">Afficher</a> - <a href="#">Se désister</a></td>
-            </tr>
+            {% for outing in pagination %}
+                <tr>
+                    <th scope="row">{{ outing.name }}</th>
+                    <td>{{ outing.dateTimeStart|date('d/m/Y') }} à {{ outing.dateTimeStart|date('H:i') }}</td>
+                    <td>{{ outing.dateLimitSigningUp|date('d/m/Y') }}</td>
+                    <td>{{ outing.participants|length }}/{{ outing.nbSigningUpMax }}</td>
+                    <td>{{ outing.state.label }}</td>
+                    <td>
+                        {% for participant in outing.participants %}
+                            {% if participant == app.user %}
+                                X
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td><a href=""></a>{{ outing.organizer.username }}</td>
+                    <td>{# todo: personnalisé les liens affiché en fonction de l'utilisateur et de la date #}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
-
+        {{ knp_pagination_render(pagination) }}
         <div>
             <button id="createOuting" type="submit" class="btn btn-primary btn-lg">Créer une sortie</button>
         </div>

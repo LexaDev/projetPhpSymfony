@@ -48,4 +48,13 @@ ul span{
     margin-left: 10px;
 }
 
+/* ==================== Style pagination ========================*/
+.pagination {
+    justify-content: center;
+}
+
+li.page-item.active span.page-link {
+    background-color: #e33d77;
+    border-color: #e33d77;
+}
 
