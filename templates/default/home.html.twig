@@ -191,7 +191,22 @@
                         {% endfor %}
                     </td>
                     <td><a href=""></a>{{ outing.organizer.username }}</td>
-                    <td>{# todo: personnalisé les liens affiché en fonction de l'utilisateur et de la date #}</td>
+                    <td>{# todo: personnalisé les liens affiché en fonction de l'utilisateur et de la date  actions #}
+                        Afficher
+                        {% if app.user is same as( outing.organizer) %}
+                            Annuler
+                            {%  if  outing.state.id == 1 %}
+                                Modifier
+                                Publier
+                            {%  endif %}
+                        {% elseif outing.canSubscribe %}
+                        S'inscrire
+                            {% if outing.isParticipant(app.user)  %}
+                            Se désister
+                        {% endif %}
+                        {%  endif %}
+
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -207,4 +222,15 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
+
+{% block javaScript %}
+    <script>
+
+
+
+    </script>
+
+
+{%  endblock %}
