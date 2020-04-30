@@ -35,7 +35,9 @@
                         {% include 'inc/nav.html.twig' %}
                         <div style="text-align: right;padding-right: 10px;">
                             <strong>Date du jour : {{ "now"|date ("d/m/Y") }} <br>
-                                Participant : {{ app.user.username }}</strong>
+                                {%  if app.user %}
+                                Participant : {{ app.user.username }}
+                            {%  endif %}</strong>
                         </div>
                     </div>
                 </div>
