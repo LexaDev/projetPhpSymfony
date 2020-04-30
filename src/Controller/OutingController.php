@@ -110,7 +110,7 @@ class OutingController extends AbstractController
             $city = $this->getDoctrine()->getRepository(Location::class);
             $citiesDatas = $city->find($id);
             dump($citiesDatas);
-            //return new JsonResponse(['infosLieu'=>$citiesDatas]);
+            return new JsonResponse(['infosLieu'=>$citiesDatas]);
         }
     }
 
