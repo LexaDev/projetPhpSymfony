@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Location;
 use App\Entity\Outing;
 use App\Form\OutingType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,22 +41,33 @@ class OutingController extends AbstractController
 
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
-        if (isset($outing) && $outing->canSubscribe())
-        {
-            if (($outing->isParticipant($user)))
-            {
+        if (isset($outing) && $outing->canSubscribe()) {
+            if (($outing->isParticipant($user))) {
 
-                return new Response('Vous êtes déjà inscrit',Response::HTTP_FORBIDDEN);
+                return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
             }
             $outing->addParticipant($user);
             $em->persist($outing);
             $em->flush();
 
 
-            return new Response('OK',Response::HTTP_OK);
-        }else{
-            return new Response('Cette sortie n\'est plus disponible',Response::HTTP_NOT_FOUND);
+            return new Response('OK', Response::HTTP_OK);
+        } else {
+            return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
         }
-
     }
+
+    /**
+     * @Route("/createOuting/{id}", name="create_outing_id",methods={"GET"})
+     */
+    public function idLieu($id)
+    {
+          $city = $this->getDoctrine()->getRepository(Location::class);
+          $citiesDatas = $city->find($id);
+          dump($citiesDatas);
+          //return new JsonResponse(['infosLieu'=>$citiesDatas]);
+    }
+
+
+
 }

@@ -81,9 +81,33 @@
                                       {{ form_label(outingForm.location) }}
                                 </span>
                              </div>
-                             {{ form_widget(outingForm.location) }}
+                                <select class="form-control" id="selectLieu" onchange="selectLocation()">
+                                    <option value="{{ form_widget(outingForm.location) }}"></option>
+                                </select>
                         </div>
                     </div>
                 </div>
         </div>
+{% block javaScript %}
+
+            <script>
+                function selectLocation()
+                {
+                    let selectElm = document.getElementById('selectLieu').value;
+                        let xhr = new XMLHttpRequest();
+                        let method = "GET";
+                        let url = "/createOuting/"+ selectElm;
+                            xhr.onreadystatechange = function(){
+                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                    let infosLieu = JSON.parse(xhr.responseText);
+                                    console.log(infosLieu);
+                                }
+                            }
+                        xhr.open(method,url);
+                        xhr.send();
+                }
+            </script>
+
+{% endblock %}
+
 {% endblock %}
