@@ -35,10 +35,108 @@ class OutingController extends AbstractController
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})
      */
-    public function subscribe($id,EntityManagerInterface $em)
+    public function subscribe($id,EntityManagerInterface $em,Request $request)
     {
-        $user = $this->getUser();
 
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $request->isXmlHttpRequest()) {
+            $user = $this->getUser();
+
+            $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
+            $outing = $outingRepo->find($id);
+            if (isset($outing) && $outing->canSubscribe()) {
+                if (($outing->isParticipant($user))) {
+                    return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
+                }
+                $outing->addParticipant($user);
+//                $user->addOutingsParticipate($outing);
+                $em->persist($outing);
+                $em->flush();
+//                $em->persist($user);
+
+                return new Response('OK', Response::HTTP_OK);
+            } else {
+                return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
+            }
+        }else{
+            return $this->redirectToRoute('home');
+        }
+    }
+/**
+ * @Route("/createOuting/{id}", name="create_outing_id",methods={"GET"})
+ */
+public function idLieu($id)
+{
+    $city = $this->getDoctrine()->getRepository(Location::class);
+    $citiesDatas = $city->find($id);
+    dump($citiesDatas);
+    //return new JsonResponse(['infosLieu'=>$citiesDatas]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     *
+     * @Route("/unsubscribe/{id}", name="outing_unsubscribe",methods={"GET"})
+     */
+    public function unsubscribe($id,EntityManagerInterface $em,Request $request)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $request->isXmlHttpRequest()) {
+            $user = $this->getUser();
+
+            $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
+            $outing = $outingRepo->find($id);
+            if (isset($outing)) {
+                if (($outing->isParticipant($user))) {
+                    $outing->removeParticipant($user);
+                    $em->persist($outing);
+                    $em->flush();
+                    return new Response('OK', Response::HTTP_OK);
+                }
+            } else {
+                return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
+            }
+        }else{
+            return $this->redirectToRoute('home');
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
         if (isset($outing) && $outing->canSubscribe()) {
