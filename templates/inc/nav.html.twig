@@ -1,13 +1,14 @@
-<nav>
-        <ul>
-        <span style="text-decoration: underline;"><a href="#">Villes</a></span>
-        <span style="text-decoration: underline;"><a href="#">Sites</a></span>
-        <span style="text-decoration: underline;"><a href="{{ path('home')   }}">Accueil</a></span>
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <span style="text-decoration: underline;"><a href="{{ path('participant_profile') }}">Mon profil</a></span>
-        <span style="text-decoration: underline;"><a href="{{ path('app_logout') }}">Se déconnecter</a></span>
-        {% else %}
-        <span style="text-decoration: underline;"><a href="{{ path('app_login') }}">Se connecter</a></span>
-        {% endif %}
-    </ul>
-</nav>
+<ul class="navbar-nav mx-auto">
+    <li class="nav-item px-lg-4">
+        <a class="nav-link text-uppercase text-expanded" href="#">Villes</a>
+    </li>
+    <li class="nav-item px-lg-4">
+        <a class="nav-link text-uppercase text-expanded" href="{{ path('home') }}">Accueil</a>
+    </li>
+    <li class="nav-item px-lg-4">
+        <a class="nav-link text-uppercase text-expanded" href="{{ path('participant_profile') }}">Mon profil</a>
+    </li>
+    <li class="nav-item px-lg-4">
+        <a class="nav-link text-uppercase text-expanded" href="{{ path('app_logout') }}">Se déconnecter</a>
+    </li>
+</ul>
