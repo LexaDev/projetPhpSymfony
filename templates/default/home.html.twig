@@ -233,6 +233,7 @@
 
             let outin= event.target.id;
             let xhr = new XMLHttpRequest();
+
             let method = "GET";
             let url ="/subscribe/"+outin;
             xhr.onreadystatechange=function () {
@@ -264,6 +265,7 @@
             }
 
             xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send();
 
         }
@@ -303,6 +305,7 @@
             }
 
             xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send();
         }
     </script>
