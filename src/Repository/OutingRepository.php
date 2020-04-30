@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Outing;
+use App\Entity\Participant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use function Doctrine\ORM\QueryBuilder;
 
 /**
@@ -15,20 +18,20 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class OutingRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Outing::class);
+        $this->paginator = $paginator;
     }
 
-    public function findOutingsByCriterias($nameModele = null,
-                                           $site = null,
-                                           $dateStart = null,
-                                           $dateEnd = null,
-                                           $organizer = null,
-                                           $registered = null,
-                                           $unregistered = null,
-                                           $finish = null)
+    /**
+     * @param SearchData $search
+     * @param Participant $user
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function findOutingsByCriterias(SearchData $search, Participant $user)
     {
+        $conditionPosed = false;
         $query = $this->createQueryBuilder('o')
             ->leftJoin('o.participants', 'p')
             ->innerJoin('o.state', 's')
@@ -36,44 +39,62 @@ class OutingRepository extends ServiceEntityRepository
             ->select('o', 'p', 's', 'organizer')
         ;
 
-        if ($nameModele){
-            $query->where('o.name LIKE :nameModele');
-            $query->setParameter('nameModele', '%'.$nameModele.'%');
+        $baseCondition = $query->expr()->andX();
+        $optionalCondition = $query->expr()->orX();
+
+        if ($search->pattern){
+            $conditionPosed = true;
+            $baseCondition->add($query->expr()->like('o.name',':nameModele'));
+            $query->setParameter('nameModele', '%'.$search->pattern.'%');
         }
 
-        if ($site){
-            $query->andWhere('o.site = :site');
-            $query->setParameter('site', $site);
+        if ($search->site){
+            $conditionPosed = true;
+            $baseCondition->add($query->expr()->eq('o.site', ':site'));
+            $query->setParameter('site', $search->site);
         }
 
-        if ($dateStart AND $dateEnd){
-            $query->andWhere($query->expr()->between('o.dateTimeStart', ':dateStart', ':dateEnd'));
-            $query->setParameter('dateStart', $dateStart);
-            $query->setParameter('dateEnd', $dateEnd);
+        if ($search->dateStart AND $search->dateEnd){
+            $conditionPosed = true;
+            $baseCondition->add($query->expr()->between('o.dateTimeStart', ':dateStart', ':dateEnd'));
+            $query->setParameter('dateStart', $search->dateStart);
+            $query->setParameter('dateEnd', $search->dateEnd);
         }
 
-        if ($organizer){
-            $query->andWhere('organizer = :organizer');
-            $query->setParameter('organizer', $organizer);
+        if ($search->organizer){
+            $conditionPosed = true;
+            $optionalCondition->add($query->expr()->eq('organizer', ':organizer'));
+            $query->setParameter('organizer', $user);
         }
 
-        if ($registered){
-            $query->andWhere('p = :participant');
-            $query->setParameter('participant', $registered);
+        if ($search->registered){
+            $conditionPosed = true;
+            $optionalCondition->add($query->expr()->eq('p', ':participant'));
+            $query->setParameter('participant', $user);
         }
 
-        if ($unregistered){
-            $query->andWhere('p != :participant');
-            $query->setParameter('participant', $unregistered);
+        if ($search->unregistered){
+            $conditionPosed = true;
+            $optionalCondition->add($query->expr()->neq('p', ':participant'));
+            $query->setParameter('participant', $user);
         }
 
-        if ($finish){
-            $query->andWhere('o.state = :etat');
-            $query->setParameter('etat', $finish);
+        if ($search->finished){
+            $conditionPosed = true;
+            $optionalCondition->add($query->expr()->eq('o.state', ':etat'));
+            $query->setParameter('etat', 'over');
+        }
+
+        if ($conditionPosed){
+            $query->where($query->expr()->andX($baseCondition, $optionalCondition));
         }
 
         $query->orderBy('o.dateTimeStart');
 
-        return $query->getQuery()->getResult();
+        return $this->paginator->paginate(
+            $query->getQuery(),
+            $search->page,
+            10
+        );
     }
 }
