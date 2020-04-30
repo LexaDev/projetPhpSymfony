@@ -71,49 +71,6 @@ public function idLieu($id)
     dump($citiesDatas);
     //return new JsonResponse(['infosLieu'=>$citiesDatas]);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      *
      * @Route("/unsubscribe/{id}", name="outing_unsubscribe",methods={"GET"})
@@ -135,37 +92,25 @@ public function idLieu($id)
             } else {
                 return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
             }
-        }else{
-            return $this->redirectToRoute('home');
-        $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
-        $outing = $outingRepo->find($id);
-        if (isset($outing) && $outing->canSubscribe()) {
-            if (($outing->isParticipant($user))) {
-
-                return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
-            }
-            $outing->addParticipant($user);
-            $em->persist($outing);
-            $em->flush();
-
-
-            return new Response('OK', Response::HTTP_OK);
         } else {
-            return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
+            return $this->redirectToRoute('home');
+            $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
+            $outing = $outingRepo->find($id);
+            if (isset($outing) && $outing->canSubscribe()) {
+                if (($outing->isParticipant($user))) {
+
+                    return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
+                }
+                $outing->addParticipant($user);
+                $em->persist($outing);
+                $em->flush();
+
+
+                return new Response('OK', Response::HTTP_OK);
+            } else {
+                return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
+            }
         }
     }
-
-    /**
-     * @Route("/createOuting/{id}", name="create_outing_id",methods={"GET"})
-     */
-    public function idLieu($id)
-    {
-          $city = $this->getDoctrine()->getRepository(Location::class);
-          $citiesDatas = $city->find($id);
-          dump($citiesDatas);
-          //return new JsonResponse(['infosLieu'=>$citiesDatas]);
-    }
-
-
 
 }
