@@ -183,7 +183,7 @@
                     <td>{{ outing.dateLimitSigningUp|date('d/m/Y') }}</td>
                     <td>{{ outing.participants|length }}/{{ outing.nbSigningUpMax }}</td>
                     <td>{{ outing.state.label }}</td>
-                    <td id="isInscrit">
+                    <td id="isInscrit{{ outing.id }}">
                         {% for participant in outing.participants %}
                             {% if participant == app.user %}
                                 X
@@ -200,9 +200,9 @@
                                 <span id="publier"><a href="">Publier</a></span>
                             {%  endif %}
                         {% elseif outing.isParticipant(app.user) %}
-                            <span id="inscrit{{ outing.id }}"><a href="" onclick="">Se désister</a></span>
+                            <span id="inscrit{{ outing.id }}"><button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="desister()">Se désister</button></span>
                         {% elseif outing.canSubscribe  %}
-                            <span id="inscrit{{ outing.id }}"><button type="submit" onclick="inscrire({{ outing.id }})">S'inscrire</button></span>
+                            <span id="inscrit{{ outing.id }}"><button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="inscrire()">S'inscrire</button></span>
                         {% endif %}
 
 
@@ -226,10 +226,11 @@
 {% endblock %}
 
 {% block javaScript %}
+
     <script>
-        function inscrire(outin) {
+        function inscrire() {
 
-
+            let outin= event.target.id;
             let xhr = new XMLHttpRequest();
             let method = "GET";
             let url ="/subscribe/"+outin;
@@ -240,11 +241,13 @@
                     span.innerText="";
                     let btn = document.createElement('button');
                     btn.setAttribute('type','submit');
-                    btn.addEventListener('click',desister());
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',desister);
                     btn.innerText='Se désister';
                     span.appendChild(btn);
 
-                    document.getElementById('isInscrit').innerText="X";
+                    document.getElementById('isInscrit'+outin).innerText="X";
                 }
                 else if (xhr.readyState === 4 ){
                     let rep = xhr.response;
@@ -257,8 +260,37 @@
             xhr.send();
 
         }
+
         function desister() {
 
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+
+            let url ="/unsubscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("inscrit"+outin);
+                    span.innerText="";
+                    span.setAttribute('class',outin);
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',inscrire);
+                    btn.innerText='S\'inscrire';
+                    span.appendChild(btn);
+
+                    document.getElementById('isInscrit'+outin).innerText="";
+                }
+                else if (xhr.readyState === 4 ){
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.send();
         }
     </script>
 

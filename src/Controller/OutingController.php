@@ -58,4 +58,30 @@ class OutingController extends AbstractController
         }
 
     }
+
+    /**
+     *
+     * @Route("/unsubscribe/{id}", name="outing_unsubscribe",methods={"GET"})
+     */
+    public function unsubscribe($id,EntityManagerInterface $em)
+    {
+        $user = $this->getUser();
+
+        $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
+        $outing = $outingRepo->find($id);
+        if (isset($outing))
+        {
+            if (($outing->isParticipant($user)))
+            {
+                $outing->removeParticipant($user);
+                $em->persist($outing);
+                $em->flush();
+                return new Response('OK',Response::HTTP_OK);
+            }
+
+        }else{
+            return new Response('Cette sortie n\'est plus disponible',Response::HTTP_NOT_FOUND);
+        }
+
+    }
 }
