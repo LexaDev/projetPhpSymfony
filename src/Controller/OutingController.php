@@ -7,6 +7,7 @@ use App\Entity\Outing;
 use App\Form\OutingType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,17 +34,17 @@ class OutingController extends AbstractController
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})
      */
-    public function subscribe($id,EntityManagerInterface $em, Request $request)
+    public function subscribe($id,EntityManagerInterface $em)
     {
         $user = $this->getUser();
-        //$id = $request->get('id');
-        dump($id);
+
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
         if (isset($outing))
         {
             if (($outing->isParticipant($user)))
             {
+
                 return new Response('User deja participant',Response::HTTP_FORBIDDEN);
             }
             $outing->addParticipant($user);
