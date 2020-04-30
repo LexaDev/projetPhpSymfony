@@ -5,180 +5,51 @@
 {% block main %}
 
     <div class="container align-items-center">
-        <form class="searching" method="get" action="">
-            <div class="row">
-
-                <div class="col-4" style="margin:auto;">
-
-                    <p style=><strong>Filtrer les sorties</strong></p>
-
-                    <div class="btn-group">
-                        <label for="search-site" class="col-6">Site :</label>
-                        <!--<button id="search-site" type="button" class="btn btn-default col-4">Rechercher</button>
-                        <button id="search-site" type="button" class="btn btn-default dropdown-toggle col-2" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" title="SAINT HERBLAIN">SAINT HERBLAIN</a></li>
-                            <li><a href="#" title="LA ROCHE SUR YON">LA ROCHE SUR YON</a></li>
-                            <li><a href="#" title="QUIMPER">QUIMPER</a></li>
-                        </ul>-->
-
-                        <select name="site">
-                            {% for site in sites|sort((a, b) => a.name <=> b.name) %}
-                                <option value="{{ site.id }}"
-                                        {% if filters['site'] %}
-                                            {% if filters['site'] == site.id %}selected{% endif %}
-                                        {% endif %}
-                                >{{ site.name }}</option>
-                            {% endfor %}
-                        </select>
+        {{ form_start(searchForm, {attr: {id: 'searchForm'}}) }}
+        <h2 class="mt-5 lead font-weight-bold">Filtrer les sorties</h2>
+        <div class="row mb-3">
+            <div class="col-12 col-lg-5">
+                {{ form_row(searchForm.site) }}
+                {{ form_row(searchForm.pattern) }}
+                <div class="row">
+                    <div class="col12 col-md-6">
+                        {{ form_row(searchForm.dateStart) }}
                     </div>
-
-
-                    <div class="d-flex">
-                        <label class="rechercher-sortie" for="sortie-search">Le nom de la<br> sortie contient
-                            :</label>
-
-
-                        <input class="form-control"
-                               type="text"
-                               id="sortie-search"
-                               placeholder="search"
-                               name="sortieSearch"
-                               {% if filters['sortieSearch'] %}
-                                    value="{{ filters['sortieSearch'] }}"
-                               {% endif %}
-                               aria-label="Search"
-                                style="display: inline-block;">
-
+                    <div class="col12 col-md-6">
+                        {{ form_row(searchForm.dateEnd) }}
                     </div>
-                    <div class="container">
-
-                        <div class="form-group">
-                            <div class='input-group date col' id='datetimepicker8'>
-                                <label for="beforeDate">Entre : </label>
-                                <input type='date' name="dateStart"
-                                        {% if filters['dateStart'] %}
-                                            value="{{ filters['dateStart'] }}"
-                                        {% endif %}
-                                       id="beforeDate" class="form-control"/>
-                                <span class="input-group-addon">
-                                    <span class="fa fa-calendar">
-                                    </span>
-                                </span>
-                            </div>
-
-
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#datetimepicker8').datetimepicker({
-                                        icons: {
-                                            time: "fa fa-clock-o",
-                                            date: "fa fa-calendar",
-                                            up: "fa fa-arrow-up",
-                                            down: "fa fa-arrow-down"
-                                        }
-                                    });
-                                });
-                            </script>
-
-                            <div class='input-group date col' id='datetimepicker8'>
-                                <label for="afterDate">et</label>
-                                <input type='date' name="dateEnd"
-                                        {% if filters['dateEnd'] %}
-                                            value="{{ filters['dateEnd'] }}"
-                                        {% endif %}
-                                       id="afterDate" class="form-control"/>
-                                <span class="input-group-addon">
-                                    <span class="fa fa-calendar">
-                                    </span>
-                                </span>
-                            </div>
-
-
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#datetimepicker8').datetimepicker({
-                                        icons: {
-                                            time: "fa fa-clock-o",
-                                            date: "fa fa-calendar",
-                                            up: "fa fa-arrow-up",
-                                            down: "fa fa-arrow-down"
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-
                 </div>
-
-                <div class="col-4" style="margin: auto;">
-
-                    <input type="checkbox" id="outing-organizer" name="organizer"
-                        {% if filters['organizer'] %}
-                            checked
-                        {% endif %}
-                    >
-                    <label for="outing-organizer">Sorties dont je suis l'organisateur/trice</label>
-
-                    <br>
-
-                    <input type="checkbox" id="registered-outings" name="registered"
-                        {% if filters['registered'] %}
-                            checked
-                        {% endif %}
-                    >
-                    <label for="registered-outings">Sorties auxquelles je suis inscrit/e</label>
-
-                    <br>
-
-                    <input type="checkbox" id="unregistered-outings" name="unregistered"
-                        {% if filters['unregistered'] %}
-                            checked
-                        {% endif %}
-                    >
-                    <label for="unregistered-outings">Sorties auxquelles je ne suis pas inscrit/e</label>
-
-                    <br>
-
-                    <input type="checkbox" id="past-outings" name="finish"
-                        {% if filters['finish'] %}
-                            checked
-                        {% endif %}
-                    >
-                    <label for="past-outings">Sorties passées</label>
-
-                </div>
-
-                <div class="col-4 d-flex align-items-center">
-                    <button type="submit" class="btn btn-primary btn-lg " style="margin: auto">Rechercher</button>
-                </div>
-
             </div>
-        </form>
+            <div class="col-12 col-lg-5">
+                {{ form_widget(searchForm.organizer) }}
+                {{ form_widget(searchForm.registered) }}
+                {{ form_widget(searchForm.unregistered) }}
+                {{ form_widget(searchForm.finished) }}
+            </div>
+            <div class="col-12 col-lg-2 d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+        {{ form_end(searchForm) }}
 
-        <p>{{ outings|length }} sorties trouvées !</p>
-        <table class="table table-bordered">
+        <p>{{ outings.totalItemCount }}{{ strNbOutings }}</p>
+        <table class="table-responsive" style="display: inline-table !important;">
             <thead>
-            <tr>
-                <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie</th>
-                <th scope="col">Clôture</th>
-                <th scope="col">Inscrits/Places</th>
-                <th scope="col">État</th>
-                <th scope=col">Inscrit</th>
-                <th scope="col">Organisateur</th>
-                <th scope="col">Actions</th>
-            </tr>
+                <tr>
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="col">Inscrits/Places</th>
+                    <th scope="col">État</th>
+                    <th scope="col">Inscrit</th>
+                    <th scope="col">Organisateur</th>
+                    <th scope="col">Actions</th>
+                </tr>
             </thead>
             <tbody>
-            {% for outing in pagination %}
+            {% for outing in outings %}
                 <tr>
-                    <th scope="row">{{ outing.name }}</th>
+                    <td>{{ outing.name }}</td>
                     <td>{{ outing.dateTimeStart|date('d/m/Y') }} à {{ outing.dateTimeStart|date('H:i') }}</td>
                     <td>{{ outing.dateLimitSigningUp|date('d/m/Y') }}</td>
                     <td ><span id="nbInscrits{{ outing.id }}">{{ outing.participants|length }}</span>/{{ outing.nbSigningUpMax }}</td>
@@ -212,9 +83,9 @@
             {% endfor %}
             </tbody>
         </table>
-        {{ knp_pagination_render(pagination) }}
+        {{ knp_pagination_render(outings) }}
         <div>
-            <div class="form-group">
+            <div class="form-group mt-3 mb-5">
                 <a href="{{ path('create_outing') }}">
                     <button class="btn btn-lg btn-primary m-2" type="submit">
                         Créer une sortie
@@ -223,11 +94,10 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javaScript %}
-
+    {{ encore_entry_script_tags('table_responsive') }}
     <script>
         function inscrire() {
 

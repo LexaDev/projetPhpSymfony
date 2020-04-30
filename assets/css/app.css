@@ -2,9 +2,6 @@ html {
     position: relative;
     min-height: 100%;
 }
-body {
-    background-color: lightgray;
-}
 
 .form-control
 {
@@ -48,6 +45,39 @@ ul span{
     margin-left: 10px;
 }
 
+/* ==================== Style commun ========================*/
+body {
+    font-family: 'Lora';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Raleway';
+}
+
+p {
+    line-height: 1.75;
+}
+
+/* ==================== Style navigation ========================*/
+header {
+    font-family: 'Raleway';
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+#mainNav .navbar-brand {
+    color: #e6a756;
+}
+
+li.dropdown div {
+    background-color: rgba(230, 167, 86, 0.9);
+}
+
 /* ==================== Style pagination ========================*/
 .pagination {
     justify-content: center;
@@ -58,3 +88,93 @@ li.page-item.active span.page-link {
     border-color: #e33d77;
 }
 
+/* ==================== Style Formulaire search ========================*/
+#searchForm .form-group {
+    display: flex;
+}
+
+#searchForm .form-group {
+    display: flex;
+}
+
+input#pattern {
+    margin-left: 0 !important;
+}
+
+#searchForm input[type="date"]{
+    width: 170px;
+}
+
+#searchForm label[for="site"],
+#searchForm label[for="dateStart"],
+#searchForm label[for="dateEnd"]{
+    align-self: flex-end;
+}
+
+
+/* ==================== Style tableau ========================*/
+.table-responsive table {
+    width: 100%;
+    display: inline-table !important;
+    border-collapse: collapse;
+}
+
+.table-responsive th, .table-responsive td {
+    padding: 10px;
+    text-align: left;
+    border: solid 1px #ccc;
+}
+
+.table-responsive th {
+    background-color: #222222;
+    color: #FFFFFF;
+}
+
+.table-responsive tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+@media only screen and (max-width: 997px) {
+    .table-responsive table,
+    .table-responsive tbody,
+    .table-responsive tr,
+    .table-responsive th,
+    .table-responsive td {
+        display: block;
+    }
+
+    .table-responsive thead{
+        display: none;
+    }
+
+    .table-responsive td {
+        padding-left: 150px;
+        margin-top: -1px;
+        position: relative;
+        background-color: #FFFFFF;
+        min-height: 3rem;
+    }
+
+    .table-responsive td:nth-child(odd) {
+        background-color: #eee;
+    }
+
+    .table-responsive td::before {
+        padding: 10px;
+        content: attr(data-label);
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 130px;
+        background-color: #222222;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .table-responsive tr {
+        margin-bottom: 1rem;
+    }
+}
