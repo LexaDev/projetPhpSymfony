@@ -246,8 +246,10 @@
 
                     document.getElementById('isInscrit').innerText="X";
                 }
-                else {
-
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
                 }
             }
 

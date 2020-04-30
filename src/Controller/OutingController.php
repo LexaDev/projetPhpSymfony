@@ -40,12 +40,12 @@ class OutingController extends AbstractController
 
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
-        if (isset($outing))
+        if (isset($outing) && $outing->canSubscribe())
         {
             if (($outing->isParticipant($user)))
             {
 
-                return new Response('User deja participant',Response::HTTP_FORBIDDEN);
+                return new Response('Vous êtes déjà inscrit',Response::HTTP_FORBIDDEN);
             }
             $outing->addParticipant($user);
             $em->persist($outing);
@@ -54,7 +54,7 @@ class OutingController extends AbstractController
 
             return new Response('OK',Response::HTTP_OK);
         }else{
-            return new Response('outing not find',Response::HTTP_NOT_FOUND);
+            return new Response('Cette sortie n\'est plus disponible',Response::HTTP_NOT_FOUND);
         }
 
     }
