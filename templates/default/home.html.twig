@@ -183,7 +183,7 @@
                     <td>{{ outing.dateLimitSigningUp|date('d/m/Y') }}</td>
                     <td>{{ outing.participants|length }}/{{ outing.nbSigningUpMax }}</td>
                     <td>{{ outing.state.label }}</td>
-                    <td>
+                    <td id="isInscrit">
                         {% for participant in outing.participants %}
                             {% if participant == app.user %}
                                 X
@@ -192,19 +192,19 @@
                     </td>
                     <td><a href=""></a>{{ outing.organizer.username }}</td>
                     <td>{# todo: personnalisé les liens affiché en fonction de l'utilisateur et de la date  actions #}
-                        Afficher
+                        <span id="affiche"><a href="" onclick="">Afficher</a></span>
                         {% if app.user is same as( outing.organizer) %}
-                            Annuler
+                            <span id="annuler"><a href="">Annuler</a></span>
                             {%  if  outing.state.id == 1 %}
-                                Modifier
-                                Publier
+                                <span id="modifier"><a href="">Modifier</a></span>
+                                <span id="publier"><a href="">Publier</a></span>
                             {%  endif %}
-                        {% elseif outing.canSubscribe %}
-                        S'inscrire
-                            {% if outing.isParticipant(app.user)  %}
-                            Se désister
+                        {% elseif outing.isParticipant(app.user) %}
+                            <span id="inscrit{{ outing.id }}"><a href="" onclick="">Se désister</a></span>
+                        {% elseif outing.canSubscribe  %}
+                            <span id="inscrit{{ outing.id }}"><button type="submit" onclick="inscrire({{ outing.id }})">S'inscrire</button></span>
                         {% endif %}
-                        {%  endif %}
+
 
                     </td>
                 </tr>
@@ -227,9 +227,38 @@
 
 {% block javaScript %}
     <script>
+        function inscrire(outin) {
 
 
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+            let url ="/subscribe/"+outin;
+            console.log(outin);
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("inscrit"+outin);
+                    span.innerText="";
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.addEventListener('click',desister());
+                    btn.innerText='Se désister';
+                    span.appendChild(btn);
 
+                    document.getElementById('isInscrit').innerText="X";
+                }
+                else {
+
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.send();
+
+        }
+        function desister() {
+
+        }
     </script>
 
 
