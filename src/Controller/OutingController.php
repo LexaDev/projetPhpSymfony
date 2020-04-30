@@ -103,14 +103,15 @@ class OutingController extends AbstractController
         }}
 
         /**
-         * @Route("/createOuting/{id}", name="create_outing_id",methods={"GET"})
+         * @Route("/createOuting/{id}", name="create_outing_id")
          */
         public function idLieu($id)
         {
-            $city = $this->getDoctrine()->getRepository(Location::class);
-            $citiesDatas = $city->find($id);
-            dump($citiesDatas);
-            //return new JsonResponse(['infosLieu'=>$citiesDatas]);
+
+            $locationRepo = $this->getDoctrine()->getRepository(Location::class);
+            $location = $locationRepo->findLocationandCity($id);
+
+              return new JsonResponse(['infosLieu'=>$location]);
         }
     }
 
