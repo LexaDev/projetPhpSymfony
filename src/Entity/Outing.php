@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -244,6 +246,36 @@ class Outing
     public function removeParticipant($participant)
     {
         $this->participants->removeElement($participant);
+    }
+
+    /**
+     * regarde si participant en parametre est dans la liste des participant
+     * @param $participant
+     * @return bool
+     */
+    public function isParticipant($participant)
+    {
+        foreach ( $this->getParticipants() as $parti)
+        {
+            if ($parti === $participant)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Teste si on inscription possible sur la sortie return true si ok
+     * @return bool
+     */
+    public function canSubscribe()
+    {
+        if ($this->getDateLimitSigningUp()>new DateTime('now') && count($this->getParticipants())<$this->getNbSigningUpMax() && $this->getState()->getId() == 2)
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
