@@ -1,0 +1,169 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ outing.name }} | {{ parent() }}{% endblock %}
+
+{% block main %}
+    <div class="container mt-4 mb-5">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card w-100">
+                <div class="card-header">
+                    <h3>Affichage d'une sortie</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                       Nom de la sortie
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.name }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Date et heure de la sortie
+                                    </span>
+                                </div>
+                                <div class="ml-0 form-control">
+                                    {{ outing.dateTimeStart|date('d/m/Y') }} à {{ outing.dateTimeStart|date('H:i') }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Date limite d'inscription
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.dateLimitSigningUp|date('d/m/Y') }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Nombres de places
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.nbSigningUpMax }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Durée
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.duration }} minutes
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend h-100">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Description et infos
+                                    </span>
+                                </div >
+                                <textarea rows="3" class="ml-0 form-control">{{ outing.infosOuting }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Lieu
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.name }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Rue
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.street }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Code postal
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.city.zip }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Ville
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.city.name }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Latitude
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.latitude }}
+                                </div>
+                            </div>
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100">
+                                        Longitude
+                                    </span>
+                                </div >
+                                <div class="ml-0 form-control">
+                                    {{ outing.location.longitude }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p>Liste des participants</p>
+                    <table class="" style="display: inline-table !important; width: 400px">
+                        <thead>
+                            <tr>
+                                <th scope="col">Pseudo</th>
+                                <th scope="col">Nom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for p in outing.participants %}
+                            <tr>
+                                <td>{{ p.username }}</td>
+                                <td>{{ p.firstName }} {{ p.lastName|upper }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javaScript %}
+{%  endblock %}
