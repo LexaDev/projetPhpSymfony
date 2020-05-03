@@ -1,0 +1,302 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ outing.name}} | {{  parent() }}
+{%  endblock %}
+
+{%  block main %}
+    <div class="container mt-4 mb-3">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card ">
+                <div class="card-header">
+                    <div class="row">
+                    <h3 class="col-8">Sortie: {{ outing.name}}</h3>
+
+                    <div class="col-4 text-right" id="buttons">
+                        {% if app.user is same as( outing.organizer) %}
+                            <span id="annuler"><a href=""><button class="btn btn-primary">Annuler</button></a></span>
+                            {%  if  outing.state.id == 1 %}
+                                <span id="modifier"><a href=""><button class="btn btn-primary">Modifier</button></a></span>
+                                <span id="publier"><a href=""><button class="btnbtn-primary">Publier</button></a></span>
+                            {%  endif %}
+                        {% elseif outing.isParticipant(app.user) %}
+                            <span id="inscrit{{ outing.id }}"><button class="btn btn-primary" id="{{ outing.id }}" type="submit" onclick="desister()">Se désister</button></span>
+                        {% elseif outing.canSubscribe  %}
+                            <span id="inscrit{{ outing.id }}"><button class="btn btn-primary" id="{{ outing.id }}" type="submit" onclick="inscrire()">S'inscrire</button></span>
+                        {% endif %}
+                    </div>
+                    </div>
+                </div>
+                <div class="card-deck">
+                    <div class="card-body" id="outingInfos">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Date et heure de la sortie
+                                    </span>
+                                </div >
+                                    <div class="ml-0 form-control" id="dateTimeStart">
+                                         le {{ outing.dateTimeStart|date('d/m/Y') }} à {{ outing.dateTimeStart|date('H:i') }}
+                                    </div>
+                                </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Date limite d'inscription
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="dateLimitSigningUp">
+                                {{ outing.dateLimitSigningUp|date('d/m/Y') }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 ">
+                                        Nombre de places
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control">
+                                <span id="nbInscrits{{ outing.id }}">{{ outing.participants|length }}</span>/{{ outing.nbSigningUpMax }}
+                            </div>
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Durée
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="duration">
+                                {{  outing.duration }} minutes
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Description et infos
+                                    </span>
+                            </div >
+                            <p class="ml-0 form-control" id="infosOuting">
+                                {{ outing.infosOuting }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-body" id="locationOutingInfo">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Lieu
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationName">
+                                {{ outing.location.name }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Rue
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationStreet">
+                                {{ outing.location.street }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 ">
+                                        Ville
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationCityName">
+                                {{  outing.location.city.name }}
+                            </div>
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Code postal
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationCityZip">
+                                {{  outing.location.city.zip }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Latitude
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationLatitude">
+                                {{  outing.location.latitude }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Longitude
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="locationLongitude">
+                                {{  outing.location.longitude }}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card-body"  id="participantsTable">
+                        <h4>Liste des participants inscrits</h4>
+                        <table class="table table-hover table-bordered table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Pseudo</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Profil</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            {% for participant in outing.participants %}
+                                {%  if participant == app.user %}
+                                    <tr id="userTr">
+                                    <td scope="row">{{ participant.username }}</td>
+                                    <td>{{ participant.firstname }} {{ participant.lastName }}</td>
+                                    <td><a href="{{ path('participant_profile') }}" {#TODO liens vers profil#}>Voir votre profil</a></td>
+                                    </tr>
+                                {% else %}
+                                    <tr id="participant{{ participant.id }}">
+                                        <td scope="row">{{ participant.username }}</td>
+                                        <td>{{ participant.firstname }} {{ participant.lastName }}</td>
+                                        <td><a href="" {#TODO liens vers profil#}>Voir son profil</a></td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{%  endblock %}
+
+{% block javaScript %}
+
+    <script>
+        function inscrire() {
+
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/subscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let user = JSON.parse(xhr.responseText).user;
+                    console.log(user);
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+
+                    // création du nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-primary');
+                    btn.addEventListener('click',desister);
+                    btn.innerText='Se désister';
+                    span.appendChild(btn);
+
+                    //ajout d'un participant
+                    let inscrits = document.getElementById('nbInscrits'+outin);
+                    inscrits.innerText = parseInt(inscrits.innerText) + 1;
+
+                    //ajout dans la liste des participants
+                    let tbody = document.querySelector('tbody');
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('id','userTr');
+                    let tdUserName = document.createElement('td');
+                    tdUserName.setAttribute('scope','row');
+                    tdUserName.innerText = user.userName;
+
+                    let tdFullName = document.createElement('td');
+                    tdFullName.innerText = user.firstName + " "+ user.lastName;
+
+                    let tdProfil =document.createElement('td');
+                    let lienProfil = document.createElement('a');
+                    lienProfil.setAttribute('href','/profile');
+                    lienProfil.innerText='Voir votre profil';
+
+                    tdProfil.appendChild(lienProfil);
+                    tr.appendChild(tdUserName);
+                    tr.appendChild(tdFullName);
+                    tr.appendChild(tdProfil);
+                    tbody.appendChild(tr);
+
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+        }
+
+        function desister() {
+
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+
+            let url ="/unsubscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let reponse = JSON.parse(xhr.responseText);
+                    let user = reponse.user;
+
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('class',outin);
+                    //creatiojn nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-primary');
+                    btn.addEventListener('click',inscrire);
+                    btn.innerText='S\'inscrire';
+                    span.appendChild(btn);
+                    //ajout d'un participant
+                    let inscrits = document.getElementById('nbInscrits'+outin);
+                    inscrits.innerText = parseInt(inscrits.innerText) - 1;
+
+                    let userTr = document.getElementById('userTr');
+                    let tBody = document.querySelector('tbody');
+                    tBody.removeChild(userTr);
+                }
+                else if (xhr.readyState === 4 ){
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+        }
+    </script>
+
+
+{%  endblock %}

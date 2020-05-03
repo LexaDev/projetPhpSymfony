@@ -64,7 +64,7 @@
                     </td>
                     <td><a href=""></a>{{ outing.organizer.username }}</td>
                     <td>
-                        <span id="affiche"><button class="btn btn-sm btn-link">Afficher</button></span>
+                        <span id="affiche"><a href="{{ path('outing_detail',{'id': outing.id}) }}"><button class="btn btn-sm btn-link">Afficher</button></a></span>
                         {% if app.user is same as( outing.organizer) %}
                             <span id="annuler"><button class="btn btn-sm btn-link"><a href="">Annuler</a></button></span>
                             {%  if  outing.state.id == 1 %}
