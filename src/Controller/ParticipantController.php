@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Form\ParticipantType;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -78,6 +79,22 @@ class ParticipantController extends AbstractController
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
             return $this->render('participant/profile.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/detailParticipant/{id}", name="participant_detail", requirements={"id": "\d+"})
+     */
+    public function detailParticipant($id, ParticipantRepository $repository)
+    {
+        $participant = $repository->find($id);
+        if ($participant){
+            return $this->render('participant/detail.html.twig', [
+                'participant' => $participant
+            ]);
+        } else {
+            $this->addFlash('warning', 'Participant inconnue !');
+            return $this->redirectToRoute('home');
         }
     }
 }

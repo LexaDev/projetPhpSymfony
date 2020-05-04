@@ -1,0 +1,73 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}
+    Profil de {{ participant.username }} | {{  parent() }}
+{%  endblock %}
+
+{%  block main %}
+    <div class="container mt-4 mb-3">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card w-75">
+                <div class="card-header">
+                    <h3>Profil de {{ participant.username }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    Prénom
+                                </span>
+                        </div >
+                        <div class="ml-0 form-control">
+                            {{ participant.firstName }}
+                        </div>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 ">
+                                    Nom
+                                </span>
+                        </div >
+                        <div class="ml-0 form-control">
+                            {{ participant.lastName }}
+                        </div>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    Email
+                                </span>
+                        </div >
+                        <div class="ml-0 form-control">
+                            {{ participant.email }}
+                        </div>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3">
+                                    Site de rattachement
+                                </span>
+                        </div >
+                        <div class="ml-0 form-control">
+                            {{ participant.site.name }}
+                        </div>
+                    </div>
+                        <div class="row justify-content-center">
+                            <div class="form-group">
+                                <a href="{{ path('home') }}">
+                                <button class="btn btn-lg btn-primary m-2" id="retour">
+                                    Retour
+                                </button>
+                                </a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock %}
+
+{%  block javaScript %}
+
+{%  endblock %}
