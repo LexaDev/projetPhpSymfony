@@ -9,6 +9,7 @@ use App\Entity\State;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -114,7 +115,7 @@ class OutingController extends AbstractController
         if ($outing===false)
         {
             return$this->redirectToRoute("home");
-        }else{
+        }elseif($outing->getState()->getId() != 5 ){
             return $this->render("outing/viewOuting.html.twig",[
                 'outing'=>$outing
             ]);
@@ -124,12 +125,39 @@ class OutingController extends AbstractController
     /**
      * @Route("/cancel/{id}",name="outing_cancel", requirements={"id"="\d+"})
      */
-    public function cancel($id)
+    public function cancel($id ,Request $request, EntityManagerInterface $em,StateRepository $stateRepository)
     {
         $outing = $this->getOuting($id);
         if ($outing === false) {
             return $this->redirectToRoute("home");
         } else {
+
+            $motif = $request->get("motif");
+            if (isset($motif))
+            {
+                if (strlen($motif)>5)
+                {
+                    //modification des infos
+                    $infosOuting = $outing->getInfosOuting();
+                    $auj= (new DateTime('now'))->format('d/m/Y');
+                    $motif = "ANNULEE LE ".$auj." \nMotif: ".$motif."\n".$infosOuting;
+                    $outing->setInfosOuting($motif);
+
+                    // modifications de l'etat
+                    $outing->setState($stateRepository->find('4'));
+
+
+                    $em->flush();
+
+                    $this->addFlash('success','Votre sortie est bien annulée');
+                    return  $this->redirectToRoute('home');
+
+
+
+                }else{
+                    $this->addFlash('warning','Veuillez décrive le motif de l\'annulation en minimum 5 caractères');
+                }
+            }
             return $this->render('outing/cancel.html.twig', [
                 'outing' => $outing
             ]);
@@ -170,7 +198,7 @@ class OutingController extends AbstractController
     {
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
-        dump($outing);
+
         if (isset($outing)) {
 
             return $outing;
