@@ -86,7 +86,7 @@ class OutingRepository extends ServiceEntityRepository
         if ($search->finished){
             $conditionPosed = true;
             $optionalCondition->add($query->expr()->eq('o.state', ':etat'));
-            $query->setParameter('etat', 'over');
+            $query->setParameter('etat', 3);
         }
 
         if ($conditionPosed){
