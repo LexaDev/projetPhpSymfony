@@ -70,7 +70,7 @@
                         <div class="row justify-content-center">
                              <button type="submit" class="btn btn-primary">Enregistrer</button>
                              <button type="submit" class="btn btn-primary">Publier la sortie</button>
-                             <button type="submit" class="btn btn-primary">Annuler</button>
+                             <button type="reset"  class="btn btn-primary">Annuler</button>
                         </div>
 
 
@@ -84,6 +84,9 @@
                                 <select class="form-control" id="selectLieu" onchange="selectLocation()">
                                     <option value="{{ form_widget(outingForm.location) }}"></option>
                                 </select>
+                        </div>
+                        <div id="lieu">
+
                         </div>
                     </div>
                 </div>
@@ -99,8 +102,50 @@
                         let url = "/createOuting/"+ selectElm;
                             xhr.onreadystatechange = function(){
                                 if (xhr.readyState === 4 && xhr.status === 200) {
-                                    let infosLieu = JSON.parse(xhr.responseText);
-                                    console.log(infosLieu);
+                                    let infosLieu = JSON.parse(xhr.responseText).infosLieu[0];
+
+                                    //création du tableau avec les informations
+                                    let tbody = document.createElement('table');
+                                    let tr = document.createElement('tr');
+                                    tr.setAttribute('id','cityName');
+                                    let tdCity = document.createElement('td');
+                                    tdCity.setAttribute('scope','row');
+                                   tdCity.innerText = infosLieu.city.name;
+
+
+                                    let tr2 = document.createElement('tr');
+                                    tr2.setAttribute('id','streetNumber');
+                                    let tdStreet = document.createElement('td');
+                                    tdStreet.innerText = infosLieu.street;
+
+                                    let tr3 = document.createElement('tr');
+                                    tr3.setAttribute('id','latitude');
+                                    let tdLatitude = document.createElement('td');
+                                    tdLatitude.innerText = infosLieu.latitude;
+
+                                    let tr4 = document.createElement('tr');
+                                    tr4.setAttribute('id','longitude');
+                                    let tdLongitude = document.createElement('td');
+                                    tdLongitude.innerText = infosLieu.longitude;
+
+                                    let tr5 = document.createElement('tr');
+                                    tr5.setAttribute('id','codePostal');
+                                    let tdCp = document.createElement('td');
+                                    tdCp.innerText = infosLieu.city.zip;
+
+                                    tr5.append(tdCp);
+                                    tr4.appendChild(tdLongitude);
+                                    tr3.appendChild(tdLatitude);
+                                    tr2.appendChild(tdStreet);
+                                    tr.appendChild(tdCity);
+                                    tbody.appendChild(tr);
+                                    tbody.appendChild(tr2);
+                                    tbody.appendChild(tr3);
+                                    tbody.appendChild(tr4);
+
+                                    let lieu=document.getElementById('lieu');
+                                    lieu.innerText = "";
+                                    lieu.appendChild(tbody);
                                 }
                             }
                         xhr.open(method,url);
