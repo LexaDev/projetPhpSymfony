@@ -102,7 +102,7 @@ class OutingController extends AbstractController
 
 
     /**
-     * @Route("/detail/{id}",name="outing_detail",requirements={"id"="\d+"})
+     * @Route("/detail/{id}",name="view_outing",requirements={"id"="\d+"})
      */
     public function detail($id)
     {
@@ -112,7 +112,7 @@ class OutingController extends AbstractController
         {
             return$this->redirectToRoute("home");
         }else{
-            return $this->render("outing/detail.html.twig",[
+            return $this->render("outing/viewOuting.html.twig",[
                 'outing'=>$outing
             ]);
         }
