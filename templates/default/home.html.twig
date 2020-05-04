@@ -156,7 +156,7 @@
 
             let outin= event.currentTarget.id;
             let xhr = new XMLHttpRequest();
-            console.log(outin);
+
             let method = "GET";
             let url ="/subscribe/"+outin;
             xhr.onreadystatechange=function () {
@@ -219,8 +219,6 @@
         function desister() {
 
             let outin= event.currentTarget.id;
-
-            console.log(outin);
             let xhr = new XMLHttpRequest();
             let method = "GET";
 

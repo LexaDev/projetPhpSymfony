@@ -7,7 +7,62 @@
         <div class="d-flex justify-content-center h-100">
             <div class="card w-100">
                 <div class="card-header">
-                    <h3>Affichage d'une sortie</h3>
+                    <div class="row">
+                        <h3 class="col-8">Sortie: {{ outing.name}}</h3>
+                        <div class="col-4 text-right" id="buttons">
+                            {% if app.user is same as( outing.organizer) %}
+                                &nbsp;
+                                {# Annuler #}
+                                <a href="{{ path('outing_cancel' , {id: outing.id}) }}" title="Annuler à la sortie {{ outing.name }}">
+                                    <svg class="bi bi-trash-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" >
+                                        <path fill-rule="evenodd" d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                                {%  if  outing.state.id == 1 %}
+                                    &nbsp;
+                                    {# Modifier #}
+                                    <a href="#" title="Modifier la sortie {{ outing.name }}" id="modifier">
+                                        <svg class="bi bi-pencil-square" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" >
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/>
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </a>
+                                    &nbsp;
+                                    {# Publier #}
+                                    <span id="publish{{ outing.id }}" title="Publier la sortie">
+                                <button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="publish()">
+                                    <svg class="bi bi-cloud-upload" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)">
+                                        <path d="M4.887 6.2l-.964-.165A2.5 2.5 0 103.5 11H6v1H3.5a3.5 3.5 0 11.59-6.95 5.002 5.002 0 119.804 1.98A2.501 2.501 0 0113.5 12H10v-1h3.5a1.5 1.5 0 00.237-2.981L12.7 7.854l.216-1.028a4 4 0 10-7.843-1.587l-.185.96z"/>
+                                        <path fill-rule="evenodd" d="M5 8.854a.5.5 0 00.707 0L8 6.56l2.293 2.293A.5.5 0 1011 8.146L8.354 5.5a.5.5 0 00-.708 0L5 8.146a.5.5 0 000 .708z" clip-rule="evenodd"/>
+                                        <path fill-rule="evenodd" d="M8 6a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </span>
+                                {% endif %}
+                            {% elseif outing.isParticipant(app.user) %}
+                                &nbsp;
+                                {# Se désister #}
+                                <span id="inscrit{{ outing.id }}" title="Se désister de la sortie">
+                                <button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="desister()">
+                                    <svg class="bi bi-person-dash-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)">
+                                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm5-.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </span>
+                            {% elseif outing.canSubscribe  %}
+                                &nbsp;
+                                {# S'inscrire #}
+                                <span id="inscrit{{ outing.id }}" title="S'inscrire à la sortie">
+                                <button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="inscrire()">
+                                    <svg class="bi bi-person-plus-fill" width="1.5em" height="1.5em"  viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)">
+                                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7.5-3a.5.5 0 01.5.5v2a.5.5 0 01-.5.5h-2a.5.5 0 010-1H13V5.5a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+                                        <path fill-rule="evenodd" d="M13 7.5a.5.5 0 01.5-.5h2a.5.5 0 010 1H14v1.5a.5.5 0 01-1 0v-2z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -68,7 +123,7 @@
                                         Description et infos
                                     </span>
                                 </div >
-                                <textarea rows="3" class="ml-0 form-control">{{ outing.infosOuting }}</textarea>
+                                <textarea rows="3" class="ml-0 form-control" readonly style="background-color: white; resize: none ">{{ outing.infosOuting }}</textarea>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -142,23 +197,29 @@
                         Liste des participants
                     </p>
                     <table class="" style="display: inline-table !important; width: 400px">
-                        <thead>
-                            <tr>
-                                <th scope="col">Pseudo</th>
-                                <th scope="col">Nom</th>
-                            </tr>
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Pseudo</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Profil</th>
+                        </tr>
+
                         </thead>
                         <tbody>
-                        {% for p in outing.participants %}
-                            <tr>
-                                <td>{{ p.username }}</td>
-                                <td>{{ p.firstName }} {{ p.lastName|upper }}</td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                        {% for participant in outing.participants %}
+                            {%  if participant == app.user %}
+                                <tr id="userTr">
+                                    <td scope="row">{{ participant.username }}</td>
+                                    <td>{{ participant.firstname }} {{ participant.lastName }}</td>
+                                    <td><a href="{{ path('participant_profile') }}" {#TODO liens vers profil#}>Voir votre profil</a></td>
+                                </tr>
+                            {% else %}
+                                <tr id="participant{{ participant.id }}">
+                                    <td scope="row">{{ participant.username }}</td>
+                                    <td>{{ participant.firstname }} {{ participant.lastName }}</td>
+                                    <td><a href="" {#TODO liens vers profil#}>Voir son profil</a></td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -170,4 +231,191 @@
 {% endblock %}
 
 {% block javaScript %}
+
+    <script>
+        function inscrire() {
+
+            let outin= event.currentTarget.id;
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/subscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let user = JSON.parse(xhr.responseText).user;
+                    console.log(user);
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('title','Se désister de la sortie'+outin );
+
+                    // création du nouveau bouton
+
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',desister);
+
+                    //création de l'icone svg
+
+                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                    svg.setAttribute('class','bi bi-person-dash-fill');
+                    svg.setAttribute('width','1.5em');
+                    svg.setAttribute('height','1.5em');
+                    svg.setAttribute('viewBox','0 0 16 16');
+                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+
+
+                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path1.setAttribute('fill-rule','evenodd');
+                    path1.setAttribute('d','M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm5-.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z');
+                    path1.setAttribute('clip-rule','evenodd');
+
+
+                    //imbrication des éléments
+                    svg.appendChild(path1);
+                    btn.appendChild(svg);
+                    span.appendChild(btn);
+
+
+                    //ajout dans la liste des participants
+                    let tbody = document.querySelector('tbody');
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('id','userTr');
+                    let tdUserName = document.createElement('td');
+                    tdUserName.setAttribute('scope','row');
+                    tdUserName.innerText = user.userName;
+
+                    let tdFullName = document.createElement('td');
+                    tdFullName.innerText = user.firstName + " "+ user.lastName;
+
+                    let tdProfil =document.createElement('td');
+                    let lienProfil = document.createElement('a');
+                    lienProfil.setAttribute('href','/profile');
+                    lienProfil.innerText='Voir votre profil';
+
+                    tdProfil.appendChild(lienProfil);
+                    tr.appendChild(tdUserName);
+                    tr.appendChild(tdFullName);
+                    tr.appendChild(tdProfil);
+                    tbody.appendChild(tr);
+
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+        }
+
+        function desister() {
+
+            let outin= event.currentTarget.id;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+
+            let url ="/unsubscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let reponse = JSON.parse(xhr.responseText);
+                    let user = reponse.user;
+
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('title','S\'inscrire à la sortie'+outin );
+                    //S'inscrire
+                    //creation nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',inscrire);
+
+                    //création de l'icone svg
+
+                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                    svg.setAttribute('class','bi bi-person-plus-fill');
+                    svg.setAttribute('width','1.5em');
+                    svg.setAttribute('height','1.5em');
+                    svg.setAttribute('viewBox','0 0 16 16');
+                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+
+
+                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path1.setAttribute('fill-rule','evenodd');
+                    path1.setAttribute('d','M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7.5-3a.5.5 0 01.5.5v2a.5.5 0 01-.5.5h-2a.5.5 0 010-1H13V5.5a.5.5 0 01.5-.5z');
+                    path1.setAttribute('clip-rule','evenodd');
+
+                    let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path2.setAttribute('fill-rule','evenodd');
+                    path2.setAttribute('d','M13 7.5a.5.5 0 01.5-.5h2a.5.5 0 010 1H14v1.5a.5.5 0 01-1 0v-2z');
+                    path2.setAttribute('clip-rule','evenodd');
+                    //imbrication des éléments
+                    svg.appendChild(path1);
+                    svg.appendChild(path2);
+                    btn.appendChild(svg);
+                    span.appendChild(btn);
+
+
+                    let userTr = document.getElementById('userTr');
+                    let tBody = document.querySelector('tbody');
+                    tBody.removeChild(userTr);
+                }
+                else if (xhr.readyState === 4 ){
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+        }
+
+
+        function publish() {
+
+            let outin= event.currentTarget.id;
+            console.log(outin);
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/publish/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("publish"+outin);
+                    //suppression du bouton publier
+                    span.innerText="";
+                    //suppression du bouton modifier
+                    let modifier = document.getElementById("modifier");
+                    if (modifier !== null)
+                    {
+                        modifier.innerText="";
+                    }
+
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+        }
+    </script>
+
+
 {%  endblock %}
