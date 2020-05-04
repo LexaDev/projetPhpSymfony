@@ -97,7 +97,7 @@ class OutingRepository extends ServiceEntityRepository
             ->setParameter('OneMonthAgo', date_sub(new \DateTime(), new \DateInterval('P1M')));
 
         $query->orderBy('o.dateTimeStart');
-dump($query->getDQL());
+
         return $this->paginator->paginate(
             $query->getQuery(),
             $search->page,
