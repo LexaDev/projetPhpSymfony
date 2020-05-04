@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Repository\ParticipantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -34,6 +37,29 @@ class SecurityController extends AbstractController
     public function logout()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/addadmin/{pseudo}")
+     */
+    public function addadmin($pseudo, ParticipantRepository $repository, EntityManagerInterface $em)
+    {
+        $user = $repository->findOneBy(['username' => $pseudo]);
+        $user->setRoles(['ROLE_ADMIN']);
+        $em->flush();
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/removeadmin/{pseudo}")
+     */
+    public function removeadmin($pseudo, ParticipantRepository $repository, EntityManagerInterface $em)
+    {
+        $user = $repository->findOneBy(['username' => $pseudo]);
+        $user->setRoles([]);
+        $user->setRoles(['ROLE_USER']);
+        $em->flush();
+        return $this->redirectToRoute('home');
     }
 
     //Methode pour encode un mot de passe et voir le resultat

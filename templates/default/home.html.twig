@@ -5,6 +5,14 @@
 {% block main %}
 
     <div class="container align-items-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {{ form_start(searchForm, {attr: {id: 'searchForm'}}) }}
         <h2 class="mt-5 lead font-weight-bold">Filtrer les sorties</h2>
         <div class="row mb-3">
@@ -54,7 +62,7 @@
                     <td>{{ outing.dateLimitSigningUp|date('d/m/Y') }}</td>
                     <td ><span id="nbInscrits{{ outing.id }}">{{ outing.participants|length }}</span>/{{ outing.nbSigningUpMax }}</td>
 
-                    <td>{{ outing.state.label }}</td>
+                    <td id="state{{ outing.id }}">{{ outing.state.label }}</td>
                     <td id="isInscrit{{ outing.id }}">
                         {% for participant in outing.participants %}
                             {% if participant == app.user %}
@@ -62,7 +70,7 @@
                             {% endif %}
                         {% endfor %}
                     </td>
-                    <td><a href=""></a>{{ outing.organizer.username }}</td>
+                    <td><a href="{{ path('participant_detail', {'id': outing.organizer.id}) }}">{{ outing.organizer.username }}</a></td>
                     <td>{# todo : lien s'inscrire ne s'affiche pas #}
 {# Version avec des icones #}
                         {# Afficher #}
@@ -270,6 +278,36 @@
             xhr.open(method,url);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send();
+        }
+
+        function publish() {
+
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/publish/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("publier"+outin);
+                    //suppression du bouton publier
+                    span.innerText="";
+                    //modification de l'état dans le tableau de CREATE à PUBLISH
+                    let td = document.getElementById("state"+outin);
+                    td.innerText = "PUBLISH";
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
         }
     </script>
 
