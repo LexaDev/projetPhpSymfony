@@ -97,8 +97,9 @@ class OutingController extends AbstractController
         $locationRepo = $this->getDoctrine()->getRepository(Location::class);
         $location = $locationRepo->findLocationandCity($id);
 
-        return new JsonResponse(['infosLieu' => $location]);
+              return new JsonResponse(['infosLieu'=>$location]);
     }
+
 
     /**
      * @Route("/detail/{id}",name="outing_detail",requirements={"id"="\d+"})
@@ -123,37 +124,36 @@ class OutingController extends AbstractController
     public function cancel($id)
     {
         $outing = $this->getOuting($id);
-        if ($outing===false)
-        {
-            return$this->redirectToRoute("home");
-        }else{
-            return $this->render('outing/cancel.html.twig',[
-                'outing'=>$outing
+        if ($outing === false) {
+            return $this->redirectToRoute("home");
+        } else {
+            return $this->render('outing/cancel.html.twig', [
+                'outing' => $outing
             ]);
         }
-
-
     }
+
 
     /**
      * retourne outing demandé ou false
      * ajoute flash error
      */
-    public function getOuting($id)
+    public
+    function getOuting($id)
     {
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
         dump($outing);
-        if (isset($outing))
-        {
+        if (isset($outing)) {
 
             return $outing;
-        }else{
-            $this->addFlash('warning',"Cette sortie n'est plus disponible");
+        } else {
+            $this->addFlash('warning', "Cette sortie n'est plus disponible");
             return false;
         }
     }
-
-
 }
+
+
+
 

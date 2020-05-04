@@ -113,24 +113,25 @@ input#pattern {
 
 
 /* ==================== Style tableau ========================*/
-.table-responsive table {
+table {
     width: 100%;
     display: inline-table !important;
     border-collapse: collapse;
 }
 
-.table-responsive th, .table-responsive td {
+
+th, td {
     padding: 10px;
     text-align: left;
     border: solid 1px #ccc;
 }
 
-.table-responsive th {
+th {
     background-color: #222222;
     color: #FFFFFF;
 }
 
-.table-responsive tr:nth-child(odd) {
+tr:nth-child(odd) {
     background-color: #eee;
 }
 
