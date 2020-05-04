@@ -17,7 +17,7 @@
                             <span id="annuler"><a href=""><button class="btn btn-primary">Annuler</button></a></span>
                             {%  if  outing.state.id == 1 %}
                                 <span id="modifier"><a href=""><button class="btn btn-primary">Modifier</button></a></span>
-                                <span id="publier"><a href=""><button class="btnbtn-primary">Publier</button></a></span>
+                                <span id="publier"><a href=""><button class="btn btn-primary">Publier</button></a></span>
                             {%  endif %}
                         {% elseif outing.isParticipant(app.user) %}
                             <span id="inscrit{{ outing.id }}"><button class="btn btn-primary" id="{{ outing.id }}" type="submit" onclick="desister()">Se désister</button></span>
