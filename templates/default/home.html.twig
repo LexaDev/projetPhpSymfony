@@ -254,9 +254,9 @@
             xhr.onreadystatechange=function () {
                 if (xhr.readyState === 4 && xhr.status === 200)
                 {
-                    let span = document.getElementById("publish"+outin);
+                    let span = document.getElementById("publier"+outin);
                     //suppression du bouton publier
-                    span.innerHTMLt="";
+                    span.innerText="";
                     //modification de l'état dans le tableau de CREATE à PUBLISH
                     let td = document.getElementById("state"+outin);
                     td.innerText = "PUBLISH";

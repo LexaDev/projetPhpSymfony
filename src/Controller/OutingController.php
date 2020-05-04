@@ -5,7 +5,10 @@ namespace App\Controller;
 
 use App\Entity\Location;
 use App\Entity\Outing;
+use App\Entity\State;
 use App\Form\OutingType;
+use App\Repository\OutingRepository;
+use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -133,13 +136,37 @@ class OutingController extends AbstractController
         }
     }
 
+    /**
+     *
+     * @Route("/publish/{id}", name="outing_publish", methods={"GET"}, requirements={"id": "\d+"})
+     */
+    public function publish($id,
+                            EntityManagerInterface $em,
+                            OutingRepository $outingRepository,
+                            StateRepository $stateRepository,
+                            Request $request)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $request->isXmlHttpRequest()) {
+
+            $outing = $outingRepository->find($id);
+
+            if (isset($outing)) {
+                $outing->setState($stateRepository->findOneBy(['label'=> 'PUBLISH']));
+                $em->flush();
+                return new Response('Cette sortie est maintenant publier', Response::HTTP_OK);
+            } else {
+                return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
+            }
+        } else {
+            return $this->redirectToRoute('home');
+        }
+    }
 
     /**
      * retourne outing demandé ou false
      * ajoute flash error
      */
-    public
-    function getOuting($id)
+    public function getOuting($id)
     {
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
