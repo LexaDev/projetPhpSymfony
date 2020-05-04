@@ -10,7 +10,7 @@
                     <div class="row">
                         <h3 class="col-8">Sortie: {{ outing.name}}</h3>
                         <div class="col-4 text-right" id="buttons">
-                            {% if app.user is same as( outing.organizer) %}
+                            {% if app.user is same as( outing.organizer) and outing.state.id != 4 and outing.state.id != 5 %}
                                 &nbsp;
                                 {# Annuler #}
                                 <a href="{{ path('outing_cancel' , {id: outing.id}) }}" title="Annuler à la sortie {{ outing.name }}">

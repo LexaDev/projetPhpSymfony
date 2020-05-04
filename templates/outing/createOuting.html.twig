@@ -101,6 +101,7 @@
                                 if (xhr.readyState === 4 && xhr.status === 200) {
                                     let infosLieu = JSON.parse(xhr.responseText);
                                     console.log(infosLieu);
+                                    console.log(infosLieu.name);
                                 }
                             }
                         xhr.open(method,url);
