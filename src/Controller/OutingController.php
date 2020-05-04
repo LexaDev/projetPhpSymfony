@@ -6,7 +6,6 @@ namespace App\Controller;
 use App\Entity\Location;
 use App\Entity\Outing;
 use App\Form\OutingType;
-use App\Repository\OutingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,26 +18,27 @@ class OutingController extends AbstractController
     /**
      * @Route("/createOuting", name="create_outing")
      */
-    public function createOuting(EntityManagerInterface $em,Request $request)
+    public function createOuting(EntityManagerInterface $em, Request $request)
     {
-
         $outing = new Outing();
 
 
-        $outingForm = $this->createForm(OutingType::class,$outing);
+        $outingForm = $this->createForm(OutingType::class, $outing);
 
-        return $this->render('outing/createOuting.html.twig', [
-            'outingForm' => $outingForm->createView()
-        ]);
+        return $this->render(
+            'outing/createOuting.html.twig',
+            [
+                'outingForm' => $outingForm->createView()
+            ]
+        );
     }
 
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})
      */
-    public function subscribe($id,EntityManagerInterface $em,Request $request)
+    public function subscribe($id, EntityManagerInterface $em, Request $request)
     {
-
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $request->isXmlHttpRequest()) {
             $user = $this->getUser();
 
@@ -49,16 +49,16 @@ class OutingController extends AbstractController
                     return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
                 }
                 $outing->addParticipant($user);
-//                $user->addOutingsParticipate($outing);
+
                 $em->persist($outing);
                 $em->flush();
-//                $em->persist($user);
 
-                return new Response('OK', Response::HTTP_OK);
+
+                return new JsonResponse(['user'=>$user->getParticipantData()]);
             } else {
                 return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
             }
-        }else{
+        } else {
             return $this->redirectToRoute('home');
         }
     }
@@ -67,7 +67,7 @@ class OutingController extends AbstractController
      *
      * @Route("/unsubscribe/{id}", name="outing_unsubscribe",methods={"GET"})
      */
-    public function unsubscribe($id,EntityManagerInterface $em,Request $request)
+    public function unsubscribe($id, EntityManagerInterface $em, Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $request->isXmlHttpRequest()) {
             $user = $this->getUser();
@@ -79,28 +79,13 @@ class OutingController extends AbstractController
                     $outing->removeParticipant($user);
                     $em->persist($outing);
                     $em->flush();
-                    return new Response('OK', Response::HTTP_OK);
+                    return new JsonResponse(['user'=>$user->getParticipantData()]);
                 }
             } else {
                 return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
             }
         } else {
             return $this->redirectToRoute('home');
-            $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
-            $outing = $outingRepo->find($id);
-            if (isset($outing) && $outing->canSubscribe()) {
-                if (($outing->isParticipant($user))) {
-                    return new Response('Vous êtes déjà inscrit', Response::HTTP_FORBIDDEN);
-                }
-                $outing->addParticipant($user);
-                $em->persist($outing);
-                $em->flush();
-
-
-                return new Response('OK', Response::HTTP_OK);
-            } else {
-                return new Response('Cette sortie n\'est plus disponible', Response::HTTP_NOT_FOUND);
-            }
         }
     }
 
@@ -109,23 +94,66 @@ class OutingController extends AbstractController
      */
     public function idLieu($id)
     {
-
         $locationRepo = $this->getDoctrine()->getRepository(Location::class);
         $location = $locationRepo->findLocationandCity($id);
 
-          return new JsonResponse(['infosLieu'=>$location]);
+              return new JsonResponse(['infosLieu'=>$location]);
+    }
+
+
+    /**
+     * @Route("/detail/{id}",name="outing_detail",requirements={"id"="\d+"})
+     */
+    public function detail($id)
+    {
+
+        $outing = $this->getOuting($id);
+        if ($outing===false)
+        {
+            return$this->redirectToRoute("home");
+        }else{
+            return $this->render("outing/detail.html.twig",[
+                'outing'=>$outing
+            ]);
+        }
     }
 
     /**
-     * @Route("viewOuting/{id}", name="view_outing", requirements={"id": "\d+"})
+     * @Route("/cancel/{id}",name="outing_cancel", requirements={"id"="\d+"})
      */
-    public function viewOuting($id, OutingRepository $repository)
+    public function cancel($id)
     {
-        $outing = $repository->find($id);
-        return $this->render('outing/viewOuting.html.twig', [
-            'outing' => $outing
-        ]);
+        $outing = $this->getOuting($id);
+        if ($outing === false) {
+            return $this->redirectToRoute("home");
+        } else {
+            return $this->render('outing/cancel.html.twig', [
+                'outing' => $outing
+            ]);
+        }
+    }
+
+
+    /**
+     * retourne outing demandé ou false
+     * ajoute flash error
+     */
+    public
+    function getOuting($id)
+    {
+        $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
+        $outing = $outingRepo->find($id);
+        dump($outing);
+        if (isset($outing)) {
+
+            return $outing;
+        } else {
+            $this->addFlash('warning', "Cette sortie n'est plus disponible");
+            return false;
+        }
     }
 }
+
+
 
 

@@ -1,0 +1,185 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ outing.name}} | {{  parent() }}
+{%  endblock %}
+
+{%  block main %}
+    <div class="container mt-4 mb-3">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card ">
+                <form>
+                <div class="card-header">
+                    <h3 >Annuler : {{ outing.name}}</h3>
+                </div>
+                <div class="card-deck">
+                    <div class="card-body" id="outingInfos">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Date de la sortie
+                                    </span>
+                                </div >
+                                    <div class="ml-0 form-control" id="dateTimeStart">
+                                         le {{ outing.dateTimeStart|date('d/m/Y') }}
+                                    </div>
+                                </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3">
+                                        Site organisateur
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control" id="dateLimitSigningUp">
+                                {{ app.user.site.name }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 ">
+                                        Lieu
+                                    </span>
+                            </div >
+                            <div class="ml-0 form-control">
+                                {{ outing.location.name }} {{ outing.location.street }} {{  outing.location.city.zip }}  {{  outing.location.city.name }}
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text ">
+                                        Motif
+                                    </span>
+                            </div >
+                                <textarea class="ml-0 form-control"  name="motif" placeholder="Motif de l'annulation" required autofocus  cols="20" rows="5" style="resize: none"></textarea>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center" id="buttons">
+
+                            <span id="enregistrer"><button class="btn btn-primary" type="submit">Enregistrer</button></span>
+                            <span id="Annuler"><button class="btn btn-primary" type="reset">Annuler</button></span>
+
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{%  endblock %}
+
+{% block javaScript %}
+
+    <script>
+        function inscrire() {
+
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/subscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let user = JSON.parse(xhr.responseText).user;
+                    console.log(user);
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+
+                    // création du nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-primary');
+                    btn.addEventListener('click',desister);
+                    btn.innerText='Se désister';
+                    span.appendChild(btn);
+
+                    //ajout d'un participant
+                    let inscrits = document.getElementById('nbInscrits'+outin);
+                    inscrits.innerText = parseInt(inscrits.innerText) + 1;
+
+                    //ajout dans la liste des participants
+                    let tbody = document.querySelector('tbody');
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('id','userTr');
+                    let tdUserName = document.createElement('td');
+                    tdUserName.setAttribute('scope','row');
+                    tdUserName.innerText = user.userName;
+
+                    let tdFullName = document.createElement('td');
+                    tdFullName.innerText = user.firstName + " "+ user.lastName;
+
+                    let tdProfil =document.createElement('td');
+                    let lienProfil = document.createElement('a');
+                    lienProfil.setAttribute('href','/profile');
+                    lienProfil.innerText='Voir votre profil';
+
+                    tdProfil.appendChild(lienProfil);
+                    tr.appendChild(tdUserName);
+                    tr.appendChild(tdFullName);
+                    tr.appendChild(tdProfil);
+                    tbody.appendChild(tr);
+
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+        }
+
+        function desister() {
+
+            let outin= event.target.id;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+
+            let url ="/unsubscribe/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let reponse = JSON.parse(xhr.responseText);
+                    let user = reponse.user;
+
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('class',outin);
+                    //creatiojn nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-primary');
+                    btn.addEventListener('click',inscrire);
+                    btn.innerText='S\'inscrire';
+                    span.appendChild(btn);
+                    //ajout d'un participant
+                    let inscrits = document.getElementById('nbInscrits'+outin);
+                    inscrits.innerText = parseInt(inscrits.innerText) - 1;
+
+                    let userTr = document.getElementById('userTr');
+                    let tBody = document.querySelector('tbody');
+                    tBody.removeChild(userTr);
+                }
+                else if (xhr.readyState === 4 ){
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+        }
+    </script>
+
+
+{%  endblock %}
