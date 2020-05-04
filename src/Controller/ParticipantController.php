@@ -93,7 +93,7 @@ class ParticipantController extends AbstractController
                 'participant' => $participant
             ]);
         } else {
-            $this->addFlash('warning', 'Participant inconnue !');
+            $this->addFlash('warning', 'Participant inconnu !');
             return $this->redirectToRoute('home');
         }
     }
