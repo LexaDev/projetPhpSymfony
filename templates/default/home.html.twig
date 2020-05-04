@@ -64,12 +64,12 @@
                     </td>
                     <td><a href=""></a>{{ outing.organizer.username }}</td>
                     <td>
-                        <span id="affiche"><button class="btn btn-sm btn-link">Afficher</button></span>
+                        <span id="affiche"><a href="{{ path('outing_detail',{'id': outing.id}) }}"><button class="btn btn-sm btn-link">Afficher</button></a></span>
                         {% if app.user is same as( outing.organizer) %}
-                            <span id="annuler"><button class="btn btn-sm btn-link"><a href="">Annuler</a></button></span>
+                            <span id="annuler"><button class="btn btn-sm btn-link"><a href="{{ path('outing_cancel',{'id': outing.id}) }}">Annuler</a></button></span>
                             {%  if  outing.state.id == 1 %}
-                                <span id="modifier"><a href="">Modifier</a></span>
-                                <span id="publier"><a href="">Publier</a></span>
+                                <span id="modifier"><a href=""><button class="btn btn-sm btn-link">Modifier</button></a></span>
+                                <span id="publier"><a href=""><button class="btn btn-sm btn-link">Publier</button></a></span>
                             {%  endif %}
                         {% elseif outing.isParticipant(app.user) %}
                             <span id="inscrit{{ outing.id }}"><button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="desister()">Se désister</button></span>

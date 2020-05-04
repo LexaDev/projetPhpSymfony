@@ -284,4 +284,18 @@ class Participant implements UserInterface
     }
 
 
+    /**
+     *Retourne les infos principales du participant sous forme d'un tableau (plus simple pour JSON)
+     * @return array
+     */
+    public function getParticipantData()
+    {
+       return ['id'=>$this->id,
+           'userName'=>$this->username,
+           'firstName'=>$this->firstName,
+           'lastName'=>$this->lastName,
+           'phoneNumber'=>$this->phoneNumber,
+           'email'=>$this->getEmail()];
+    }
+
 }
