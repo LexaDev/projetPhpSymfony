@@ -105,19 +105,55 @@ class OutingController extends AbstractController
      */
     public function detail($id)
     {
+
+        $outing = $this->getOuting($id);
+        if ($outing===false)
+        {
+            return$this->redirectToRoute("home");
+        }else{
+            return $this->render("outing/detail.html.twig",[
+                'outing'=>$outing
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/cancel/{id}",name="outing_cancel", requirements={"id"="\d+"})
+     */
+    public function cancel($id)
+    {
+        $outing = $this->getOuting($id);
+        if ($outing===false)
+        {
+            return$this->redirectToRoute("home");
+        }else{
+            return $this->render('outing/cancel.html.twig',[
+                'outing'=>$outing
+            ]);
+        }
+
+
+    }
+
+    /**
+     * retourne outing demandé ou false
+     * ajoute flash error
+     */
+    public function getOuting($id)
+    {
         $outingRepo = $this->getDoctrine()->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
         dump($outing);
         if (isset($outing))
         {
 
-            return $this->render("outing/detail.html.twig",[
-                'outing'=>$outing
-            ]);
+            return $outing;
         }else{
             $this->addFlash('warning',"Cette sortie n'est plus disponible");
-            return$this->redirectToRoute("home");
+            return false;
         }
     }
+
+
 }
 

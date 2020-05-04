@@ -11,10 +11,9 @@
                 <div class="card-header">
                     <div class="row">
                     <h3 class="col-8">Sortie: {{ outing.name}}</h3>
-
                     <div class="col-4 text-right" id="buttons">
                         {% if app.user is same as( outing.organizer) %}
-                            <span id="annuler"><a href=""><button class="btn btn-primary">Annuler</button></a></span>
+                            <span id="annuler"><a href="{{ path('outing_cancel',{'id': outing.id}) }}"><button class="btn btn-primary">Annuler</button></a></span>
                             {%  if  outing.state.id == 1 %}
                                 <span id="modifier"><a href=""><button class="btn btn-primary">Modifier</button></a></span>
                                 <span id="publier"><a href=""><button class="btn btn-primary">Publier</button></a></span>
