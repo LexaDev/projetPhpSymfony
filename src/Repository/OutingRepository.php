@@ -36,7 +36,7 @@ class OutingRepository extends ServiceEntityRepository
             ->leftJoin('o.participants', 'p')
             ->innerJoin('o.state', 's')
             ->innerJoin('o.organizer', 'organizer')
-            ->select('o', 'p', 's', 'organizer')
+            ->select('o', 's', 'organizer', 'p')
         ;
 
         $baseCondition = $query->expr()->andX();
@@ -69,14 +69,18 @@ class OutingRepository extends ServiceEntityRepository
 
         if ($search->registered){
             $conditionPosed = true;
-            $optionalCondition->add($query->expr()->eq('p', ':participant'));
+            $optionalCondition->add(':participant MEMBER OF o.participants');
             $query->setParameter('participant', $user);
         }
 
         if ($search->unregistered){
             $conditionPosed = true;
-            $optionalCondition->add($query->expr()->neq('p', ':participant'));
+            $optionalCondition->add($query->expr()->andX(
+                ':participant NOT MEMBER OF o.participants',
+                $query->expr()->neq('organizer', ':organizer')
+            ));
             $query->setParameter('participant', $user);
+            $query->setParameter('organizer', $user);
         }
 
         if ($search->finished){
@@ -89,8 +93,11 @@ class OutingRepository extends ServiceEntityRepository
             $query->where($query->expr()->andX($baseCondition, $optionalCondition));
         }
 
-        $query->orderBy('o.dateTimeStart');
+        $query->andWhere('o.dateTimeStart >= :OneMonthAgo')
+            ->setParameter('OneMonthAgo', date_sub(new \DateTime(), new \DateInterval('P1M')));
 
+        $query->orderBy('o.dateTimeStart');
+dump($query->getDQL());
         return $this->paginator->paginate(
             $query->getQuery(),
             $search->page,
