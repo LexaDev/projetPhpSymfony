@@ -217,7 +217,7 @@
                                 <tr id="participant{{ participant.id }}">
                                     <td scope="row">{{ participant.username }}</td>
                                     <td>{{ participant.firstname }} {{ participant.lastName }}</td>
-                                    <td><a href="" {#TODO liens vers profil#}>Voir son profil</a></td>
+                                    <td><a href="{{ path('participant_detail', {'id': participant.id}) }}">Voir son profil</a></td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
