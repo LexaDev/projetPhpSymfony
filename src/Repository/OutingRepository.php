@@ -44,18 +44,21 @@ class OutingRepository extends ServiceEntityRepository
 
         if ($search->pattern){
             $conditionPosed = true;
+            //Restriction le titre de la sortie doit contenir
             $baseCondition->add($query->expr()->like('o.name',':nameModele'));
             $query->setParameter('nameModele', '%'.$search->pattern.'%');
         }
 
         if ($search->site){
             $conditionPosed = true;
+            //Restriction le site de rattachement doit être le même que renseigner
             $baseCondition->add($query->expr()->eq('o.site', ':site'));
             $query->setParameter('site', $search->site);
         }
 
         if ($search->dateStart AND $search->dateEnd){
             $conditionPosed = true;
+            //Restriction dateTimeStart doit être entre les dates renseignées
             $baseCondition->add($query->expr()->between('o.dateTimeStart', ':dateStart', ':dateEnd'));
             $query->setParameter('dateStart', $search->dateStart);
             $query->setParameter('dateEnd', $search->dateEnd);
@@ -63,18 +66,21 @@ class OutingRepository extends ServiceEntityRepository
 
         if ($search->organizer){
             $conditionPosed = true;
+            //Restriction $user doit être l'organisateur
             $optionalCondition->add($query->expr()->eq('organizer', ':organizer'));
             $query->setParameter('organizer', $user);
         }
 
         if ($search->registered){
             $conditionPosed = true;
+            //Restriction $user doit faire partie des participants
             $optionalCondition->add(':participant MEMBER OF o.participants');
             $query->setParameter('participant', $user);
         }
 
         if ($search->unregistered){
             $conditionPosed = true;
+            //Restriction $user ne doit faire partie des participants ni être l'organisateur
             $optionalCondition->add($query->expr()->andX(
                 ':participant NOT MEMBER OF o.participants',
                 $query->expr()->neq('organizer', ':organizer')
@@ -85,7 +91,12 @@ class OutingRepository extends ServiceEntityRepository
 
         if ($search->finished){
             $conditionPosed = true;
-            $optionalCondition->add($query->expr()->eq('o.state', ':etat'));
+            //Restriction dateTimeStart avant ajourd'hui et l'état doit être 'cloturée'
+            $optionalCondition->add($query->expr()->andX(
+                $query->expr()->lt('o.dateTimeStart', ':today'),
+                $query->expr()->eq('o.state', ':etat')
+            ));
+            $query->setParameter('today', new \DateTime());
             $query->setParameter('etat', 3);
         }
 
@@ -93,8 +104,9 @@ class OutingRepository extends ServiceEntityRepository
             $query->where($query->expr()->andX($baseCondition, $optionalCondition));
         }
 
-        $query->andWhere('o.dateTimeStart >= :OneMonthAgo')
-            ->setParameter('OneMonthAgo', date_sub(new \DateTime(), new \DateInterval('P1M')));
+        //Dans tous les cas on affiche que les sorties qui ne sont pas archivées
+        $query->andWhere('o.state != :archived')
+            ->setParameter('archived', 5);
 
         $query->orderBy('o.dateTimeStart');
 
