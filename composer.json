@@ -9,6 +9,7 @@
         "laminas/laminas-code": "^3.4",
         "laminas/laminas-eventmanager": "^3.2",
         "mbezhanov/faker-provider-collection": "^1.2",
+        "mobiledetect/mobiledetectlib": "^2.8",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",

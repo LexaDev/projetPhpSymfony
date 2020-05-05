@@ -80,22 +80,27 @@
                                       {{ form_label(outingForm.location) }}
                                 </span>
                              </div>
-                                <select class="form-control" id="selectLieu" onchange="selectLocation()">
-                                    <option value="{{ form_widget(outingForm.location) }}"></option>
-                                </select>
+
+                                    {{ form_widget(outingForm.location) }}
+
                         </div>
                         <div id="lieu" class="card w-75">
 
                         </div>
+
                         {{ form_end(outingForm) }}
+
                     </div>
                 </div>
         </div>
 {% block javaScript %}
             <script>
-                function selectLocation()
+                window.onload=function() {
+                    document.getElementById('outing_location').addEventListener('change',selectLocation);
+                }
+                function selectLocation(event)
                 {
-                    let selectElm = document.getElementById('selectLieu').value;
+                    let selectElm = event.currentTarget.value;
                         let xhr = new XMLHttpRequest();
                         let method = "GET";
                         let url = "/createOuting/"+ selectElm;

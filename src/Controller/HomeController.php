@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Data\SearchData;
 use App\Entity\Outing;
 use App\Form\SearchForm;
+use Detection\MobileDetect;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class HomeController extends AbstractController
     public function home(EntityManagerInterface $em,
                          Request $request)
     {
+
         $data = new SearchData();
         $data->page = $request->get('page', 1);
         $searchForm = $this->createForm(SearchForm::class, $data);

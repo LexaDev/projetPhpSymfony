@@ -33,7 +33,8 @@ class OutingController extends AbstractController
         if ($outingForm->isSubmitted() && $outingForm->isValid())
 
         {
-            dump($outing);
+
+            dump($outingForm);
             //Chargement de l'état
             $stateRepo = $this->getDoctrine()->getRepository(State::class);
             $outing->setState($stateRepo->find('1'));

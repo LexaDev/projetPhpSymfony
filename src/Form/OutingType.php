@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Location;
 use App\Entity\Outing;
+use App\Entity\Site;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,7 +28,7 @@ class OutingType extends AbstractType
                     'class'=>'ml-0 form-control'
                         ]
             ])
-            ->add('dateTimeStart', DateTimeType::class, [
+            ->add('dateTimeStart', DateType::class, [
                 'label' => 'Date et heure de la sortie :',
                 'required' => true,
                 'widget' => 'single_text',
@@ -75,17 +76,20 @@ class OutingType extends AbstractType
                     'class'=>'ml-0 form-control'
                 ]
             ])
-            ->add('location', EntityType::class,array(
+            ->add('location', EntityType::class,[
                 'class' => Location::class,
+
                 'label'=> 'Lieu :',
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir un lieu..',
                 'multiple' => false,
                 'expanded' => false,
                 'attr'=>[
-                    'class'=>'ml-0 form-control'
+                    'class'=>'ml-0 form-control',
                     ]
-            ));
+
+            ]);
+
     }
     public function configureOptions(OptionsResolver $resolver)
     {
