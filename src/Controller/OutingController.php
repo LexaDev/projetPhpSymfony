@@ -7,6 +7,7 @@ use App\Entity\Location;
 use App\Entity\Outing;
 use App\Entity\State;
 use App\Form\OutingType;
+use App\Repository\LocationRepository;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
 use DateTime;
@@ -29,11 +30,10 @@ class OutingController extends AbstractController
         $outingForm = $this->createForm(OutingType::class, $outing);
 
         $outingForm->handleRequest($request);
-        dump($outing);
+
         if ($outingForm->isSubmitted() && $outingForm->isValid())
 
-        {
-            dump($outing);
+        { dd($request->get('location'));
             //Chargement de l'état
             $stateRepo = $this->getDoctrine()->getRepository(State::class);
             $outing->setState($stateRepo->find('1'));
@@ -41,20 +41,22 @@ class OutingController extends AbstractController
             $outing->setOrganizer($this->getUser());
             //Chargement du site
             $outing->setSite($this->getUser()->getSite());
+            //Chargement de la location
+            $locationRepo = $em->getRepository(Location::class);
+            $outing->setLocation($locationRepo->find($request->get('location')));
+
             $em->persist($outing);
             $em->flush();
 
-            /*
             return $this->redirectToRoute('view_outing',[
-                "outing"=> $outing,
+                "id"=> $outing->getId(),
             ]);
-            */
+
         }
         return $this->render(
             'outing/createOuting.html.twig',
             [
                 'outingForm' => $outingForm->createView(),
-
             ]
         );
     }

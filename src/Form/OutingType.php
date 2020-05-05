@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Location;
 use App\Entity\Outing;
+use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -82,8 +83,13 @@ class OutingType extends AbstractType
                 'placeholder' => 'Choisir un lieu..',
                 'multiple' => false,
                 'expanded' => false,
+                'query_builder' => function (LocationRepository $locationRepository) {
+                    return $locationRepository->createQueryBuilder('l')
+                        ->orderBy('l.name', 'ASC');
+                },
                 'attr'=>[
-                    'class'=>'ml-0 form-control'
+                    'class'=>'ml-0 form-control',
+                    'id' => 'selectLieu',
                     ]
             ));
     }
