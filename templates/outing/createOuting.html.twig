@@ -68,8 +68,8 @@
                         </div>
                     </div>
                         <div class="row justify-content-center">
-                             <button type="submit" class="btn btn-primary">Enregistrer</button>
-                             <button type="submit" class="btn btn-primary">Publier la sortie</button>
+                             <button type="submit" class="btn btn-primary"><a href="{{ path('home') }}"></a> Enregistrer</button>
+                            <button type="submit" class="btn btn-primary"><a href="{{ path('outing_publish', {'id': outing.id}) }}"></a>Publier la sortie</button>
                              <button type="reset"  class="btn btn-primary">Annuler</button>
                         </div>
 
@@ -102,6 +102,7 @@
                         let url = "/createOuting/"+ selectElm;
                             xhr.onreadystatechange = function(){
                                 if (xhr.readyState === 4 && xhr.status === 200) {
+
                                     let infosLieu = JSON.parse(xhr.responseText).infosLieu[0];
 
                                     //création du tableau avec les informations
@@ -146,6 +147,9 @@
                                     let lieu=document.getElementById('lieu');
                                     lieu.innerText = "";
                                     lieu.appendChild(tbody);
+
+
+
                                 }
                             }
                         xhr.open(method,url);

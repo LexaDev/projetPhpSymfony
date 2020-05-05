@@ -8,7 +8,7 @@
     <div class="container mt-4 mb-3">
         <div class="d-flex justify-content-center h-100">
             <div class="card ">
-                <form>
+                <form method="post" action="{{ path('outing_cancel', {id: outing.id}) }}">
                 <div class="card-header">
                     <h3 >Annuler : {{ outing.name}}</h3>
                 </div>
@@ -50,13 +50,13 @@
                                         Motif
                                     </span>
                             </div >
-                                <textarea class="ml-0 form-control"  name="motif" placeholder="Motif de l'annulation" required autofocus  cols="20" rows="5" style="resize: none"></textarea>
+                                <textarea class="ml-0 form-control"  name="motif" placeholder="Motif de l'annulation" required autofocus  cols="20" rows="5" style="resize: none" minlength="5"></textarea>
                         </div>
                         </div>
                     </div>
                     <div class="card-footer text-center" id="buttons">
 
-                            <span id="enregistrer"><button class="btn btn-primary" type="submit">Enregistrer</button></span>
+                            <span id="enregistrer"><button class="btn btn-primary" type="submit" >Enregistrer</button></span>
                             <span id="Annuler"><button class="btn btn-primary" type="reset">Annuler</button></span>
 
                     </div>
@@ -149,7 +149,7 @@
                 {
                     let reponse = JSON.parse(xhr.responseText);
                     let user = reponse.user;
-
+                    console.log(user);
                     let span = document.getElementById("inscrit"+outin);
                     //suppression du bouton précédent
                     span.innerText="";

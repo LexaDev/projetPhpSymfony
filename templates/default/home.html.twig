@@ -80,8 +80,8 @@
                                 <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" clip-rule="evenodd"/>
                             </svg>
                         </a>
-                        {% if app.user is same as( outing.organizer) %}
-                            &nbsp;
+                        {% if app.user is same as( outing.organizer) and outing.state.id != 4 and outing.state.id != 5 %}
+
                             {# Annuler #}
                             <a href="{{ path('outing_cancel' , {id: outing.id}) }}" title="Annuler à la sortie {{ outing.name }}">
                                 <svg class="bi bi-trash-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" >
@@ -165,7 +165,7 @@
                     let span = document.getElementById("inscrit"+outin);
                     //suppression du bouton précédent
                     span.innerText="";
-                    span.setAttribute('title','Se désister de la sortie'+outin );
+                    span.setAttribute('title','Se désister de la sortie');
 
                     // création du nouveau bouton
 
@@ -230,7 +230,7 @@
                     //suppression du bouton précédent
                     span.innerText="";
                     span.setAttribute('class',outin);
-                    span.setAttribute('title','S\'inscrire à la sortie'+outin );
+                    span.setAttribute('title','S\'inscrire à la sortie');
                     //S'inscrire
                     //creation nouveau bouton
                     let btn = document.createElement('button');
@@ -301,8 +301,7 @@
                     }
                     //modification de l'état dans le tableau de CREATE à PUBLISH
                     let td = document.getElementById("state"+outin);
-                    td.innerText = "PUBLISH";
-
+                    td.innerText = "Publiée";
 
 
                 }
