@@ -93,9 +93,10 @@
     </div>
 {% block javaScript %}
             <script>
-                //Ajouter window.onload ...
-
-                function selectLocation()
+                window.onload=function() {
+                    document.getElementById('outing_location').addEventListener('change',selectLocation);
+                }
+                function selectLocation(event)
                 {
                     let selectElm = document.getElementById('selectLieu').value;
                     let xhr = new XMLHttpRequest();
@@ -103,6 +104,12 @@
                     let url = "/createOuting/"+ selectElm;
                     xhr.onreadystatechange = function(){
                     if (xhr.readyState === 4 && xhr.status === 200) {
+                    let selectElm = event.currentTarget.value;
+                        let xhr = new XMLHttpRequest();
+                        let method = "GET";
+                        let url = "/createOuting/"+ selectElm;
+                            xhr.onreadystatechange = function(){
+                                if (xhr.readyState === 4 && xhr.status === 200) {
 
                         let infosLieu = JSON.parse(xhr.responseText).infosLieu[0];
 
@@ -239,8 +246,8 @@
                 }
             xhr.open(method,url);
             xhr.send();
-                }
-            </script>
+        }
+    </script>
 {% endblock %}
 
 {% endblock %}
