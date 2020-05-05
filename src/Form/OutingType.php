@@ -30,6 +30,8 @@ class OutingType extends AbstractType
             ->add('dateTimeStart', DateTimeType::class, [
                 'label' => 'Date et heure de la sortie :',
                 'required' => true,
+                'widget' => 'single_text',
+                'html5' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control',
                     'type'=>"datetime-local"
@@ -38,6 +40,8 @@ class OutingType extends AbstractType
             ->add('dateLimitSigningUp', DateType::class, [
                 'label' => 'Date limite d\'inscription :',
                 'required' => true,
+                'widget' => 'single_text',
+                'html5' => true,
                 'attr'=>[
                 'class'=>'ml-0 form-control',
                 'type'=>"date"
@@ -54,11 +58,11 @@ class OutingType extends AbstractType
                 'label' => 'Durée :',
                 'required' => true,
                 'choices' => [
-                    '45' => '45_minutes',
-                    '60' => '1_hour',
-                    '90' => '1_hour_and_a_half',
-                    '120' => '2_hours',
-                    '180' => '3_hours',
+                    '45 minutes' => '45',
+                    '1 heure' => '60',
+                    '1 heure et demi' => '90',
+                    '2 heures' => '120',
+                    '3 heures' => '180',
                 ],
                 'attr'=>[
                      'class'=>'ml-0 form-control'
