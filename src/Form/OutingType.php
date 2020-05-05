@@ -58,11 +58,11 @@ class OutingType extends AbstractType
                 'label' => 'Durée :',
                 'required' => true,
                 'choices' => [
-                    '45_minutes' => '45',
-                    '1_hour' => '60',
-                    '1_hour_and_a_half' => '90',
-                    '2_hours' => '120',
-                    '3_hours' => '180',
+                    '45 minutes' => '45',
+                    '1 heure' => '60',
+                    '1 heure et demi' => '90',
+                    '2 heures' => '120',
+                    '3 heures' => '180',
                 ],
                 'attr'=>[
                      'class'=>'ml-0 form-control'

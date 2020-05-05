@@ -51,7 +51,6 @@ class Outing
     /**
      * @Assert\NotBlank(message="La date limite d'inscription doit être rensignée")
      * @Assert\Date()
-     * @Assert\LessThan("$dateTimeStart", message="La date limite d'inscription doit être avant le début de la sortie")
      * @Assert\GreaterThanOrEqual("today UTC", message="La date limite d'inscription doit être supérieure à aujourd'hui")
      * @ORM\Column(type="date")
      */

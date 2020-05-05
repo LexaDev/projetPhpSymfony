@@ -27,17 +27,29 @@ class OutingController extends AbstractController
         $outing = new Outing();
 
         $outingForm = $this->createForm(OutingType::class, $outing);
+
         $outingForm->handleRequest($request);
+        dump($outing);
         if ($outingForm->isSubmitted() && $outingForm->isValid())
+
         {
+            dump($outing);
+            //Chargement de l'état
+            $stateRepo = $this->getDoctrine()->getRepository(State::class);
+            $outing->setState($stateRepo->find('1'));
+            //Chargement de l'organizer
+            $outing->setOrganizer($this->getUser());
+            //Chargement du site
+            $outing->setSite($this->getUser()->getSite());
             $em->persist($outing);
             $em->flush();
 
+            /*
             return $this->redirectToRoute('view_outing',[
-                "id"=> $outing->getId(),
+                "outing"=> $outing,
             ]);
+            */
         }
-
         return $this->render(
             'outing/createOuting.html.twig',
             [
