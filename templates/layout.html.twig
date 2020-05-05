@@ -47,6 +47,15 @@
     </header>
 </div>
 <main>
+    <div class="container align-items-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% block main %}{% endblock %}
 </main>
 <footer class="footer">
