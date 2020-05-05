@@ -75,7 +75,7 @@ class Outing
     private $infosOuting;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="outings")
+     * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="outings", cascade={"persist"})
      */
     private $state;
 
