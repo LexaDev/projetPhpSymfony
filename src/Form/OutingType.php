@@ -24,6 +24,9 @@ class OutingType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la sortie :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control'
@@ -31,6 +34,9 @@ class OutingType extends AbstractType
             ])
             ->add('dateTimeStart', DateType::class, [
                 'label' => 'Date et heure de la sortie :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => true,
                 'widget' => 'single_text',
                 'html5' => true,
@@ -41,6 +47,9 @@ class OutingType extends AbstractType
             ])
             ->add('dateLimitSigningUp', DateType::class, [
                 'label' => 'Date limite d\'inscription :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => true,
                 'widget' => 'single_text',
                 'html5' => true,
@@ -51,6 +60,9 @@ class OutingType extends AbstractType
             ])
             ->add('nbSigningUpMax', TextType::class, [
                 'label' => 'Nombre de places :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control'
@@ -58,6 +70,9 @@ class OutingType extends AbstractType
             ])
             ->add('duration', ChoiceType::class, [
                 'label' => 'Durée :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => true,
                 'choices' => [
                     '45 minutes' => '45',
@@ -72,6 +87,9 @@ class OutingType extends AbstractType
             ])
             ->add('infosOuting', TextareaType::class, [
                 'label' => 'Description et infos :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'required' => false,
                 'attr'=>[
                     'class'=>'ml-0 form-control'
@@ -81,6 +99,9 @@ class OutingType extends AbstractType
                 'class' => Location::class,
 
                 'label'=> 'Lieu :',
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir un lieu..',
                 'multiple' => false,
@@ -91,7 +112,6 @@ class OutingType extends AbstractType
                 },
                 'attr'=>[
                     'class'=>'ml-0 form-control',
-                    'id' => 'selectLieu',
                     ]
 
             ]);
