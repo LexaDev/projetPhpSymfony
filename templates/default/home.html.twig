@@ -5,13 +5,6 @@
 {% block main %}
 
     <div class="container align-items-center">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
 
         {{ form_start(searchForm, {attr: {id: 'searchForm'}}) }}
         <h2 class="mt-5 lead font-weight-bold">Filtrer les sorties</h2>
