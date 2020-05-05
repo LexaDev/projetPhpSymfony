@@ -20,7 +20,7 @@ class State
     private $id;
 
     /**
-     * @Assert\Choice({"Créée", "Ouverte", "Clôturée", "Activité en cours", "Passée", "Annulé"})
+     * @Assert\Choice({"Créée", "Ouverte", "Clôturée", "Activité en cours", "Passée", "Annulée"})
      * @ORM\Column(type="string")
      */
     private $label;

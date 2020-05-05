@@ -189,7 +189,7 @@ class OutingController extends AbstractController
             $outing = $outingRepository->find($id);
 
             if (isset($outing)) {
-                $outing->setState($stateRepository->findOneBy(['label'=> 'PUBLISH']));
+                $outing->setState($stateRepository->find(2));
                 $em->flush();
                 return new Response('Cette sortie est maintenant publier', Response::HTTP_OK);
             } else {

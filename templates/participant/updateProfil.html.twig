@@ -14,9 +14,9 @@
                 </div>
                 <div class="card-body">
                     {{ form_errors(partiForm.username) }}
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                                <span class="input-group-text mb-3 w-100">
                                     Pseudo
                                 </span>
                         </div >
@@ -25,9 +25,9 @@
 
                     </div>
                     {{ form_errors(partiForm.firstName) }}
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                                <span class="input-group-text mb-3 w-100">
                                     Prénom
                                 </span>
                         </div >
@@ -36,9 +36,9 @@
 
                     </div>
                     {{ form_errors(partiForm.lastName) }}
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 ">
+                                <span class="input-group-text mb-3 w-100">
                                     Nom
                                 </span>
                         </div >
@@ -49,9 +49,9 @@
 
                     {{ form_errors(partiForm.email) }}
 
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                                <span class="input-group-text mb-3 w-100">
                                     Email
                                 </span>
                         </div >
@@ -60,9 +60,9 @@
 
                     </div>
                     {{ form_errors(partiForm.phoneNumber) }}
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                                <span class="input-group-text mb-3 w-100">
                                     Téléphone
                                 </span>
                         </div >
@@ -71,9 +71,9 @@
 
                     </div>
                     {{ form_errors(partiForm.site) }}
-                    <div class="input-group form-group">
+                    <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                                <span class="input-group-text mb-3 w-100">
                                     Site de rattachement
                                 </span>
                         </div >
@@ -82,7 +82,17 @@
 
                     </div>
 
-                    {{ form_widget(partiForm.image) }}
+                    {{ form_errors(partiForm.image) }}
+                    <div class="input-group form-group flex-column flex-md-row" id="block_image">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Télécharger une photo (JPEG, JPG, PNG)
+                                </span>
+                        </div >
+
+                        {{  form_widget(partiForm.image) }}
+
+                    </div>
 
                     <div class="input-group-prepend" >
                                 <button class="input-group-text mb-3" onclick="myFunction()" type="button" id="btnPass">
@@ -92,9 +102,9 @@
                     <div  id="myDIV" style="display: none">
                     {{ form_errors(partiForm.newPassword) }}
                     {{ form_errors(partiForm.newPassword.first) }}
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                        <div class="input-group form-group flex-column flex-md-row">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
                                     Mot de passe
                                 </span>
                         </div >
@@ -103,9 +113,9 @@
 
                     </div>
                     {{ form_errors(partiForm.newPassword.second) }}
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                        <div class="input-group form-group flex-column flex-md-row">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
                                     Saisir à nouveau
                                 </span>
                         </div >
@@ -134,6 +144,33 @@
 {%  block javaScript %}
 
     <script>
+        $(document).ready(function(){
+            $('input[type="file"]').change(function (event){
+                let file = event.target.files[0].name;
+
+                //Suppression de l'ancien block si existant
+                let span = document.getElementById('block_nom_fichier');
+                if (span){
+                    span.remove();
+                }
+
+                //Ajout du nouveau block
+                let spanBlock = document.createElement('span');
+                spanBlock.classList.add('valid-feedback', 'd-block');
+                spanBlock.id = 'block_nom_fichier';
+
+                let spanTitle = document.createElement('span');
+                spanTitle.classList.add('badge', 'badge-success', 'text-uppercase');
+                spanTitle.innerText = 'Nom du fichier';
+
+                let spanMsg = document.createElement('span');
+                spanMsg.innerText = 'Le fichier ' + file + ' a été sélectionné.';
+
+                spanBlock.append(spanTitle);
+                spanBlock.append(spanMsg);
+                document.getElementById('block_image').append(spanBlock);
+            })
+        })
         function myFunction() {
             let x = document.getElementById("myDIV");
             let y = document.getElementById("btnPass")

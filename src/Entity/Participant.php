@@ -75,7 +75,7 @@ class Participant implements UserInterface
     private $actif;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string",nullable=true)
      */
     private $imageFilename;
 
