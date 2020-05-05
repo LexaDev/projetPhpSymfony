@@ -26,18 +26,26 @@ class OutingController extends AbstractController
     {
         $outing = new Outing();
 
-
         $outingForm = $this->createForm(OutingType::class, $outing);
+        $outingForm->handleRequest($request);
+        if ($outingForm->isSubmitted() && $outingForm->isValid())
+        {
+            $em->persist($outing);
+            $em->flush();
+
+            return $this->redirectToRoute('view_outing',[
+                "id"=> $outing->getId(),
+            ]);
+        }
 
         return $this->render(
             'outing/createOuting.html.twig',
             [
                 'outingForm' => $outingForm->createView(),
-                'outing' => $outing
+
             ]
         );
     }
-
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})
@@ -95,6 +103,7 @@ class OutingController extends AbstractController
     }
 
     /**
+     * Donne les infos (rue,cp,latitude...) lors d'un renseignement d'un lieu
      * @Route("/createOuting/{id}", name="create_outing_id")
      */
     public function idLieu($id)
