@@ -68,7 +68,7 @@
                         </div>
                     </div>
                         <div class="row justify-content-center">
-                             <button type="submit" class="btn btn-primary"><a href="{{ path('home') }}"></a> Enregistrer</button>
+                             <button type="submit" class="btn btn-primary"><a href="{{ path('outing_save', {'id': outing.id}) }}"></a> Enregistrer</button>
                             <button type="submit" class="btn btn-primary"><a href="{{ path('outing_publish', {'id': outing.id}) }}"></a>Publier la sortie</button>
                              <button type="reset"  class="btn btn-primary">Annuler</button>
                         </div>

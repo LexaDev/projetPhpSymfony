@@ -8,9 +8,11 @@ use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ParticipantController extends AbstractController
 {
@@ -21,7 +23,10 @@ class ParticipantController extends AbstractController
      * @param Request $request
      *
      */
-    public function update(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function update(EntityManagerInterface $em,
+                           Request $request,
+                           UserPasswordEncoderInterface $passwordEncoder,
+                           SluggerInterface $slugger)
     {
 
         //recupère user en cours
@@ -38,6 +43,32 @@ class ParticipantController extends AbstractController
             //recuperation des child unmapped
             $firstPass = $participantForm->get('newPassword')->get('first')->getData();
             $secondPass =$participantForm->get('newPassword')->get('second')->getData();
+            $imageFile = $participantForm->get('image')->getData();
+
+            //Gestion de l'ajout d'une image
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                //Déplacer l'image dans le dossier correspondant
+                try {
+                    //Si cette utilisateur à déjà une image associé -> la supprimer
+                    if($participant->getImageFilename() != null){
+                        unlink($this->getParameter('images_profile_directory').'/'.$participant->getImageFilename());
+                    }
+                    $imageFile->move(
+                        $this->getParameter('images_profile_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Impossible d\'ajouter cette image');
+                }
+
+                // Ajouter le nom de l'image à ce participant pour faire le lien et non le contenu de l'image
+                $participant->setImageFilename($newFilename);
+            }
 
             //deuxième controle double saisie identique
             if (isset($firstPass) && isset($secondPass) && $firstPass===$secondPass) {

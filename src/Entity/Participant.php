@@ -75,6 +75,11 @@ class Participant implements UserInterface
     private $actif;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $imageFilename;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="participants")
      */
     private $site;
@@ -233,6 +238,23 @@ class Participant implements UserInterface
     public function setActif($actif): void
     {
         $this->actif = $actif;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImageFilename()
+    {
+        return $this->imageFilename;
+    }
+
+    /**
+     * @param mixed $imageFilename
+     */
+    public function setImageFilename($imageFilename)
+    {
+        $this->imageFilename = $imageFilename;
+        return $this;
     }
 
     /**
