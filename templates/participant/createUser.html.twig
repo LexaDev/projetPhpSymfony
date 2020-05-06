@@ -8,11 +8,23 @@
     <div class="container mt-4 mb-3">
         {{ form_start(partiForm) }}
         <div class="d-flex justify-content-center h-100">
-            <div class="card w-75">
+            <div class="card w-75 mb-5">
                 <div class="card-header">
                     <h3>Création d'un participant</h3>
                 </div>
                 <div class="card-body">
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100" for="uploadParticipants">
+                                    Importer plusieurs participants (fichier .csv)
+                                </span>
+                        </div >
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="uploadParticipants" id="uploadParticipants">
+                            <label class="custom-file-label"></label>
+                        </div>
+                    </div>
+
                     {{ form_errors(partiForm.username) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
@@ -191,7 +203,33 @@
 
             }
 
+            $(document).ready(function(){
+                $('input[type="file"]').change(function (event){
+                    let file = event.target.files[0].name;
 
+                    //Suppression de l'ancien block si existant
+                    let span = document.getElementById('block_nom_fichier');
+                    if (span){
+                        span.remove();
+                    }
+
+                    //Ajout du nouveau block
+                    let spanBlock = document.createElement('span');
+                    spanBlock.classList.add('valid-feedback', 'd-block');
+                    spanBlock.id = 'block_nom_fichier';
+
+                    let spanTitle = document.createElement('span');
+                    spanTitle.classList.add('badge', 'badge-success', 'text-uppercase');
+                    spanTitle.innerText = 'Nom du fichier';
+
+                    let spanMsg = document.createElement('span');
+                    spanMsg.innerText = 'Le fichier ' + file + ' a été sélectionné.';
+
+                    spanBlock.append(spanTitle);
+                    spanBlock.append(spanMsg);
+                    document.getElementById('block_image').append(spanBlock);
+                })
+            })
 
 
         </script>

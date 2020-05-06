@@ -133,7 +133,7 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     *@Route("/importcsv")
+     *@Route("/importcsv", name="import_fichier")
      */
     public function uploadParticipants(EntityManagerInterface $em,
                                        SiteRepository $siteRepository,
