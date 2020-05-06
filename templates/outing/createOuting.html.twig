@@ -15,6 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-6">
+                            {{ form_errors(outingForm.name) }}
                             <div class="input-group form-group flex-column flex-md-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.name) }}
@@ -29,28 +30,28 @@
                                 {{ form_widget(outingForm.dateStart) }}
                                 {{ form_widget(outingForm.timeStart) }}
                             </div>
-
+                            {{ form_errors(outingForm.dateLimitSigningUp) }}
                             <div class="input-group form-group flex-column flex-md-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.dateLimitSigningUp) }}
                                 </div>
                                 {{ form_widget(outingForm.dateLimitSigningUp) }}
                             </div>
-
+                            {{ form_errors(outingForm.nbSigningUpMax) }}
                             <div class="input-group form-group flex-column flex-md-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.nbSigningUpMax) }}
                                 </div>
                                 {{ form_widget(outingForm.nbSigningUpMax) }}
                             </div>
-
+                            {{ form_errors(outingForm.duration) }}
                             <div class="input-group form-group flex-column flex-md-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.duration) }}
                                 </div>
                                 {{ form_widget(outingForm.duration) }}
                             </div>
-
+                            {{ form_errors(outingForm.infosOuting) }}
                             <div class="input-group form-group flex-column flex-lg-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.infosOuting) }}
@@ -59,6 +60,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
+                            {{ form_errors(outingForm.location) }}
                             <div class="input-group form-group flex-column flex-md-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.location) }}
