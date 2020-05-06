@@ -32,7 +32,7 @@ class OutingType extends AbstractType
                     'class'=>'ml-0 form-control'
                         ]
             ])
-            ->add('dateTimeStart', DateType::class, [
+            ->add('dateTimeStart', DateTimeType::class, [
                 'label' => 'Date et heure de la sortie :',
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
