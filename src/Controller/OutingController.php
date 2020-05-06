@@ -121,11 +121,10 @@ class OutingController extends AbstractController
                 'outingForm' => $updateForm->createView(),
                 'cardTitle' => 'Modifier',
                 'btnSuppr' => true,
-                'id' => $id
+                'id' => $id,
+                'outing' =>$outing,
             ]
         );
-
-
 
     }
 
