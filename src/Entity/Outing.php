@@ -34,8 +34,8 @@ class Outing
     private $name;
 
     /**
-     * @Assert\NotBlank(message="La date de début de la sortie doit être rensignée")
-     * @Assert\DateTime()
+     *
+     * @Assert\Type(type="datetime")
      * @Assert\GreaterThan("today UTC", message="La date et l'heure de début de la sortie doit être après aujourd'hui")
      * @ORM\Column(type="datetime")
      */
