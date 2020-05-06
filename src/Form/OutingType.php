@@ -77,6 +77,7 @@ class OutingType extends AbstractType
             ])
             ->add('location', EntityType::class,array(
                 'class' => Location::class,
+                'mapped'=>false,
                 'label'=> 'Lieu :',
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir un lieu..',

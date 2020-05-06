@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-
 use App\Entity\Location;
 use App\Entity\Outing;
 use App\Entity\State;
@@ -25,16 +23,16 @@ class OutingController extends AbstractController
     public function createOuting(EntityManagerInterface $em, Request $request)
     {
         $outing = new Outing();
-
         $outingForm = $this->createForm(OutingType::class, $outing);
-
         $outingForm->handleRequest($request);
         dump($outing);
         if ($outingForm->isSubmitted() && $outingForm->isValid())
 
         {
-            dump($outing);
+            dump($outing->getLocation());
             //Chargement de l'état
+            $location = $outingForm->get('location')->getName();
+            dump($location);
             $stateRepo = $this->getDoctrine()->getRepository(State::class);
             $outing->setState($stateRepo->find('1'));
             //Chargement de l'organizer
@@ -43,7 +41,6 @@ class OutingController extends AbstractController
             $outing->setSite($this->getUser()->getSite());
             $em->persist($outing);
             $em->flush();
-
             /*
             return $this->redirectToRoute('view_outing',[
                 "outing"=> $outing,
@@ -54,7 +51,6 @@ class OutingController extends AbstractController
             'outing/createOuting.html.twig',
             [
                 'outingForm' => $outingForm->createView(),
-
             ]
         );
     }
