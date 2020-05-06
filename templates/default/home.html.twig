@@ -63,7 +63,15 @@
                             {% endif %}
                         {% endfor %}
                     </td>
-                    <td><a href="{{ path('participant_detail', {'id': outing.organizer.id}) }}">{{ outing.organizer.username }}</a></td>
+                    <td><a href="{{ path('participant_detail', {'id': outing.organizer.id}) }}"
+                            {% if outing.organizer == app.user %}
+                        title="Voir mon profil">
+                                moi
+                            {% else %}
+                                title="Voir son profil">
+                            {{ outing.organizer.username }}
+                                {%  endif %}
+                        </a></td>
                     <td style="min-width: 160px">
                         {# Afficher #}
                         <a href="{{ path('view_outing', {id: outing.id}) }}" title="Afficher la sortie {{ outing.name }}">

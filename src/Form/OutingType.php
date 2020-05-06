@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -58,7 +59,7 @@ class OutingType extends AbstractType
                 'html5' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control',
-                    'value'=>'00:00'
+                    'value'=>$options['timeValue']
 
                 ]
             ])
@@ -90,19 +91,13 @@ class OutingType extends AbstractType
                     'class'=>'ml-0 form-control'
                 ]
             ])
-            ->add('duration', ChoiceType::class, [
+            ->add('duration', NumberType::class, [
                 'label' => 'Durée :',
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
                 ],
+                'html5'=>true,
                 'required' => true,
-                'choices' => [
-                    '45 minutes' => '45',
-                    '1 heure' => '60',
-                    '1 heure et demi' => '90',
-                    '2 heures' => '120',
-                    '3 heures' => '180',
-                ],
                 'attr'=>[
                      'class'=>'ml-0 form-control'
     ]
@@ -142,6 +137,8 @@ class OutingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Outing::class,
+            'timeValue'=> '00:00'
         ]);
+        $resolver->setAllowedTypes('timeValue','string');
     }
 }
