@@ -58,7 +58,7 @@ class OutingType extends AbstractType
                 'html5' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control',
-                    'value'=>'00:00'
+                    'value'=>$options['timeValue']
 
                 ]
             ])
@@ -142,6 +142,8 @@ class OutingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Outing::class,
+            'timeValue'=> '00:00'
         ]);
+        $resolver->setAllowedTypes('timeValue','string');
     }
 }
