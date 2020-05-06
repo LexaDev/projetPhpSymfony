@@ -23,11 +23,11 @@
                                 {{ form_widget(outingForm.name) }}
                             </div>
 
-                            <div class="input-group form-group flex-column flex-md-row">
-                                <div class="input-group-prepend">
-                                    {{ form_label(outingForm.dateStart) }}
+                            <div class="input-group form-group flex-column flex-md-row" id="time">
+                                <div class="input-group-prepend" >
+                                    {{ form_label(outingForm.dateTimeStart) }}
                                 </div>
-                                {{ form_widget(outingForm.dateStart) }}
+                                {{ form_widget(outingForm.dateTimeStart) }}
                                 {{ form_widget(outingForm.timeStart) }}
                             </div>
                             {{ form_errors(outingForm.dateLimitSigningUp) }}
@@ -65,10 +65,17 @@
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.location) }}
                                 </div>
-                                {{ form_widget(outingForm.location) }}
+                                {%  if btnSuppr %}
+                                {{ form_widget(outingForm.location)}}
+                                {%  else %}
+                                    {{ form_widget(outingForm.location )}}
+                                {%  endif %}
                             </div>
                             <div id="lieu" class="card w-100">
+                                {%  if btnSuppr %}
 
+                                    <p>{{  outing.location.street }}</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -93,8 +100,11 @@
     <script>
         window.onload=function() {
             document.getElementById('outing_location').addEventListener('change',selectLocation);
-        }
 
+        }
+        document.getElementById('name').onload=function () {
+
+        }
         function erase()
         {
             let lieu = document.getElementById('lieu');
