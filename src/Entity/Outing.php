@@ -270,7 +270,7 @@ class Outing
      */
     public function canSubscribe()
     {
-        if ($this->getDateLimitSigningUp()>new DateTime('now') && count($this->getParticipants())<$this->getNbSigningUpMax() && $this->getState()->getId() == 2)
+        if ($this->getDateLimitSigningUp() > date('Y-m-d H:i:s') && count($this->getParticipants())<$this->getNbSigningUpMax() && $this->getState()->getId() == 2)
         {
             return true;
         }
