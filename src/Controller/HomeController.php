@@ -16,8 +16,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home(EntityManagerInterface $em,
-                         Request $request)
+    public function home(EntityManagerInterface $em, Request $request)
     {
 
         $data = new SearchData();

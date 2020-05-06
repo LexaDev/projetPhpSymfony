@@ -1,0 +1,200 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}
+    Créer un participant | {{  parent() }}
+{%  endblock %}
+{% form_theme partiForm 'bootstrap_4_layout.html.twig' %}
+{%  block main %}
+    <div class="container mt-4 mb-3">
+        {{ form_start(partiForm) }}
+        <div class="d-flex justify-content-center h-100">
+            <div class="card w-75">
+                <div class="card-header">
+                    <h3>Création d'un participant</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_errors(partiForm.username) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Pseudo
+                                </span>
+                        </div >
+
+                                    {{  form_widget(partiForm.username) }}
+
+                    </div>
+                    {{ form_errors(partiForm.firstName) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Prénom
+                                </span>
+                        </div >
+
+                            {{  form_widget(partiForm.firstName) }}
+
+                    </div>
+                    {{ form_errors(partiForm.lastName) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Nom
+                                </span>
+                        </div >
+
+                            {{  form_widget(partiForm.lastName) }}
+
+                    </div>
+
+                    {{ form_errors(partiForm.email) }}
+
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Email
+                                </span>
+                        </div >
+
+                            {{  form_widget(partiForm.email) }}
+
+                    </div>
+                    {{ form_errors(partiForm.phoneNumber) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Téléphone
+                                </span>
+                        </div >
+
+                            {{  form_widget(partiForm.phoneNumber) }}
+
+                    </div>
+
+                    {{ form_errors(partiForm.site) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Site de rattachement
+                                </span>
+                        </div >
+
+                            {{  form_widget(partiForm.site) }}
+
+                    </div>
+
+
+
+                    {{ form_errors(partiForm.roles) }}
+                    <div class="input-group form-group flex-column flex-md-row">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Role
+                                </span>
+                        </div >
+
+                        {{  form_widget(partiForm.roles) }}
+
+                    </div>
+
+
+
+                    <div  id="passwordDIV">
+                    {{ form_errors(partiForm.newPassword) }}
+                    {{ form_errors(partiForm.newPassword.first) }}
+                        <div class="input-group form-group flex-column flex-md-row">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Mot de passe
+                                </span>
+                        </div >
+
+                        {{  form_widget(partiForm.newPassword.first) }}
+
+                    </div>
+                    {{ form_errors(partiForm.newPassword.second) }}
+                        <div class="input-group form-group flex-column flex-md-row">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Saisir à nouveau
+                                </span>
+                        </div >
+
+                        {{  form_widget(partiForm.newPassword.second) }}
+
+                    </div>
+
+
+
+                    </div>
+                    {{ form_errors(partiForm.image) }}
+                    <div class="input-group form-group flex-column flex-md-row" id="block_image">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text mb-3 w-100">
+                                    Télécharger une photo (JPEG, JPG, PNG)
+                                </span>
+                        </div >
+
+                        {{  form_widget(partiForm.image) }}
+
+                    </div>
+
+                    {{ form_errors(partiForm.actif) }}
+                    <div class="input-group form-group flex-column flex-md-row custom-control custom-switch">
+
+
+                        {{  form_widget(partiForm.actif) }}
+
+                    </div>
+                    <div class="card-footer">
+                    <div class="row justify-content-center">
+                        <div class="form-group">
+
+                                <button class="btn btn-lg btn-primary m-2" id="modifier" type="submit">
+                                    Enregistrer
+                                </button>
+                            <button class="btn btn-lg btn-primary m-2" id="annuler" type="reset">
+                                Annuler
+                            </button>
+
+                        </div>
+                    </div>
+                    </div>
+                    {{ form_end(partiForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock %}
+
+{%  block javaScript %}
+        <script>
+
+            window.onload=function() {
+                document.getElementById('user_firstName').addEventListener('blur',email);
+                document.getElementById('user_lastName').addEventListener('blur',email);
+            }
+
+            function email()
+            {
+                let firstName = document.getElementById('user_firstName').value;
+                let lastName = document.getElementById('user_lastName').value;
+                let email = document.getElementById('user_email');
+                let year = new Date(Date.now()).getFullYear();
+                if (firstName && lastName)
+                {
+
+                    email.value=firstName+'.'+lastName+year+'@campus-eni.fr';
+                }else{
+                    email.value='';
+                }
+
+            }
+
+
+
+
+        </script>
+
+
+{%  endblock %}
