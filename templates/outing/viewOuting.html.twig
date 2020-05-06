@@ -191,13 +191,31 @@
                     </div>
                 </div>
                 {% if outing.state.id != 4 and outing.state.id != 5 %}
+
                 <div class="card-footer">
                     <p><svg class="bi bi-people-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/>
                         </svg>
-                        Liste des participants
-                    </p>
-                    <table class="" style="display: inline-table !important; width: 400px">
+                    {%  if  outing.participants|length ==0 %}
+                        <span id="participantText">Pas encore de participants</span>
+                        </p>
+                    <div id="participantsTab" style="visibility: hidden">
+
+                    {%  else %}
+
+                    {%  if outing.state.id == 3 %}
+                        <span id="participantText">Ils ont participé</span>
+
+                    {%  else %}
+                        <span id="participantText">Liste des participants</span>
+
+                    {%  endif %}
+                            </p>
+                        <div id="participantsTab">
+                            {%  endif %}
+
+
+                    <table class="" style="display: inline-table !important; width: 400px" data-nb-participants="{{ outing.participants|length }}" id="participantsNumber">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Pseudo</th>
@@ -210,13 +228,13 @@
                         {% for participant in outing.participants %}
                             {%  if participant == app.user %}
                                 <tr id="userTr">
-                                    <td scope="row">{{ participant.username }}</td>
+                                    <td>{{ participant.username }}</td>
                                     <td>{{ participant.firstname }} {{ participant.lastName }}</td>
-                                    <td><a href="{{ path('participant_profile') }}" {#TODO liens vers profil#}>Voir votre profil</a></td>
+                                    <td><a href="{{ path('participant_profile') }}">Voir votre profil</a></td>
                                 </tr>
                             {% else %}
                                 <tr id="participant{{ participant.id }}">
-                                    <td scope="row">{{ participant.username }}</td>
+                                    <td>{{ participant.username }}</td>
                                     <td>{{ participant.firstname }} {{ participant.lastName }}</td>
                                     <td><a href="{{ path('participant_detail', {'id': participant.id}) }}">Voir son profil</a></td>
                                 </tr>
@@ -224,8 +242,10 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
+
             </div>
         </div>
     </div>
@@ -246,7 +266,7 @@
                 if (xhr.readyState === 4 && xhr.status === 200)
                 {
                     let user = JSON.parse(xhr.responseText).user;
-                    console.log(user);
+
                     let span = document.getElementById("inscrit"+outin);
                     //suppression du bouton précédent
                     span.innerText="";
@@ -281,6 +301,12 @@
                     btn.appendChild(svg);
                     span.appendChild(btn);
 
+                    //visibility du tableau
+                    let participantsTab = document.getElementById('participantsTab');
+                    participantsTab.style.visibility="visible";
+                    //modification texte
+                    let participantsText = document.getElementById('participantText');
+                    participantsText.innerText ="Liste des participants";
 
                     //ajout dans la liste des participants
                     let tbody = document.querySelector('tbody');
@@ -368,10 +394,23 @@
                     btn.appendChild(svg);
                     span.appendChild(btn);
 
-
+                    //suppression de la ligne
                     let userTr = document.getElementById('userTr');
                     let tBody = document.querySelector('tbody');
                     tBody.removeChild(userTr);
+                    //cacher tableau si plsu de participants
+                    let tabNumber = document.getElementById('participantsNumber');
+                    let nbInscrits = tabNumber.dataset.nbParticipants;
+                    if (nbInscrits==1)
+                    {
+                        //visibility du tableau
+                        let participantsTab = document.getElementById('participantsTab');
+                        participantsTab.style.visibility="hidden";
+                        //modification texte
+                        let participantsText = document.getElementById('participantText');
+                        participantsText.innerText ="Pas encore de participants";
+                    }
+
                 }
                 else if (xhr.readyState === 4 ){
                     alert(xhr.response);
