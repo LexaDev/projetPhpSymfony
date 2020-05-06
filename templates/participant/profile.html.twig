@@ -13,9 +13,9 @@
                 </div>
                 <div class="mx-auto" >
                     {% if app.user.imageFilename %}
-                        <img src="{{ asset('uploads/images_profile/' ~ app.user.imageFilename) }}" class="img-fluid rounded" style="max-width: 240px">
+                        <img src="{{ asset('uploads/images_profile/' ~ app.user.imageFilename) }}" class="img-fluid rounded" style="max-width: 240px; max-height: 240px">
                     {% else %}
-                        <img src="{{ asset('build/img/avatarNeutre.png') }}" class="img-fluid rounded" style="max-width: 240px">
+                        <img src="{{ asset('build/img/avatarNeutre.png') }}" class="img-fluid rounded" style="max-width: 240px; max-height: 240px">
                     {% endif %}
                 </div>
                 <div class="card-body">

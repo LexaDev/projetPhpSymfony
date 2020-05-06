@@ -64,8 +64,7 @@
                         {% endfor %}
                     </td>
                     <td><a href="{{ path('participant_detail', {'id': outing.organizer.id}) }}">{{ outing.organizer.username }}</a></td>
-                    <td>{# todo : lien s'inscrire ne s'affiche pas #}
-{# Version avec des icones #}
+                    <td style="min-width: 160px">
                         {# Afficher #}
                         <a href="{{ path('view_outing', {id: outing.id}) }}" title="Afficher la sortie {{ outing.name }}">
                             <svg class="bi bi-eye-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" >
@@ -91,7 +90,6 @@
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
                                     </svg>
                                 </a>
-                                &nbsp;
                                 {# Publier #}
                             <span id="publish{{ outing.id }}" title="Publier la sortie">
                                 <button class="btn btn-sm btn-link" id="{{ outing.id }}" type="submit" onclick="publish()">
