@@ -181,12 +181,12 @@
                 let lastName = document.getElementById('user_lastName').value;
                 let email = document.getElementById('user_email');
                 let year = new Date(Date.now()).getFullYear();
-                console.log(firstName);
-                console.log(lastName);
                 if (firstName && lastName)
                 {
-                    console.log(year);
+
                     email.value=firstName+'.'+lastName+year+'@campus-eni.fr';
+                }else{
+                    email.value='';
                 }
 
             }
