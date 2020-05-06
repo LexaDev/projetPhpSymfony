@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantType;
 use App\Form\UserType;
+use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,7 +102,63 @@ class AdminController extends AbstractController
             );
        }else{
             return $this->redirectToRoute('home');
+       }
+    }
+
+    /**
+     *@Route("/importcsv", name="import_fichier")
+     */
+    public function uploadParticipants(EntityManagerInterface $em,
+                                       SiteRepository $siteRepository,
+                                       UserPasswordEncoderInterface $encoder,
+                                       Request $request)
+    {
+        //Recupération et déplacement du fichier uploader
+        $originalFile = $request->files->get('uploadParticipants');
+        $originalFileName = $originalFile->getClientOriginalName();
+        $destination = $this->getParameter('import_file_temporary_directory');
+        $originalFile->move($destination, $originalFileName);
+
+        //Traitement du fichier
+        $reader = Reader::createFromPath('../public/uploads/import_temp'. '/' .$originalFileName)
+            ->setHeaderOffset(0)
+        ;
+        $count = 0;
+        foreach ($reader as $row){
+            $participant = new Participant();
+            $participant
+                ->setUsername($row['username'])
+                ->setFirstName($row['firstName'])
+                ->setLastName($row['lastName'])
+                ->setPhoneNumber($row['phoneNumber'])
+                ->setEmail($row['email'])
+                ->setActif($row['actif'] == 1 ? true : false)
+            ;
+
+            if ($row['role'] == 'admin') {
+                $participant->setRoles(['ROLE_ADMIN']);
+            }
+
+            //encoder le mdp
+            $passwordHashed = $encoder->encodePassword($participant, $row['password']);
+            $participant->setPassword($passwordHashed);
+
+            $site = $siteRepository->find($row['site']);
+            $participant->setSite($site);
+            $em->persist($participant);
+            $count++;
         }
-        }
+        //ferme le flux pour suppression du fichier
+        $reader = null;
+
+        $em->flush();
+
+        //Supprimer le fichier une fois le traitement terminé
+        unlink($this->getParameter('import_file_temporary_directory'). '/' .$originalFileName);
+
+        $count == 0 ? $this->addFlash('warning', 'Echec de l\'ajout d\'un nouveau participant') : $this->addFlash('success', $count .' nouveaux participants ajoutés');
+
+        return $this->redirectToRoute('home');
+    }
 
 }

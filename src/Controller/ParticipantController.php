@@ -132,42 +132,4 @@ class ParticipantController extends AbstractController
         }
     }
 
-    /**
-     *@Route("/importcsv", name="import_fichier")
-     */
-    public function uploadParticipants(EntityManagerInterface $em,
-                                       SiteRepository $siteRepository,
-                                       UserPasswordEncoderInterface $encoder)
-    {
-        $reader = Reader::createFromPath('../public/uploads/list.csv')
-            ->setHeaderOffset(0)
-        ;
-
-        foreach ($reader as $row){
-            $participant = new Participant();
-            $participant
-                ->setUsername($row['username'])
-                ->setFirstName($row['firstName'])
-                ->setLastName($row['lastName'])
-                ->setPhoneNumber($row['phoneNumber'])
-                ->setEmail($row['email'])
-                ->setActif($row['actif'] == 1 ? true : false)
-            ;
-
-            if ($row['role'] == 'admin') {
-                $participant->setRoles(['ROLE_ADMIN']);
-            }
-
-            //encoder le mdp
-            $passwordHashed = $encoder->encodePassword($participant, $row['password']);
-            $participant->setPassword($passwordHashed);
-
-            $site = $siteRepository->find($row['site']);
-            $participant->setSite($site);
-            $em->persist($participant);
-        }
-        $em->flush();
-
-        return $this->redirectToRoute('home');
-    }
 }
