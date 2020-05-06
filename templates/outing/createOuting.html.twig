@@ -6,239 +6,229 @@
 
 {% block main %}
     <div class="container mt-4 mb-3">
-            {{ form_start(outingForm) }}
+        {{ form_start(outingForm) }}
         <div class="d-flex justify-content-center h-100">
-            <div class="card w-75">
+            <div class="card w-100 mb-5">
                 <div class="card-header">
                     <h3 style="text-align: center;">Créer une sortie</h3>
-
-                    <div class="card-body">
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                 <span class="input-group-text mb-3">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.name) }}
-                                 </span>
+                                </div>
+                                {{ form_widget(outingForm.name) }}
                             </div>
-                                    {{ form_widget(outingForm.name) }}
-                        </div>
 
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.dateTimeStart) }}
-                                </span>
+                                </div>
+                                {{ form_widget(outingForm.dateTimeStart) }}
                             </div>
-                                    {{ form_widget(outingForm.dateTimeStart) }}
-                        </div>
 
-                        <div class="input-group form-group">
-                           <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.dateLimitSigningUp) }}
-                                </span>
-                           </div>
-                                    {{ form_widget(outingForm.dateLimitSigningUp) }}
-                        </div>
+                                </div>
+                                {{ form_widget(outingForm.dateLimitSigningUp) }}
+                            </div>
 
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.nbSigningUpMax) }}
-                                </span>
-                             </div>
-                                    {{ form_widget(outingForm.nbSigningUpMax) }}
-                         </div>
+                                </div>
+                                {{ form_widget(outingForm.nbSigningUpMax) }}
+                            </div>
 
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.duration) }}
-                                </span>
+                                </div>
+                                {{ form_widget(outingForm.duration) }}
                             </div>
-                                    {{ form_widget(outingForm.duration) }}
-                        </div>
 
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text mb-3">
+                            <div class="input-group form-group flex-column flex-lg-row">
+                                <div class="input-group-prepend">
                                     {{ form_label(outingForm.infosOuting) }}
-                                </span>
+                                </div>
+                                {{ form_widget(outingForm.infosOuting) }}
                             </div>
-                                    {{ form_widget(outingForm.infosOuting) }}
                         </div>
-                    </div>
-                        <div class="row justify-content-center">
-                             <button type="submit" class="btn btn-primary">Enregistrer</button>
-                             <button type="" class="btn btn-primary">Publier la sortie</button>
-                             <button type="reset"  class="btn btn-primary">Annuler</button>
-                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="input-group form-group flex-column flex-md-row">
+                                <div class="input-group-prepend">
+                                    {{ form_label(outingForm.location) }}
+                                </div>
+                                {{ form_widget(outingForm.location) }}
+                            </div>
+                            <div id="lieu" class="card w-100">
 
-                    <div class="card w-75">
-                         <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                 <span class="input-group-text mb-3">
-                                      {{ form_label(outingForm.location) }}
-                                </span>
-                             </div>
-                                <select class="form-control" id="selectLieu" onchange="selectLocation()">
-                                    <option value="{{ form_widget(outingForm.location) }}"></option>
-                                </select>
+                            </div>
                         </div>
-                        <div id="lieu" class="card w-75">
-
-                        </div>
-                        {{ form_end(outingForm) }}
                     </div>
                 </div>
+                <div class="card-footer">
+                    <div class="row justify-content-around">
+                        <button type="submit" name="save" value="save" class="btn btn-primary">Enregistrer</button>
+                        <button type="submit" name="publish" value="publish" class="btn btn-primary">Publier la sortie</button>
+                        <button type="reset"  class="btn btn-primary" onclick="erase()">Annuler</button>
+                    </div>
+                </div>
+            </div>
         </div>
-{% block javaScript %}
-            <script>
-                function selectLocation()
-                {
-                    let selectElm = document.getElementById('selectLieu').value;
-                        let xhr = new XMLHttpRequest();
-                        let method = "GET";
-                        let url = "/createOuting/"+ selectElm;
-                            xhr.onreadystatechange = function(){
-                                if (xhr.readyState === 4 && xhr.status === 200) {
+        {{ form_end(outingForm) }}
+    </div>
 
-                                    let infosLieu = JSON.parse(xhr.responseText).infosLieu[0];
-
-                                    //création des champs avec les informations
-
-                                    //Champ-> Ville : "LABELLEVILLE"
-                                    let formGroup = document.createElement('div');
-                                    formGroup.setAttribute('class','input-group form-group');
-                                    let inputGroup = document.createElement('div');
-                                    inputGroup.setAttribute('class','input-group-prepend');
-                                    let groupText = document.createElement('span');
-                                    groupText.setAttribute('class','input-group-text mb-3')
-                                    let cityLabel = document.createElement('label');
-                                    cityLabel.setAttribute('for','city');
-                                    let cityText = document.createTextNode('Ville : ');
-                                    let inputCity = document.createElement('input');
-                                    inputCity.setAttribute('type','text');
-                                    inputCity.setAttribute('class','form-control');
-                                    inputCity.setAttribute('id','city');
-                                    inputCity.setAttribute('name','city');
-                                    inputCity.setAttribute('readonly','readonly');
-                                    inputCity.setAttribute('value',inputCity.innerText = infosLieu.city.name);
-
-
-                                    //Champ-> Rue : "17 rue des policiers"
-                                    let formGroupStreet = document.createElement('div');
-                                    formGroupStreet.setAttribute('class','input-group form-group');
-                                    let inputGroupStreet = document.createElement('div');
-                                    inputGroupStreet.setAttribute('class','input-group-prepend');
-                                    let groupTextStreet = document.createElement('span');
-                                    groupTextStreet.setAttribute('class','input-group-text mb-3');
-                                    let streetLabel = document.createElement('label');
-                                    streetLabel.setAttribute('for','street');
-                                    let streetText = document.createTextNode('Rue :');
-                                    let inputStreet = document.createElement('input');
-                                    inputStreet.setAttribute('type','text');
-                                    inputStreet.setAttribute('class','form-control');
-                                    inputStreet.setAttribute('id','street');
-                                    inputStreet.setAttribute('name','street');
-                                    inputStreet.setAttribute('readonly','readonly');
-                                    inputStreet.setAttribute('value',inputStreet.innerText = infosLieu.street);
-
-                                    //Champ->Code postal : "66667"
-                                    let formGroupCP = document.createElement('div');
-                                    formGroupCP.setAttribute('class','input-group form-group');
-                                    let inputGroupCP = document.createElement('div');
-                                    inputGroupCP.setAttribute('class','input-group-prepend');
-                                    let groupTextCP = document.createElement('span');
-                                    groupTextCP.setAttribute('class','input-group-text mb-3');
-                                    let cpLabel = document.createElement('label');
-                                    cpLabel.setAttribute('for','codePostal');
-                                    let cpText = document.createTextNode('Code Postal :');
-                                    let inputCp = document.createElement('input');
-                                    inputCp.setAttribute('type','text');
-                                    inputCp.setAttribute('class','form-control');
-                                    inputCp.setAttribute('id','codePostal');
-                                    inputCp.setAttribute('name','codePostal');
-                                    inputCp.setAttribute('readonly','readonly');
-                                    inputCp.setAttribute('value',inputCp.innerText = infosLieu.city.zip);
-
-                                    //Champ->Latitude : "47° 09'S"
-                                    let formGroupLatitude = document.createElement('div');
-                                    formGroupLatitude.setAttribute('class','input-group form-group');
-                                    let inputGroupLatitude = document.createElement('div');
-                                    inputGroupLatitude.setAttribute('class','input-group-prepend');
-                                    let groupTextLatitude = document.createElement('span');
-                                    groupTextLatitude.setAttribute('class','input-group-text mb-3');
-                                    let latitudeLabel = document.createElement('label');
-                                    latitudeLabel.setAttribute('for','latitude')
-                                    let latitudeText = document.createTextNode('Latitude :');
-                                    let inputLatitude = document.createElement('input');
-                                    inputLatitude.setAttribute('type','text');
-                                    inputLatitude.setAttribute('class','form-control');
-                                    inputLatitude.setAttribute('id','latitude');
-                                    inputLatitude.setAttribute('name','latitude');
-                                    inputLatitude.setAttribute('readonly','readonly');
-                                    inputLatitude.setAttribute('value',inputLatitude.innerText = infosLieu.latitude);
-
-                                    //Champ->Longitude : "126° 43'O"
-                                    let formGroupLongitude = document.createElement('div');
-                                    formGroupLongitude.setAttribute('class','input-group form-group');
-                                    let inputGroupLongitude = document.createElement('div');
-                                    inputGroupLongitude.setAttribute('class','input-group-prepend');
-                                    let groupTextLongitude = document.createElement('span');
-                                    groupTextLongitude.setAttribute('class','input-group-text mb-3');
-                                    let longitudeLabel = document.createElement('label');
-                                    longitudeLabel.setAttribute('for','longitude');
-                                    let longitudeText = document.createTextNode('Longitude : ');
-                                    let inputLongitude = document.createElement('input');
-                                    inputLongitude.setAttribute('type','text');
-                                    inputLongitude.setAttribute('class','form-control');
-                                    inputLongitude.setAttribute('id','latitude');
-                                    inputLongitude.setAttribute('readonly','readonly');
-                                    inputLongitude.setAttribute('value',inputLongitude.innerText = infosLieu.longitude);
-
-                                    cityLabel.append(cityText);
-                                    cityLabel.appendChild(inputCity);
-                                    groupText.appendChild(cityLabel);
-                                    inputGroup.appendChild(groupText);
-                                    formGroup.appendChild(inputGroup);
-
-                                    streetLabel.append(streetText);
-                                    streetLabel.appendChild(inputStreet);
-                                    groupTextStreet.appendChild(streetLabel);
-                                    inputGroupStreet.appendChild(groupTextStreet);
-                                    formGroupStreet.appendChild(inputGroupStreet);
-
-                                    cpLabel.append(cpText);
-                                    cpLabel.appendChild(inputCp);
-                                    groupTextCP.appendChild(cpLabel);
-                                    inputGroupCP.appendChild(groupTextCP);
-                                    formGroupCP.appendChild(inputGroupCP);
-
-                                    latitudeLabel.append(latitudeText);
-                                    latitudeLabel.appendChild(inputLatitude);
-                                    groupTextLatitude.appendChild(latitudeLabel);
-                                    inputGroupLatitude.appendChild(groupTextLatitude);
-                                    formGroupLatitude.appendChild(inputGroupLatitude);
-
-                                    longitudeLabel.append(longitudeText);
-                                    longitudeLabel.appendChild(inputLongitude);
-                                    groupTextLongitude.appendChild(longitudeLabel);
-                                    inputGroupLongitude.appendChild(groupTextLongitude);
-                                    formGroupLongitude.appendChild(inputGroupLongitude);
-
-                                    let lieu=document.getElementById('lieu');
-                                    lieu.innerText = "";
-                                    lieu.appendChild(formGroup);
-                                    lieu.appendChild(formGroupStreet);
-                                    lieu.appendChild(formGroupCP);
-                                    lieu.appendChild(formGroupLatitude);
-                                    lieu.appendChild(formGroupLongitude);
-                                }
-                            }
-                        xhr.open(method,url);
-                        xhr.send();
-                }
-            </script>
 {% endblock %}
+{% block javaScript %}
+    <script>
+        window.onload=function() {
+            document.getElementById('outing_location').addEventListener('change',selectLocation);
+        }
 
+        function erase()
+        {
+            let lieu = document.getElementById('lieu');
+            lieu.innerText ="";
+        }
+
+
+        function selectLocation(event) {
+            let selectElm = event.currentTarget.value;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+            let url = "/createOuting/" + selectElm;
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+
+                    let infosLieu = JSON.parse(xhr.responseText).infosLieu[0];
+
+                    //création des champs avec les informations
+
+                    //Champ-> Ville : "LABELLEVILLE"
+                    let formGroup = document.createElement('div');
+                    formGroup.setAttribute('class', 'input-group form-group flex-column flex-md-row');
+                    let inputGroup = document.createElement('div');
+                    inputGroup.setAttribute('class', 'input-group-prepend');
+                    let cityLabel = document.createElement('label');
+                    cityLabel.setAttribute('for', 'city');
+                    cityLabel.setAttribute('class', 'input-group-text mb-3 w-100');
+                    let cityText = document.createTextNode('Ville : ');
+                    let inputCity = document.createElement('input');
+                    inputCity.setAttribute('type', 'text');
+                    inputCity.setAttribute('class', 'form-control ml-0 bg-white');
+                    inputCity.setAttribute('id', 'city');
+                    inputCity.setAttribute('name', 'city');
+                    inputCity.setAttribute('readonly', 'readonly');
+                    inputCity.setAttribute('value', inputCity.innerText = infosLieu.city.name);
+
+
+                    //Champ-> Rue : "17 rue des policiers"
+                    let formGroupStreet = document.createElement('div');
+                    formGroupStreet.setAttribute('class', 'input-group form-group flex-column flex-md-row');
+                    let inputGroupStreet = document.createElement('div');
+                    inputGroupStreet.setAttribute('class', 'input-group-prepend');
+                    let streetLabel = document.createElement('label');
+                    streetLabel.setAttribute('for', 'street');
+                    streetLabel.setAttribute('class', 'input-group-text mb-3 w-100');
+                    let streetText = document.createTextNode('Rue :');
+                    let inputStreet = document.createElement('input');
+                    inputStreet.setAttribute('type', 'text');
+                    inputStreet.setAttribute('class', 'form-control ml-0 bg-white');
+                    inputStreet.setAttribute('id', 'street');
+                    inputStreet.setAttribute('name', 'street');
+                    inputStreet.setAttribute('readonly', 'readonly');
+                    inputStreet.setAttribute('value', inputStreet.innerText = infosLieu.street);
+
+                    //Champ->Code postal : "66667"
+                    let formGroupCP = document.createElement('div');
+                    formGroupCP.setAttribute('class', 'input-group form-group flex-column flex-md-row');
+                    let inputGroupCP = document.createElement('div');
+                    inputGroupCP.setAttribute('class', 'input-group-prepend');
+                    let cpLabel = document.createElement('label');
+                    cpLabel.setAttribute('for', 'codePostal');
+                    cpLabel.setAttribute('class', 'input-group-text mb-3 w-100');
+                    let cpText = document.createTextNode('Code Postal :');
+                    let inputCp = document.createElement('input');
+                    inputCp.setAttribute('type', 'text');
+                    inputCp.setAttribute('class', 'form-control ml-0 bg-white');
+                    inputCp.setAttribute('id', 'codePostal');
+                    inputCp.setAttribute('name', 'codePostal');
+                    inputCp.setAttribute('readonly', 'readonly');
+                    inputCp.setAttribute('value', inputCp.innerText = infosLieu.city.zip);
+
+                    //Champ->Latitude : "47° 09'S"
+                    let formGroupLatitude = document.createElement('div');
+                    formGroupLatitude.setAttribute('class', 'input-group form-group flex-column flex-md-row');
+                    let inputGroupLatitude = document.createElement('div');
+                    inputGroupLatitude.setAttribute('class', 'input-group-prepend');
+                    let latitudeLabel = document.createElement('label');
+                    latitudeLabel.setAttribute('for', 'latitude');
+                    latitudeLabel.setAttribute('class', 'input-group-text mb-3 w-100');
+                    let latitudeText = document.createTextNode('Latitude :');
+                    let inputLatitude = document.createElement('input');
+                    inputLatitude.setAttribute('type', 'text');
+                    inputLatitude.setAttribute('class', 'form-control ml-0 bg-white');
+                    inputLatitude.setAttribute('id', 'latitude');
+                    inputLatitude.setAttribute('name', 'latitude');
+                    inputLatitude.setAttribute('readonly', 'readonly');
+                    inputLatitude.setAttribute('value', inputLatitude.innerText = infosLieu.latitude);
+
+                    //Champ->Longitude : "126° 43'O"
+                    let formGroupLongitude = document.createElement('div');
+                    formGroupLongitude.setAttribute('class', 'input-group form-group flex-column flex-md-row');
+                    let inputGroupLongitude = document.createElement('div');
+                    inputGroupLongitude.setAttribute('class', 'input-group-prepend');
+                    let longitudeLabel = document.createElement('label');
+                    longitudeLabel.setAttribute('for', 'longitude');
+                    longitudeLabel.setAttribute('class', 'input-group-text mb-3 w-100');
+                    let longitudeText = document.createTextNode('Longitude : ');
+                    let inputLongitude = document.createElement('input');
+                    inputLongitude.setAttribute('type', 'text');
+                    inputLongitude.setAttribute('class', 'form-control ml-0 bg-white');
+                    inputLongitude.setAttribute('id', 'longitude');
+                    inputLongitude.setAttribute('readonly', 'readonly');
+                    inputLongitude.setAttribute('value', inputLongitude.innerText = infosLieu.longitude);
+
+                    cityLabel.append(cityText);
+                    inputGroup.append(cityLabel);
+                    formGroup.appendChild(inputGroup);
+                    formGroup.appendChild(inputCity);
+
+                    streetLabel.append(streetText);
+                    inputGroupStreet.appendChild(streetLabel);
+                    formGroupStreet.appendChild(inputGroupStreet);
+                    formGroupStreet.appendChild(inputStreet);
+
+                    cpLabel.append(cpText);
+                    inputGroupCP.appendChild(cpLabel);
+                    formGroupCP.appendChild(inputGroupCP);
+                    formGroupCP.appendChild(inputCp);
+
+                    latitudeLabel.append(latitudeText);
+                    inputGroupLatitude.appendChild(latitudeLabel);
+                    formGroupLatitude.appendChild(inputGroupLatitude);
+                    formGroupLatitude.appendChild(inputLatitude);
+
+                    longitudeLabel.append(longitudeText);
+                    inputGroupLongitude.appendChild(longitudeLabel);
+                    formGroupLongitude.appendChild(inputGroupLongitude);
+                    formGroupLongitude.appendChild(inputLongitude);
+
+                    let lieu = document.getElementById('lieu');
+                    lieu.innerText = "";
+                    lieu.appendChild(formGroup);
+                    lieu.appendChild(formGroupStreet);
+                    lieu.appendChild(formGroupCP);
+                    lieu.appendChild(formGroupLatitude);
+                    lieu.appendChild(formGroupLongitude);
+                }
+            }
+            xhr.open(method, url);
+            xhr.send();
+        }
+    </script>
 {% endblock %}

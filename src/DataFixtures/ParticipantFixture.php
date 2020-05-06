@@ -3,7 +3,7 @@
 
 namespace App\DataFixtures;
 
-require_once 'vendor/autoload.php';
+
 use App\Entity\Participant;
 use App\Entity\Site;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
