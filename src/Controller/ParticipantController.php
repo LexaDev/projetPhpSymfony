@@ -135,7 +135,9 @@ class ParticipantController extends AbstractController
     /**
      *@Route("/importcsv")
      */
-    public function uploadParticipants(EntityManagerInterface $em, SiteRepository $siteRepository)
+    public function uploadParticipants(EntityManagerInterface $em,
+                                       SiteRepository $siteRepository,
+                                       UserPasswordEncoderInterface $encoder)
     {
         $reader = Reader::createFromPath('../public/uploads/list.csv')
             ->setHeaderOffset(0)
@@ -145,13 +147,20 @@ class ParticipantController extends AbstractController
             $participant = new Participant();
             $participant
                 ->setUsername($row['username'])
-                ->setPassword($row['password'])
                 ->setFirstName($row['firstName'])
                 ->setLastName($row['lastName'])
                 ->setPhoneNumber($row['phoneNumber'])
                 ->setEmail($row['email'])
                 ->setActif($row['actif'] == 1 ? true : false)
             ;
+
+            if ($row['role'] == 'admin') {
+                $participant->setRoles(['ROLE_ADMIN']);
+            }
+
+            //encoder le mdp
+            $passwordHashed = $encoder->encodePassword($participant, $row['password']);
+            $participant->setPassword($passwordHashed);
 
             $site = $siteRepository->find($row['site']);
             $participant->setSite($site);
