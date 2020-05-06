@@ -179,3 +179,8 @@ tr:nth-child(odd) {
         margin-bottom: 1rem;
     }
 }
+
+/* ==================== Style input file ========================*/
+.custom-file-label::after {
+    content: "Parcourir";
+}
