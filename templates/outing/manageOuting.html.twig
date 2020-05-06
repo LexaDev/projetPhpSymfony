@@ -64,11 +64,8 @@
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.location) }}
                                 </div>
-                                {%  if btnSuppr %}
-                                {{ form_widget(outingForm.location)}}
-                                {%  else %}
-                                    {{ form_widget(outingForm.location )}}
-                                {%  endif %}
+                                    {{ form_widget(outingForm.location, {'value':'00:00'} )}}
+
                             </div>
                             <div id="lieu" class="card w-100">
                                 {%  if btnSuppr %}
