@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
+use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -127,5 +130,35 @@ class ParticipantController extends AbstractController
             $this->addFlash('warning', 'Participant inconnu !');
             return $this->redirectToRoute('home');
         }
+    }
+
+    /**
+     *@Route("/importcsv")
+     */
+    public function uploadParticipants(EntityManagerInterface $em, SiteRepository $siteRepository)
+    {
+        $reader = Reader::createFromPath('../public/uploads/list.csv')
+            ->setHeaderOffset(0)
+        ;
+
+        foreach ($reader as $row){
+            $participant = new Participant();
+            $participant
+                ->setUsername($row['username'])
+                ->setPassword($row['password'])
+                ->setFirstName($row['firstName'])
+                ->setLastName($row['lastName'])
+                ->setPhoneNumber($row['phoneNumber'])
+                ->setEmail($row['email'])
+                ->setActif($row['actif'] == 1 ? true : false)
+            ;
+
+            $site = $siteRepository->find($row['site']);
+            $participant->setSite($site);
+            $em->persist($participant);
+        }
+        $em->flush();
+
+        return $this->redirectToRoute('home');
     }
 }
