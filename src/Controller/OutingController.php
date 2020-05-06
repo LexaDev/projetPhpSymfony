@@ -29,11 +29,8 @@ class OutingController extends AbstractController
         $outingForm = $this->createForm(OutingType::class, $outing);
 
         $outingForm->handleRequest($request);
-        dump($outing);
         if ($outingForm->isSubmitted() && $outingForm->isValid())
-
         {
-
             //Chargement de l'état
             if ($request->get('save')){
                 $stateRepo = $this->getDoctrine()->getRepository(State::class);
@@ -42,7 +39,6 @@ class OutingController extends AbstractController
                 $stateRepo = $this->getDoctrine()->getRepository(State::class);
                 $outing->setState($stateRepo->find(2));
             }
-
             //Chargement de l'organizer
             $outing->setOrganizer($this->getUser());
             //Chargement du site
@@ -64,6 +60,15 @@ class OutingController extends AbstractController
             ]
         );
     }
+    /**
+     * @Route("/updateOuting", name="update_outing")
+     */
+    public function updateOuting(EntityManagerInterface $em, Request $request)
+    {
+
+    }
+
+
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})
