@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use function Sodium\add;
@@ -29,11 +30,13 @@ class OutingType extends AbstractType
                 ],
                 'required' => true,
                 'attr'=>[
-                    'class'=>'ml-0 form-control'
+                    'class'=>'ml-0 form-control',
+                    'autofocus'=>true
                         ]
             ])
-            ->add('dateTimeStart', DateTimeType::class, [
+            ->add('dateStart', DateType::class, [
                 'label' => 'Date et heure de la sortie :',
+                'mapped'=>false,
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
                 ],
@@ -42,9 +45,28 @@ class OutingType extends AbstractType
                 'html5' => true,
                 'attr'=>[
                     'class'=>'ml-0 form-control',
-                    'type'=>"datetime-local"
                         ]
             ])
+            ->add('timeStart', TimeType::class, [
+                'label' => 'Date et heure de la sortie :',
+                'mapped'=>false,
+                'label_attr' => [
+                    'class' => 'input-group-text mb-3 w-100'
+                ],
+                'required' => true,
+                'widget' => 'single_text',
+                'html5' => true,
+                'attr'=>[
+                    'class'=>'ml-0 form-control',
+                    'value'=>'00:00'
+
+                ]
+            ])
+
+
+
+
+
             ->add('dateLimitSigningUp', DateType::class, [
                 'label' => 'Date limite d\'inscription :',
                 'label_attr' => [
@@ -88,7 +110,7 @@ class OutingType extends AbstractType
             ->add('infosOuting', TextareaType::class, [
                 'label' => 'Description et infos :',
                 'label_attr' => [
-                    'class' => 'input-group-text mb-3 w-100'
+                    'class' => 'input-group-text'
                 ],
                 'required' => false,
                 'attr'=>[
@@ -97,7 +119,6 @@ class OutingType extends AbstractType
             ])
             ->add('location', EntityType::class,[
                 'class' => Location::class,
-
                 'label'=> 'Lieu :',
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
