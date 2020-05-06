@@ -34,18 +34,18 @@ class OutingController extends AbstractController
         if ($outingForm->isSubmitted() && $outingForm->isValid())
 
         {
-
-            dump($outingForm);
             //Chargement de l'état
-            $stateRepo = $this->getDoctrine()->getRepository(State::class);
-            $outing->setState($stateRepo->find('1'));
+            if ($request->get('save')){
+                $stateRepo = $this->getDoctrine()->getRepository(State::class);
+                $outing->setState($stateRepo->find(1));
+            } elseif ($request->get('publish')){
+                $stateRepo = $this->getDoctrine()->getRepository(State::class);
+                $outing->setState($stateRepo->find(2));
+            }
             //Chargement de l'organizer
             $outing->setOrganizer($this->getUser());
             //Chargement du site
             $outing->setSite($this->getUser()->getSite());
-            //Chargement de la location
-            $locationRepo = $em->getRepository(Location::class);
-            $outing->setLocation($locationRepo->find($request->get('location')));
 
             $em->persist($outing);
             $em->flush();
