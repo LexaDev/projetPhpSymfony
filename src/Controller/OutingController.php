@@ -7,7 +7,6 @@ use App\Entity\Location;
 use App\Entity\Outing;
 use App\Entity\State;
 use App\Form\OutingType;
-use App\Repository\LocationRepository;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
 use Cassandra\Date;
@@ -32,9 +31,7 @@ class OutingController extends AbstractController
         $outingForm = $this->createForm(OutingType::class, $outing);
 
         $outingForm->handleRequest($request);
-
         if ($outingForm->isSubmitted() && $outingForm->isValid())
-
         {
             //Chargement de l'état
             if ($request->get('save')){
@@ -60,6 +57,10 @@ class OutingController extends AbstractController
                     $outing->setOrganizer($this->getUser());
                     //Chargement du site
                     $outing->setSite($this->getUser()->getSite());
+            //Chargement de l'organizer
+            $outing->setOrganizer($this->getUser());
+            //Chargement du site
+            $outing->setSite($this->getUser()->getSite());
 
                     $em->persist($outing);
                     $em->flush();
@@ -78,12 +79,57 @@ class OutingController extends AbstractController
 
         }
         return $this->render(
-            'outing/createOuting.html.twig',
+            'outing/manageOuting.html.twig',
             [
                 'outingForm' => $outingForm->createView(),
+                'cardTitle' => 'Créer',
+                'btnSuppr' => false,
             ]
         );
     }
+    /**
+     * @Route("/updateOuting/{id}", name="update_outing", requirements={"id":"\d+"})
+     */
+    public function updateOuting(EntityManagerInterface $em, Request $request,$id)
+    {
+        $outingRepo = $em->getRepository(Outing::class);
+        $outing = $outingRepo->find($id);
+        $updateForm = $this->createForm(OutingType::class,$outing);
+        $updateForm->handleRequest($request);
+        if ($updateForm->isSubmitted() && $updateForm->isValid())
+        {
+            //Chargement de l'état
+            if ($request->get('save')){
+                $stateRepo = $this->getDoctrine()->getRepository(State::class);
+                $outing->setState($stateRepo->find(1));
+            } elseif ($request->get('publish')){
+                $stateRepo = $this->getDoctrine()->getRepository(State::class);
+                $outing->setState($stateRepo->find(2));
+            }
+
+            $em->flush();
+            $this->addFlash('success','Modifications éffectuées avec succès');
+
+            return $this->redirectToRoute('view_outing', [
+                'id' =>$outing->getId(),
+            ]);
+        }
+
+        return $this->render(
+            'outing/manageOuting.html.twig',
+            [
+                'outingForm' => $updateForm->createView(),
+                'cardTitle' => 'Modifier',
+                'btnSuppr' => true,
+                'id' => $id
+            ]
+        );
+
+
+
+    }
+
+
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})

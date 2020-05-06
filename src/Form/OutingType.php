@@ -119,7 +119,6 @@ class OutingType extends AbstractType
             ])
             ->add('location', EntityType::class,[
                 'class' => Location::class,
-
                 'label'=> 'Lieu :',
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
