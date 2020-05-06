@@ -67,15 +67,17 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <div class="input-group form-group flex-column flex-lg-row">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text mb-3 w-100">
+                            <div class="input-group form-group">
+                                <div class="input-group form-group">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text ">
                                        Nom de la sortie
                                     </span>
-                                </div >
-                                <div class="ml-0 form-control">
-                                    {{ outing.name }}
+                                    </div >
+
+                                    <textarea class="ml-0 form-control"  name="motif" placeholder="Motif de l'annulation" required autofocus  rows="2" style="resize: none" minlength="5">{{ outing.name }}</textarea>
                                 </div>
+
                             </div>
                             <div class="input-group form-group flex-column flex-lg-row">
                                 <div class="input-group-prepend">
@@ -116,15 +118,15 @@
                                 <div class="ml-0 form-control">
                                     {{ outing.duration }} minutes
                                 </div>
-                            </div>
-                            <div class="input-group form-group flex-column flex-lg-row">
-                                <div class="input-group-prepend h-100">
-                                    <span class="input-group-text mb-3 w-100">
-                                        Description et infos
+                            </div><div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text ">
+                                       Description et infos
                                     </span>
                                 </div >
-                                <textarea rows="3" class="ml-0 form-control" readonly style="background-color: white; resize: none ">{{ outing.infosOuting }}</textarea>
+                                <textarea class="ml-0 form-control"  name="motif" placeholder="Motif de l'annulation" required autofocus  rows="3" style="resize: none" minlength="5">{{ outing.infosOuting }}</textarea>
                             </div>
+
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="input-group form-group flex-column flex-lg-row">
