@@ -74,7 +74,7 @@
                     <div class="row justify-content-around">
                         <button type="submit" class="btn btn-primary">Enregistrer</button>
                         <button type="" class="btn btn-primary">Publier la sortie</button>
-                        <button type="reset"  class="btn btn-primary">Annuler</button>
+                        <button type="reset"  class="btn btn-primary" onclick="erase()">Annuler</button>
                     </div>
                 </div>
             </div>
@@ -88,6 +88,13 @@
         window.onload=function() {
             document.getElementById('outing_location').addEventListener('change',selectLocation);
         }
+
+        function erase()
+        {
+            let lieu = document.getElementById('lieu');
+            lieu.innerText ="";
+        }
+
 
         function selectLocation(event) {
             let selectElm = event.currentTarget.value;
