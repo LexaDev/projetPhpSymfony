@@ -94,9 +94,12 @@ class OutingController extends AbstractController
     {
         $outingRepo = $em->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
-        $updateForm = $this->createForm(OutingType::class,$outing);
+
+        $updateForm = $this->createForm(OutingType::class,$outing,['timeValue'=>$outing->getDateTimeStart()->format('H:i')]);
 
         $updateForm->handleRequest($request);
+
+       ;
         if ($updateForm->isSubmitted() && $updateForm->isValid())
         {
             //Chargement de l'état
