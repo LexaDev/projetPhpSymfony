@@ -29,7 +29,6 @@ class OutingController extends AbstractController
         $outing = new Outing();
 
         $outingForm = $this->createForm(OutingType::class, $outing);
-
         $outingForm->handleRequest($request);
         if ($outingForm->isSubmitted() && $outingForm->isValid())
         {
@@ -43,7 +42,7 @@ class OutingController extends AbstractController
             }
 
             //gestion du datetime input séparé controle saisie
-            $dateStart = $outingForm->get('dateStart')->getData();
+            $dateStart = $outingForm->get('dateTimeStart')->getData();
             $timeStart = $outingForm->get('timeStart')->getData();
             if (isset($dateStart) && isset($timeStart)) {
                 $hour = $timeStart->format('H');
@@ -95,6 +94,7 @@ class OutingController extends AbstractController
         $outingRepo = $em->getRepository(Outing::class);
         $outing = $outingRepo->find($id);
         $updateForm = $this->createForm(OutingType::class,$outing);
+
         $updateForm->handleRequest($request);
         if ($updateForm->isSubmitted() && $updateForm->isValid())
         {
@@ -106,14 +106,27 @@ class OutingController extends AbstractController
                 $stateRepo = $this->getDoctrine()->getRepository(State::class);
                 $outing->setState($stateRepo->find(2));
             }
+            //gestion du datetime input séparé controle saisie
+            $dateStart = $updateForm->get('dateTimeStart')->getData();
+            $timeStart = $updateForm->get('timeStart')->getData();
+            if (isset($dateStart) && isset($timeStart)) {
+                $hour = $timeStart->format('H');
+                $min = $timeStart->format('i');
+                $dateStart->setTime($hour, $min);
+                $outing->setDateTimeStart($dateStart);
 
-            $em->flush();
-            $this->addFlash('success','Modifications éffectuées avec succès');
 
-            return $this->redirectToRoute('view_outing', [
-                'id' =>$outing->getId(),
-            ]);
-        }
+                if ($outing->getDateTimeStart()>$outing->getDateLimitSigningUp()) {
+                    $em->flush();
+                    $this->addFlash('success', 'Modifications éffectuées avec succès');
+
+                    return $this->redirectToRoute(
+                        'view_outing',
+                        [
+                            'id' => $outing->getId(),
+                        ]
+                    );
+                }}}
 
         return $this->render(
             'outing/manageOuting.html.twig',
@@ -121,7 +134,8 @@ class OutingController extends AbstractController
                 'outingForm' => $updateForm->createView(),
                 'cardTitle' => 'Modifier',
                 'btnSuppr' => true,
-                'id' => $id
+                'id' => $id,
+                'outing'=>$outing
             ]
         );
 

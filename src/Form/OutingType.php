@@ -34,9 +34,9 @@ class OutingType extends AbstractType
                     'autofocus'=>true
                         ]
             ])
-            ->add('dateStart', DateType::class, [
+            ->add('dateTimeStart', DateType::class, [
                 'label' => 'Date et heure de la sortie :',
-                'mapped'=>false,
+
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
                 ],
