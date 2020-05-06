@@ -105,8 +105,8 @@
                                         Nombres de places
                                     </span>
                                 </div >
-                                <div class="ml-0 form-control">
-                                    {{ outing.nbSigningUpMax }}
+                                <div class="ml-0 form-control" id="nbPlaces">
+                                    {{  outing.nbSigningUpMax - outing.participants|length}}
                                 </div>
                             </div>
                             <div class="input-group form-group flex-column flex-lg-row">
@@ -332,6 +332,11 @@
                     tr.appendChild(tdProfil);
                     tbody.appendChild(tr);
 
+                    //enlever une place dispo
+                    let nbPlaces = document.getElementById('nbPlaces');
+                    nbPlaces.innerText = parseInt(nbPlaces.innerText) - 1;
+
+
                 }
                 else if (xhr.readyState === 4 ){
                     let rep = xhr.response;
@@ -403,7 +408,13 @@
                     //cacher tableau si plsu de participants
                     let tabNumber = document.getElementById('participantsNumber');
                     let nbInscrits = tabNumber.dataset.nbParticipants;
-                    if (nbInscrits==1)
+
+                    //ajouter une place dispo
+                    let nbPlaces = document.getElementById('nbPlaces');
+
+                    nbPlaces.innerText = parseInt(nbPlaces.innerText) + 1;
+
+                    if (nbInscrits==1 || nbInscrits==0)
                     {
                         //visibility du tableau
                         let participantsTab = document.getElementById('participantsTab');
