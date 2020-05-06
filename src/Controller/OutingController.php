@@ -42,6 +42,7 @@ class OutingController extends AbstractController
                 $stateRepo = $this->getDoctrine()->getRepository(State::class);
                 $outing->setState($stateRepo->find(2));
             }
+
             //Chargement de l'organizer
             $outing->setOrganizer($this->getUser());
             //Chargement du site
