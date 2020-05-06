@@ -8,6 +8,7 @@
         "knplabs/knp-paginator-bundle": "^5.2",
         "laminas/laminas-code": "^3.4",
         "laminas/laminas-eventmanager": "^3.2",
+        "league/csv": "^9.6",
         "mbezhanov/faker-provider-collection": "^1.2",
         "mobiledetect/mobiledetectlib": "^2.8",
         "sensio/framework-extra-bundle": "^5.1",

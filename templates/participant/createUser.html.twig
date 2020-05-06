@@ -146,6 +146,7 @@
                         {{  form_widget(partiForm.actif) }}
 
                     </div>
+                    <div class="card-footer">
                     <div class="row justify-content-center">
                         <div class="form-group">
 
@@ -158,6 +159,7 @@
 
                         </div>
                     </div>
+                    </div>
                     {{ form_end(partiForm) }}
                 </div>
             </div>
@@ -166,7 +168,33 @@
 {%  endblock %}
 
 {%  block javaScript %}
+        <script>
 
+            window.onload=function() {
+                document.getElementById('user_firstName').addEventListener('blur',email);
+                document.getElementById('user_lastName').addEventListener('blur',email);
+            }
+
+            function email()
+            {
+                let firstName = document.getElementById('user_firstName').value;
+                let lastName = document.getElementById('user_lastName').value;
+                let email = document.getElementById('user_email');
+                let year = new Date(Date.now()).getFullYear();
+                if (firstName && lastName)
+                {
+
+                    email.value=firstName+'.'+lastName+year+'@campus-eni.fr';
+                }else{
+                    email.value='';
+                }
+
+            }
+
+
+
+
+        </script>
 
 
 {%  endblock %}

@@ -125,6 +125,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.3"
     },
+    "league/csv": {
+        "version": "9.6.0"
+    },
     "mbezhanov/faker-provider-collection": {
         "version": "1.2.1"
     },

@@ -9,9 +9,11 @@ use App\Entity\State;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
+use Cassandra\Date;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,17 +41,41 @@ class OutingController extends AbstractController
                 $stateRepo = $this->getDoctrine()->getRepository(State::class);
                 $outing->setState($stateRepo->find(2));
             }
+
+            //gestion du datetime input séparé controle saisie
+            $dateStart = $outingForm->get('dateStart')->getData();
+            $timeStart = $outingForm->get('timeStart')->getData();
+            if (isset($dateStart) && isset($timeStart)) {
+                $hour = $timeStart->format('H');
+                $min = $timeStart->format('i');
+                $dateStart->setTime($hour, $min);
+                $outing->setDateTimeStart($dateStart);
+
+
+                if ($outing->getDateTimeStart()>$outing->getDateLimitSigningUp()) {
+                    //Chargement de l'organizer
+                    $outing->setOrganizer($this->getUser());
+                    //Chargement du site
+                    $outing->setSite($this->getUser()->getSite());
             //Chargement de l'organizer
             $outing->setOrganizer($this->getUser());
             //Chargement du site
             $outing->setSite($this->getUser()->getSite());
 
-            $em->persist($outing);
-            $em->flush();
+                    $em->persist($outing);
+                    $em->flush();
 
-            return $this->redirectToRoute('view_outing',[
-                "id"=> $outing->getId(),
-            ]);
+                    return $this->redirectToRoute(
+                        'view_outing',
+                        [
+                            "id" => $outing->getId(),
+                        ]
+                    );
+                }else{
+                   $outingForm->get('dateStart')->addError(new FormError('La sortie doit se dérouler après la date limite d\'inscription'));
+                   $outingForm->get('timeStart')->addError(new FormError('La sortie doit se dérouler après la date limite d\'inscription'));
+                }
+            }
 
         }
         return $this->render(
