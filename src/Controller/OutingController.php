@@ -143,12 +143,7 @@ class OutingController extends AbstractController
 
             ]
         );
-
-
-
     }
-
-
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})

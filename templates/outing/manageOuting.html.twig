@@ -69,8 +69,60 @@
                             </div>
                             <div id="lieu" class="card w-100">
                                 {%  if btnSuppr %}
+                                    <div class="input-group form-group flex-column flex-md-row">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text mb-3 w-100">
+                                                 Ville :
+                                            </span>
+                                        </div >
+                                            <div class="ml-0 form-control">
+                                                 {{ outing.location.city.name }}
+                                            </div>
+                                    </div>
 
-                                    <p>{{  outing.location.street }}</p>
+                                    <div class="input-group form-group flex-column flex-md-row">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text mb-3 w-100">
+                                                 Rue :
+                                            </span>
+                                        </div >
+                                        <div class="ml-0 form-control">
+                                            {{ outing.location.street }}
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group form-group flex-column flex-md-row">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text mb-3 w-100">
+                                                 Code Postal :
+                                            </span>
+                                        </div >
+                                        <div class="ml-0 form-control">
+                                            {{ outing.location.city.zip }}
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group form-group flex-column flex-md-row">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text mb-3 w-100">
+                                                 Latitude :
+                                            </span>
+                                        </div >
+                                        <div class="ml-0 form-control">
+                                            {{ outing.location.latitude }}
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group form-group flex-column flex-md-row">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text mb-3 w-100">
+                                                 Longitude :
+                                            </span>
+                                        </div >
+                                        <div class="ml-0 form-control">
+                                            {{ outing.location.longitude }}
+                                        </div>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
