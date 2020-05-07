@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -74,25 +75,26 @@ class AdminController extends AbstractController
                     // Ajouter le nom de l'image à ce participant pour faire le lien et non le contenu de l'image
                     $participant->setImageFilename($newFilename);
                 }
-
+                dump(isset($firstPass));
                 //deuxième controle double saisie identique
                 if (isset($firstPass) && isset($secondPass) && $firstPass === $secondPass) {
                     //deuxième controle pattern
 
-                        $partiRepo = $this->getDoctrine()->getRepository(Participant::class);
-                        //changement du password, effectuer le changement du password (uniquement) en base aussi
-                        $partiRepo->upgradePassword(
-                            $participant,
-                            $passwordEncoder->encodePassword($participant, $firstPass)
-                        );
-                    }
+                    $partiRepo = $this->getDoctrine()->getRepository(Participant::class);
+                    //changement du password, effectuer le changement du password (uniquement) en base aussi
+                    $partiRepo->upgradePassword(
+                        $participant,
+                        $passwordEncoder->encodePassword($participant, $firstPass)
+                    );
 
-                //modification en base
-                $em->persist($participant);
-                $em->flush();
-                $this->addFlash('success', 'Ajout éffectué avec succès');
-
-               // return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
+                    //modification en base
+                    $em->persist($participant);
+                    $em->flush();
+                    $this->addFlash('success', 'Ajout éffectué avec succès');
+                    // return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
+                }else{
+                    $participantForm->get('newPassword')->addError(new FormError('Le mot de passe ne peut pas être null'));
+                }
             }
             return $this->render(
                 'participant/createUser.html.twig',
@@ -106,7 +108,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     *@Route("/importcsv", name="import_fichier")
+     *@Route("/admin/importcsv", name="import_fichier")
      */
     public function uploadParticipants(EntityManagerInterface $em,
                                        SiteRepository $siteRepository,
