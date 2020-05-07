@@ -1,0 +1,213 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Sortir.com{% endblock %}
+
+{% block main %}
+    <div class="container align-items-center">
+        <form action="{{ path('admin_list_participants') }}" method="get">
+            <h2 class="mt-5 lead font-weight-bold">Filtrer les particpants</h2>
+            <div class="row mb-3">
+                <div class="col-12 col-lg-6">
+                    <input type="text" class="ml-0 mb-3 form-control" name="pattern"
+                           {% if pattern %}
+                                value="{{ pattern }}"
+                           {% endif %}
+                           placeholder="Doit contenir ...">
+                </div>
+                <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
+                    <button type="submit" class="btn btn-lg btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </form>
+
+        <p>{{ pagination.totalItemCount }}{{ strNbParticipants }}</p>
+        <table style="display: inline-table !important;">
+            <thead>
+                <tr>
+                    <th scope="col">Pseudo du participant</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for participant in pagination %}
+                <tr>
+                    <td>{{ participant.username }}</td>
+                    <td style="min-width: 160px">
+                        {# Afficher #}
+                        <a href="{{ path('participant_detail', {id: participant.id}) }}" title="Afficher {{ participant.username }}">
+                            <svg class="bi bi-eye-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" >
+                                <path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                                <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        &nbsp;
+                        {# Désactiver #}
+                        {% if participant.actif %}
+                            <span id="inscrit{{ participant.id }}" title="Désactiver ce particpant">
+                                <button class="btn btn-sm btn-link" id="{{ participant.id }}" type="submit" onclick="desactiver()">
+                                    <svg class="bi bi-unlock-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M.5 9a2 2 0 012-2h7a2 2 0 012 2v5a2 2 0 01-2 2h-7a2 2 0 01-2-2V9z"/>
+                                      <path fill-rule="evenodd" d="M8.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </span>
+                        {% else %}
+                            <span id="inscrit{{ participant.id }}" title="Activer ce participant">
+                                <button class="btn btn-sm btn-link" id="{{ participant.id }}" type="submit" onclick="activer()">
+                                   <svg class="bi bi-lock-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" xmlns="http://www.w3.org/2000/svg">
+                                      <rect width="11" height="9" x="2.5" y="7" rx="2"/>
+                                      <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </span>
+                        {% endif %}
+                        {# Supprimer #}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ knp_pagination_render(pagination) }}
+        <div>
+            <div class="form-group mt-3 mb-5">
+                <a href="{{ path('admin_create') }}">
+                    <button class="btn btn-lg btn-primary m-2" type="button">
+                        Ajouter un nouveau participant
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javaScript %}
+    {{ encore_entry_script_tags('table_responsive') }}
+    <script>
+        function activer() {
+
+            let participant= event.currentTarget.id;
+            let xhr = new XMLHttpRequest();
+
+            let method = "GET";
+            let url ="/admin/enable/"+participant;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("inscrit"+participant);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('title','Se désister de la sortie');
+
+                    // création du nouveau bouton
+
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',participant);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',desactiver);
+
+                    //création de l'icone svg
+
+                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                    svg.setAttribute('class','bi bi-unlock-fill');
+                    svg.setAttribute('width','1.5em');
+                    svg.setAttribute('height','1.5em');
+                    svg.setAttribute('viewBox','0 0 16 16');
+                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+
+
+                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path1.setAttribute('d','M.5 9a2 2 0 012-2h7a2 2 0 012 2v5a2 2 0 01-2 2h-7a2 2 0 01-2-2V9z');
+
+                    let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path2.setAttribute('fill-rule','evenodd');
+                    path2.setAttribute('d','M8.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z');
+                    path2.setAttribute('clip-rule','evenodd');
+
+                    //imbrication des éléments
+                    svg.appendChild(path1);
+                    svg.appendChild(path2);
+                    btn.appendChild(svg);
+                    span.appendChild(btn);
+
+                }
+                else if (xhr.readyState === 4 ){
+                    let rep = xhr.response;
+                    console.log(rep);
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+        }
+
+        function desactiver() {
+
+            let outin= event.currentTarget.id;
+            let xhr = new XMLHttpRequest();
+            let method = "GET";
+
+            let url ="/admin/disable/"+outin;
+            xhr.onreadystatechange=function () {
+                if (xhr.readyState === 4 && xhr.status === 200)
+                {
+                    let span = document.getElementById("inscrit"+outin);
+                    //suppression du bouton précédent
+                    span.innerText="";
+                    span.setAttribute('class',outin);
+                    span.setAttribute('title','S\'inscrire à la sortie');
+                    //Activer
+                    //creation nouveau bouton
+                    let btn = document.createElement('button');
+                    btn.setAttribute('type','submit');
+                    btn.setAttribute('id',outin);
+                    btn.setAttribute('class','btn btn-sm btn-link');
+                    btn.addEventListener('click',activer);
+
+                    //création de l'icone svg
+
+                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                    svg.setAttribute('class','bi bi-lock-fill');
+                    svg.setAttribute('width','1.5em');
+                    svg.setAttribute('height','1.5em');
+                    svg.setAttribute('viewBox','0 0 16 16');
+                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+
+
+                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","rect");
+                    path1.setAttribute('width','11');
+                    path1.setAttribute('height','9');
+                    path1.setAttribute('x','2.5');
+                    path1.setAttribute('y','7');
+                    path1.setAttribute('rx','2');
+
+                    let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                    path2.setAttribute('fill-rule','evenodd');
+                    path2.setAttribute('d','M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z');
+                    path2.setAttribute('clip-rule','evenodd');
+
+                     //imbrication des éléments
+                    svg.appendChild(path1);
+                    svg.appendChild(path2);
+                    btn.appendChild(svg);
+                    span.appendChild(btn);
+
+                }
+                else if (xhr.readyState === 4 ){
+                    alert(xhr.response);
+                }
+            }
+
+            xhr.open(method,url);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+        }
+
+    </script>
+
+
+{%  endblock %}

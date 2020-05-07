@@ -7,10 +7,12 @@ use App\Form\ParticipantType;
 use App\Form\UserType;
 use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use League\Csv\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -161,4 +163,52 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
+    /**
+     * @Route("/admin/disable/{id}", name="admin_disable", requirements={"id": "\d+"})
+     */
+    public function disable($id, EntityManagerInterface $em)
+    {
+        $participantRepo = $em->getRepository(Participant::class);
+        $participant = $participantRepo->find($id);
+        $participant->setActif(false);
+        $em->flush();
+        return new Response('Participant inactif',Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/admin/enable/{id}", name="admin_enable", requirements={"id": "\d+"})
+     */
+    public function enable($id, EntityManagerInterface $em)
+    {
+        $participantRepo = $em->getRepository(Participant::class);
+        $participant = $participantRepo->find($id);
+        $participant->setActif(true);
+        $em->flush();
+        return new Response('Participant actif',Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/admin/list/participants", name="admin_list_participants")
+     */
+    public function listParticipants(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator)
+    {
+        $pattern = $request->get('pattern', '');
+        $participantRepo = $em->getRepository(Participant::class);
+        $participants = $participantRepo->findByPattern($pattern);
+        $strNbParticipants = count($participants) > 1 ? ' participants trouvées !': ' sortie trouvée !';
+
+        $pagination = $paginator->paginate(
+            $participants,
+            $request->query->getInt('page', 1),
+            10
+
+        );
+
+        return $this->render('participant/list.html.twig', [
+            'participants'       => $participants,
+            'strNbParticipants'  => $strNbParticipants,
+            'pagination' => $pagination,
+            'pattern' => $pattern
+        ]);
+    }
 }

@@ -69,6 +69,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         $user = $this->entityManager->getRepository(Participant::class)->loadUserByUsername($credentials['username']);
 
+        if ($user->getActif() == false){
+            throw new CustomUserMessageAuthenticationException('1');
+        }
+
         if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
