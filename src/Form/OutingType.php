@@ -92,7 +92,7 @@ class OutingType extends AbstractType
                 ]
             ])
             ->add('duration', NumberType::class, [
-                'label' => 'Durée :',
+                'label' => 'Durée (en minutes) :',
                 'label_attr' => [
                     'class' => 'input-group-text mb-3 w-100'
                 ],

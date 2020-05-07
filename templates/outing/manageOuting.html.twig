@@ -51,6 +51,7 @@
                                 {{ form_widget(outingForm.duration) }}
                             </div>
                             {{ form_errors(outingForm.infosOuting) }}
+
                             <div class="input-group form-group flex-column flex-lg-row">
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.infosOuting) }}
@@ -64,7 +65,7 @@
                                 <div class="input-group-prepend">
                                     {{ form_label(outingForm.location) }}
                                 </div>
-                                    {{ form_widget(outingForm.location, {'value':'00:00'} )}}
+                                    {{ form_widget(outingForm.location)}}
 
                             </div>
                             <div id="lieu" class="card w-100">
@@ -142,7 +143,7 @@
         </div>
         {{ form_end(outingForm) }}
     </div>
-
+    <br>
 {% endblock %}
 {% block javaScript %}
     <script>
