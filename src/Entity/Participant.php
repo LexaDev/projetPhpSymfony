@@ -95,6 +95,11 @@ class Participant implements UserInterface
      */
     private $outingsParticipate;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $resetToken;
+
 
     public function __construct()
     {
@@ -304,6 +309,22 @@ class Participant implements UserInterface
     public function setOutingsParticipate(ArrayCollection $outingsParticipate): void
     {
         $this->outingsParticipate = $outingsParticipate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param mixed $resetToken
+     */
+    public function setResetToken($resetToken): void
+    {
+        $this->resetToken = $resetToken;
     }
 
 
