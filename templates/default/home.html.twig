@@ -9,7 +9,7 @@
         {{ form_start(searchForm, {attr: {id: 'searchForm'}}) }}
         <h2 class="mt-5 lead font-weight-bold">Filtrer les sorties</h2>
         <div class="row mb-3">
-            <div class="col-12 col-lg-5">
+            <div class="col-12 col-lg-6">
                 {{ form_row(searchForm.site) }}
                 {{ form_row(searchForm.pattern) }}
                 <div class="row">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-5">
+            <div class="col-12 col-lg-4">
                 {{ form_widget(searchForm.organizer) }}
                 {{ form_widget(searchForm.registered) }}
                 {{ form_widget(searchForm.unregistered) }}
