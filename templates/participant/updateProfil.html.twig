@@ -100,8 +100,9 @@
                                 </button>
                     </div >
                     <div  id="myDIV" style="display: none">
-                    {{ form_errors(partiForm.newPassword) }}
-                    {{ form_errors(partiForm.newPassword.first) }}
+
+                        {{ form_errors(partiForm.newPassword) }}
+                        {{ form_errors(partiForm.newPassword.first) }}
                         <div class="input-group form-group flex-column flex-md-row">
                             <div class="input-group-prepend">
                                 <span class="input-group-text mb-3 w-100">
@@ -189,13 +190,20 @@
             let x = document.getElementById("myDIV");
             let y = document.getElementById("btnPass")
             if (x.style.display === "none") {
-                y.innerText="Retour";
+                y.innerText="Annuler";
                 x.style.display = "block";
+
             } else {
                 y.innerText="Modifier le mot de passe";
                 x.style.display = "none";
+                pass1 = document.getElementById('participant_newPassword_first');
+                pass2 = document.getElementById('participant_newPassword_second');
+                pass1.value='';
+                pass2.value='';
+
             }
         }
+
 
 
 

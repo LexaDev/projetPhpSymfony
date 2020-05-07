@@ -6,98 +6,112 @@
 {% form_theme partiForm 'bootstrap_4_layout.html.twig' %}
 {%  block main %}
     <div class="container mt-4 mb-3">
-        {{ form_start(partiForm) }}
         <div class="d-flex justify-content-center h-100">
-            <div class="card w-75">
+            <div class="card w-75 mb-5">
                 <div class="card-header">
                     <h3>Création d'un participant</h3>
                 </div>
-                <div class="card-body">
+                <!-- formulaire pour l'ajout de participant à l'aide d'un fichier importer -->
+                <form method="post" action="{{ path('import_fichier') }}" enctype="multipart/form-data">
+                    <div class="mt-4">
+                        <div class="input-group form-group flex-column flex-md-row" id="bloc_upload">
+                            <div class="input-group-prepend">
+                                    <span class="input-group-text mb-3 w-100" for="uploadParticipants">
+                                        Importer plusieurs participants (fichier .csv)
+                                    </span>
+                            </div >
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="uploadParticipants" id="uploadParticipants">
+                                <label class="custom-file-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer" id="upload">
+                        <div class="row justify-content-center">
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-primary m-2" id="uploadSubmit" type="submit">
+                                    Envoyer ce fichier
+                                </button>
+                                <button class="btn btn-lg btn-primary m-2" id="uploadReset" type="reset">
+                                    Annuler
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Formulaire d'ajout manuel d'un participant -->
+                {{ form_start(partiForm) }}
+                <div id="formField" class="card-body">
+
                     {{ form_errors(partiForm.username) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Pseudo
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Pseudo
+                            </span>
                         </div >
-
-                                    {{  form_widget(partiForm.username) }}
-
+                        {{  form_widget(partiForm.username) }}
                     </div>
+
                     {{ form_errors(partiForm.firstName) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Prénom
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Prénom
+                            </span>
                         </div >
-
-                            {{  form_widget(partiForm.firstName) }}
-
+                        {{  form_widget(partiForm.firstName) }}
                     </div>
+
                     {{ form_errors(partiForm.lastName) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Nom
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Nom
+                            </span>
                         </div >
-
-                            {{  form_widget(partiForm.lastName) }}
-
+                        {{  form_widget(partiForm.lastName) }}
                     </div>
 
                     {{ form_errors(partiForm.email) }}
-
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Email
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Email
+                            </span>
                         </div >
-
                             {{  form_widget(partiForm.email) }}
-
                     </div>
                     {{ form_errors(partiForm.phoneNumber) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Téléphone
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Téléphone
+                            </span>
                         </div >
-
-                            {{  form_widget(partiForm.phoneNumber) }}
-
+                        {{  form_widget(partiForm.phoneNumber) }}
                     </div>
 
                     {{ form_errors(partiForm.site) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Site de rattachement
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Site de rattachement
+                            </span>
                         </div >
-
-                            {{  form_widget(partiForm.site) }}
-
+                        {{  form_widget(partiForm.site) }}
                     </div>
-
-
 
                     {{ form_errors(partiForm.roles) }}
                     <div class="input-group form-group flex-column flex-md-row">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Role
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Role
+                            </span>
                         </div >
-
                         {{  form_widget(partiForm.roles) }}
-
                     </div>
-
-
 
                     <div  id="passwordDIV">
                     {{ form_errors(partiForm.newPassword) }}
@@ -107,8 +121,7 @@
                                 <span class="input-group-text mb-3 w-100">
                                     Mot de passe
                                 </span>
-                        </div >
-
+                            </div >
                         {{  form_widget(partiForm.newPassword.first) }}
                             <button class="input-group-text mb-3 svgMask1" id="1" type="button" onclick="mask()">
                                 <svg class="bi bi-eye-slash" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" xmlns="http://www.w3.org/2000/svg">
@@ -126,8 +139,7 @@
                                 <span class="input-group-text mb-3 w-100">
                                     Saisir à nouveau
                                 </span>
-                        </div >
-
+                            </div >
                         {{  form_widget(partiForm.newPassword.second) }}
                             <button class="input-group-text mb-3 svgMask2" id="2" type="button" onclick="mask()">
                                 <svg class="bi bi-eye-slash" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="rgba(224, 143, 44, 0.9)" xmlns="http://www.w3.org/2000/svg">
@@ -140,44 +152,37 @@
                     </div>
 
 
-
                     </div>
+
                     {{ form_errors(partiForm.image) }}
                     <div class="input-group form-group flex-column flex-md-row" id="block_image">
                         <div class="input-group-prepend">
-                                <span class="input-group-text mb-3 w-100">
-                                    Télécharger une photo (JPEG, JPG, PNG)
-                                </span>
+                            <span class="input-group-text mb-3 w-100">
+                                Télécharger une photo (JPEG, JPG, PNG)
+                            </span>
                         </div >
-
                         {{  form_widget(partiForm.image) }}
-
                     </div>
 
                     {{ form_errors(partiForm.actif) }}
                     <div class="input-group form-group flex-column flex-md-row custom-control custom-switch">
-
-
                         {{  form_widget(partiForm.actif) }}
-
                     </div>
                 </div>
-                    <div class="card-footer">
+                <div class="card-footer" id="save">
                     <div class="row justify-content-center">
                         <div class="form-group">
-
-                                <button class="btn btn-lg btn-primary m-2" id="modifier" type="submit">
-                                    Enregistrer
-                                </button>
+                            <button class="btn btn-lg btn-primary m-2" id="modifier" type="submit">
+                                Enregistrer
+                            </button>
                             <button class="btn btn-lg btn-primary m-2" id="annuler" type="reset">
                                 Annuler
                             </button>
-
                         </div>
                     </div>
-                    </div>
-                    {{ form_end(partiForm) }}
-
+                </div>
+                {{ form_end(partiForm) }}
+                </div>
             </div>
         </div>
     </div>
@@ -207,92 +212,160 @@
 
             }
 
-            function mask()
-            {
+            $(document).ready(function(){
+                document.getElementById('upload').setAttribute('class', 'd-none');
+                $('#uploadParticipants').change(function (event){
+                    let file = event.target.files[0].name;
 
-                let ele = event.currentTarget.id;
-                let pass1;
-                let btnMask;
-                if (ele == 1) {
-                    pass1 = document.getElementById('user_newPassword_first');
-                    btnMask = document.querySelector('.svgMask1');
+                    //Suppression de l'ancien block si existant 'indication fichier selectionner'
+                    let span = document.getElementById('block_nom_fichier');
+                    if (span){
+                        span.remove();
+                    }
 
-                } else {
-                    pass1 = document.getElementById('user_newPassword_second');
-                    btnMask = document.querySelector('.svgMask2');
-                }
+                    //Ajout du nouveau block 'indication fichier selectionner'
+                    let spanBlock = document.createElement('span');
+                    spanBlock.classList.add('valid-feedback', 'd-block');
+                    spanBlock.id = 'block_nom_fichier';
+                    let spanTitle = document.createElement('span');
+                    spanTitle.classList.add('badge', 'badge-success', 'text-uppercase');
+                    spanTitle.innerText = 'Nom du fichier';
+                    let spanMsg = document.createElement('span');
+                    spanMsg.innerText = 'Le fichier ' + file + ' a été sélectionné.';
 
+                    spanBlock.append(spanTitle);
+                    spanBlock.append(spanMsg);
+                    document.getElementById('bloc_upload').append(spanBlock);
 
-                if (pass1.getAttribute('type')==='password')
-                {
-                    pass1.setAttribute('type','text');
-                    btnMask.innerText="";
-
-                    //création de l'icone svg
-
-                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
-                    svg.setAttribute('class','bi bi-eye');
-                    svg.setAttribute('width','1.5em');
-                    svg.setAttribute('height','1.5em');
-                    svg.setAttribute('viewBox','0 0 16 16');
-                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
-
-
-                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path1.setAttribute('fill-rule','evenodd');
-                    path1.setAttribute('d','M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z');
-                    path1.setAttribute('clip-rule','evenodd');
-
-                    let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path2.setAttribute('fill-rule','evenodd');
-                    path2.setAttribute('d','M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z');
-                    path1.setAttribute('clip-rule','evenodd');
-                    svg.appendChild(path1);
-                    svg.appendChild(path2);
-                    btnMask.appendChild(svg);
+                    //Afficher le bouton pour Telecharger et supprimer le bouton pour Enregistrer manuellement
+                    document.getElementById('upload').removeAttribute('class');
+                    document.getElementById('save').setAttribute('class', 'd-none');
 
 
-                }else{
-                    pass1.setAttribute('type','password');
+                    //supprimmer les champs pour une creation manuel
+                    document.getElementById('formField').setAttribute('class', 'd-none');
 
-                    btnMask.innerText="";
+                    //si click annuler retour case départ
+                    document.getElementById('uploadReset').addEventListener('click', function() {
+                        document.getElementById('formField').setAttribute('class', 'd-block');
+                        document.getElementById('block_nom_fichier').innerText = "";
+                        document.getElementById('save').removeAttribute('class');
+                        document.getElementById('upload').setAttribute('class', 'd-none');
+                    })
+                })
+                $('#user_image').change(function (event){
+                    let file = event.target.files[0].name;
 
-                    //création de l'icone svg
+                    //Suppression de l'ancien block si existant 'indication fichier selectionner'
+                    let span = document.getElementById('block_nom_fichier_image');
+                    if (span){
+                        span.remove();
+                    }
 
-                    let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
-                    svg.setAttribute('class','bi bi-eye-slash');
-                    svg.setAttribute('width','1.5em');
-                    svg.setAttribute('height','1.5em');
-                    svg.setAttribute('viewBox','0 0 16 16');
-                    svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+                    //Ajout du nouveau block 'indication fichier selectionner'
+                    let spanBlock = document.createElement('span');
+                    spanBlock.classList.add('valid-feedback', 'd-block');
+                    spanBlock.id = 'block_nom_fichier_image';
+                    let spanTitle = document.createElement('span');
+                    spanTitle.classList.add('badge', 'badge-success', 'text-uppercase');
+                    spanTitle.innerText = 'Nom du fichier';
+                    let spanMsg = document.createElement('span');
+                    spanMsg.innerText = 'Le fichier ' + file + ' a été sélectionné.';
+
+                    spanBlock.append(spanTitle);
+                    spanBlock.append(spanMsg);
+                    document.getElementById('block_image').append(spanBlock);
+
+                    //si click annuler retour case départ
+                    document.getElementById('annuler').addEventListener('click', function() {
+                        document.getElementById('block_nom_fichier_image').innerText = "";
+                    })
+                })
+            })
+                    function mask()
+                    {
+
+                        let ele = event.currentTarget.id;
+                        let pass1;
+                        let btnMask;
+                        if (ele == 1) {
+                            pass1 = document.getElementById('user_newPassword_first');
+                            btnMask = document.querySelector('.svgMask1');
+
+                        } else {
+                            pass1 = document.getElementById('user_newPassword_second');
+                            btnMask = document.querySelector('.svgMask2');
+                        }
 
 
-                    let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path1.setAttribute('d','M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 00-2.79.588l.77.771A5.944 5.944 0 018 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0114.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z');
+                        if (pass1.getAttribute('type')==='password')
+                        {
+                            pass1.setAttribute('type','text');
+                            btnMask.innerText="";
+
+                            //création de l'icone svg
+
+                            let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                            svg.setAttribute('class','bi bi-eye');
+                            svg.setAttribute('width','1.5em');
+                            svg.setAttribute('height','1.5em');
+                            svg.setAttribute('viewBox','0 0 16 16');
+                            svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
 
 
-                    let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path2.setAttribute('d','M11.297 9.176a3.5 3.5 0 00-4.474-4.474l.823.823a2.5 2.5 0 012.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 01-4.474-4.474l.823.823a2.5 2.5 0 002.829 2.829z');
+                            let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path1.setAttribute('fill-rule','evenodd');
+                            path1.setAttribute('d','M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z');
+                            path1.setAttribute('clip-rule','evenodd');
 
-                    let path3 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path3.setAttribute('d','M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 001.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 018 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z');
-
-                    let path4 = document.createElementNS("http://www.w3.org/2000/svg","path");
-                    path4.setAttribute('fill-rule','evenodd');
-                    path4.setAttribute('d','M13.646 14.354l-12-12 .708-.708 12 12-.708.708z');
-                    path4.setAttribute('clip-rule','evenodd');
-
-                    svg.appendChild(path1);
-                    svg.appendChild(path2);
-                    svg.appendChild(path3);
-                    svg.appendChild(path4);
-                    btnMask.appendChild(svg);
-
-                }
-
-            }
+                            let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path2.setAttribute('fill-rule','evenodd');
+                            path2.setAttribute('d','M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z');
+                            path1.setAttribute('clip-rule','evenodd');
+                            svg.appendChild(path1);
+                            svg.appendChild(path2);
+                            btnMask.appendChild(svg);
 
 
+                        }else{
+                            pass1.setAttribute('type','password');
+
+                            btnMask.innerText="";
+
+                            //création de l'icone svg
+
+                            let svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+                            svg.setAttribute('class','bi bi-eye-slash');
+                            svg.setAttribute('width','1.5em');
+                            svg.setAttribute('height','1.5em');
+                            svg.setAttribute('viewBox','0 0 16 16');
+                            svg.setAttribute('fill',"rgba(224, 143, 44, 0.9)");
+
+
+                            let path1 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path1.setAttribute('d','M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 00-2.79.588l.77.771A5.944 5.944 0 018 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0114.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z');
+
+
+                            let path2 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path2.setAttribute('d','M11.297 9.176a3.5 3.5 0 00-4.474-4.474l.823.823a2.5 2.5 0 012.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 01-4.474-4.474l.823.823a2.5 2.5 0 002.829 2.829z');
+
+                            let path3 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path3.setAttribute('d','M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 001.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 018 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z');
+
+                            let path4 = document.createElementNS("http://www.w3.org/2000/svg","path");
+                            path4.setAttribute('fill-rule','evenodd');
+                            path4.setAttribute('d','M13.646 14.354l-12-12 .708-.708 12 12-.708.708z');
+                            path4.setAttribute('clip-rule','evenodd');
+
+                            svg.appendChild(path1);
+                            svg.appendChild(path2);
+                            svg.appendChild(path3);
+                            svg.appendChild(path4);
+                            btnMask.appendChild(svg);
+
+                        }
+
+                    }
 
 
         </script>
