@@ -143,6 +143,8 @@ class AdminController extends AbstractController
 
                     if ($row['role'] == 'admin') {
                         $participant->setRoles(['ROLE_ADMIN']);
+                    }else{
+                        $participant->setRoles(['ROLE_USER']);
                     }
 
                     //encoder le mdp
