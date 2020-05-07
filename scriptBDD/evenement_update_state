@@ -1,0 +1,11 @@
+Evenement à calibrer description :
+
+BEGIN
+
+UPDATE outing SET state_id = 3
+	WHERE date_limit_signing_up < CURRENT_DATE;
+
+UPDATE outing SET state_id = 5
+	WHERE date_time_start < DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH);
+
+END

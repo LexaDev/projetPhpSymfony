@@ -1,0 +1,10 @@
+username,password,role,firstName,lastName,phoneNumber,email,actif,site
+john.doe,password,admin,john,doe,0251223366,john.doe@hotmail.fr,1,1
+paul.dumant,password,user,paul,dumant,0251223366,paul.dumant@hotmail.fr,1,2
+celine.charlie,password,user,celine,charlie,0251223366,celine.charlie@hotmail.fr,1,3
+john.smith,password,user,john,smith,0251223366,john.smith@hotmail.fr,1,5
+caroline.forbes,password,user,caroline,forbes,0251223366,caroline.forbes@hotmail.fr,1,4
+damon.salvatore,password,user,damon,salvatore,0251223366,damon.salvatore@hotmail.fr,1,5
+elena.gilbert,password,user,elena,gilbert,0251223366,elena.gilbert@hotmail.fr,1,6
+alaric.saltzaman,password,user,alaric,saltzaman,0251223366,alaric.saltzaman@hotmail.fr,1,1
+bonnie.bennett,password,user,bonnie,bennett,0251223366,bonnie.bennett@hotmail.fr,1,7
