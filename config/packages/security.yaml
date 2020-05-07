@@ -38,6 +38,7 @@ security:
     access_control:
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/city, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/location, roles: ROLE_ADMIN }
          - { path: ^/, roles: ROLE_USER }
 
