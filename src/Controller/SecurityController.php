@@ -72,9 +72,9 @@ class SecurityController extends AbstractController
             }
             $url = $this->generateUrl('reset_pwd', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
             $message = (new \Swift_Message('Mot de passe oublié'))
-                ->setFrom('aleou-cheval@hotmail.fr')   //l'adresse mail de la societe
+                ->setFrom('alexandra.peyrical2019@campus-eni.fr')   //l'adresse mail de la societe
                 ->setTo($user->getEmail())
-                ->setBody('Voici le lien pour enregistrer un nouveau mot de passe : '. $url, 'text/html')
+                ->setBody($this->renderView('mail/forgotten_pwd.html.twig', ['url' => $url]),'text/html')
             ;
             //dd($message);
             $mailer->send($message);
