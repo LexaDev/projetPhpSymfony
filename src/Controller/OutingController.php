@@ -29,6 +29,7 @@ class OutingController extends AbstractController
         $outing = new Outing();
 
         $outingForm = $this->createForm(OutingType::class, $outing);
+
         $outingForm->handleRequest($request);
         if ($outingForm->isSubmitted() && $outingForm->isValid())
         {
@@ -139,14 +140,10 @@ class OutingController extends AbstractController
                 'btnSuppr' => true,
                 'id' => $id,
                 'outing'=>$outing
+
             ]
         );
-
-
-
     }
-
-
     /**
      *
      * @Route("/subscribe/{id}", name="outing_subscribe",methods={"GET"})

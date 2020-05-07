@@ -25,8 +25,8 @@ class Participant implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Le champs 'Pseudo' est obligatoire.")
-     * @Assert\Length(  min="5",
-     *                  minMessage="Le champs 'Pseudo' doit contenir au minimum 5 caractères.",
+     * @Assert\Length(  min="4",
+     *                  minMessage="Le champs 'Pseudo' doit contenir au minimum 4 caractères.",
      *                  max="30",
      *                  maxMessage="Le champs 'Pseudo' doit contenir au maximum 30 caractères.")
      * @ORM\Column(type="string", length=180, unique=true)
