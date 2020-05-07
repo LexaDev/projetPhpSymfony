@@ -12,7 +12,7 @@
                 <div class="card-body">
                     {% if error %}
                         {% if error.messageKey|trans(error.messageData, 'security') == '1' %}
-                            <div class="alert alert-danger">Votre compte a été désactiver</div>
+                            <div class="alert alert-danger">Votre compte a été désactivé</div>
                         {% else %}
                             <div class="alert alert-danger pl-4">Identifiants invalides</div>
                         {% endif %}
